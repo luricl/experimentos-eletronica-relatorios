@@ -668,121 +668,70 @@ Para comprovar que o projeto atende às especificações apresentadas na seção
 \label{fig:circs_daniel}
 \end{figure}
 
-% \subsubsection{Lurian Lima (22/2005395)}
+\subsubsection{Lurian Lima (22/2005395)}
 
-% \textbf{Símbolo dos Amplificadores}
+\textbf{Configuração e Simulação dos Circuitos}
 
-% Os ampOps LM741 e TL064 foram construídos em simulação seguindo o seguinte formato:
+O roteiro determina $G_1=20+(5\bmod 21)=25$, $G_2=80+(39\bmod 41)=119$ e $V_p=2+\tfrac{5}{2}=4{,}5\text{ V}$. Os seis circuitos foram desenhados e simulados no LTspice com os símbolos do LM741 e do TL064 construídos no Roteiro 2, a partir da biblioteca \texttt{ene0046.lib}, e alimentação simétrica de $\pm15\text{ V}$, conforme a Figura~\ref{fig:circs_luri}. Cada esquemático traz uma única diretiva de análise ativa, configurada da seguinte forma:
 
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=0.2\linewidth]{lurian_simulacao/lm741_luri.png} \hspace{0.1\linewidth}
-% \includegraphics[width=0.2\linewidth]{lurian_simulacao/tl064_luri.png}
-% \caption{Símbolos do LM741 (esquerda) e TL064 (direita).}
-% \label{fig:simbolos_opamps_luri}
-% \end{figure}
+\begin{itemize}
+    \item \textbf{Tensão de Offset (Fig.~\ref{fig:circs_luri}a):} Amplificador não inversor de ganho 101, com $R_f=100\text{ k}\Omega$ e $R_g=1\text{ k}\Omega$, e a entrada não inversora ligada diretamente ao terra. A análise de ponto de operação (\texttt{.op}) fornece a tensão contínua na saída $v_o$, da qual se obtém $V_{os}=V_o/101$.
 
-% \textbf{Configuração e Simulação dos Circuitos}
+    \item \textbf{Corrente de Polarização (Fig.~\ref{fig:circs_luri}b e \ref{fig:circs_luri}c):} O circuito anterior foi alterado com a inclusão de $R_s=100\text{ k}\Omega$ entre o terra e a entrada não inversora (nó \texttt{ninv}). A análise \texttt{.op} foi feita em dois esquemáticos, um com o LM741 e outro com o TL064 no lugar dele. A diferença entre a saída com $R_s$ e a saída sem $R_s$ permite obter $I_b=\Delta V_o/(101\,R_s)$.
 
-% Com as especificações geradas a partir da matrícula, foram construídos os seguintes circuitos com os parâmetros especificados na seção \ref{espec:luri}.
+    \item \textbf{Resposta em Frequência (Fig.~\ref{fig:circs_luri}d):} Dois amplificadores não inversores com LM741 no mesmo arquivo, alimentados pela mesma fonte de sinal (\texttt{AC 1}, nó \texttt{vin}). Para o ganho baixo $G_1=25$, adotou-se $R_g=1\text{ k}\Omega$ e $R_f$ formado pela associação em série de dois resistores de $12\text{ k}\Omega$, totalizando $24\text{ k}\Omega$, o que dá $G_{1,\text{real}}=1+24/1=25$. Para o ganho alto $G_2=119$, adotou-se $R_g=1\text{ k}\Omega$ e $R_f$ formado por $100\text{ k}\Omega$ em série com $18\text{ k}\Omega$, totalizando $118\text{ k}\Omega$, o que dá $G_{2,\text{real}}=1+118/1=119$. Em ambos os casos, o ganho realizado coincide com o especificado. A análise \texttt{.ac dec 50 10 10Meg} faz uma varredura decádica de 10 Hz a 10 MHz com 50 pontos por década, faixa que cobre as duas frequências de corte esperadas, que ficam em torno de $f_T/G$.
 
-% \begin{figure}[H]
-% \centering
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{lurian_simulacao/seguidor_luri.png}
-%     \vspace{2pt}
-%     {\small (a) Seguidor de Tensão}
-% \end{minipage}\hfill
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{lurian_simulacao/nao_inversor_luri.png}
-%     \vspace{2pt}
-%     {\small (b) Não Inversor}
-% \end{minipage}
+    \item \textbf{Slew Rate (Fig.~\ref{fig:circs_luri}e e \ref{fig:circs_luri}f):} Seguidor de tensão alimentado por uma fonte senoidal \texttt{SINE(0 4.5 \{freq\})}, com a amplitude $V_p=4{,}5\text{ V}$ da matrícula. A análise de transiente \texttt{.tran 0 \{10/freq\} 0 \{1/(500*freq)\}} simula dez períodos de cada frequência, com passo máximo de $1/(500f)$, isto é, 500 pontos por período, o que resolve bem a inclinação da rampa na passagem por zero. A frequência é varrida por \texttt{.step param freq list}. No LM741 adotou-se $5\text{ kHz}$ e $50\text{ kHz}$: com o slew rate típico de $0{,}5\text{ V}/\mu\text{s}$ do datasheet, a senoide de $4{,}5\text{ V}$ passa a exigir mais do que o amplificador entrega a partir de $f=\mathrm{SR}/(2\pi V_p)\approx17{,}7\text{ kHz}$, de modo que a primeira frequência é acompanhada pela saída e a segunda já resulta em triângulo. Como o TL064 é mais rápido, as frequências foram escolhidas de novo, em $30\text{ kHz}$ e $400\text{ kHz}$, uma vez que as do LM741 não servem para evidenciar o limite dessa peça.
+\end{itemize}
 
-% \vspace{12pt}
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/Item 1 - Tensao de offset do LM741.png}
+    \vspace{2pt}
+    {\small (a) Tensão de Offset}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/Item 2 - Corrente de polarizacao do LM741.png}
+    \vspace{2pt}
+    {\small (b) Corrente de Polarização (LM741)}
+\end{minipage}
 
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{lurian_simulacao/somador_luri.png}
-%     \vspace{2pt}
-%     {\small (c) Somador Inversor}
-% \end{minipage}\hfill
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{lurian_simulacao/amplificador_diff_luri.png}
-%     \vspace{2pt}
-%     {\small (d) Amplificador de Diferença}
-% \end{minipage}
+\vspace{12pt}
 
-% \caption{Esquemáticos dos circuitos individuais para a matrícula 22/2005395}
-% \label{fig:circs_luri}
-% \end{figure}
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/Item 5 - Corrente de polarizacao do TL064.png}
+    \vspace{2pt}
+    {\small (c) Corrente de Polarização (TL064)}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/Item 3 - Resposta em frequencia do LM741.png}
+    \vspace{2pt}
+    {\small (d) Resposta em Frequência}
+\end{minipage}
 
-% \subsubsection{Daniel Campos Silva (23/1036775)}
+\vspace{12pt}
 
-% \textbf{Símbolos dos Amplificadores Operacionais}
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/Item 4 - Slew rate do LM741.png}
+    \vspace{2pt}
+    {\small (e) Slew Rate (LM741)}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/Item 6 - Slew rate do TL064.png}
+    \vspace{2pt}
+    {\small (f) Slew Rate (TL064)}
+\end{minipage}
 
-% Foram utilizados os símbolos do LM741 e do TL064 desenvolvidos no LTspice a partir da biblioteca \texttt{ene0046.lib}, mantendo a disposição dos pinos compatível com os componentes utilizados na montagem.
-
-% \begin{figure}[H]
-% \centering
-% \includegraphics[width=0.2\linewidth]{daniel_simulação/Relatorio2/LM741.png} \hspace{0.1\linewidth}
-% \includegraphics[width=0.2\linewidth]{daniel_simulação/Relatorio2/TL064.png}
-% \caption{Símbolos do LM741 (esquerda) e TL064 (direita).}
-% \label{fig:simbolos_opamps_daniel}
-% \end{figure}
-
-% \vspace{10pt}
-% \textbf{Configuração e Simulação dos Circuitos}
-
-% \textbf{Configuração:}
-% Os quatro circuitos individuais foram simulados utilizando os valores determinados para a matrícula 23/1036775. Os respectivos esquemáticos são apresentados na Figura~\ref{fig:circs_daniel}.
-
-% \begin{itemize}
-%     \item \textbf{Seguidor de Tensão:} Foram utilizados $R_1=2{,}2\,\text{k}\Omega$ e $R_2=1\,\text{k}\Omega$, com o objetivo de obter $V_{\text{carga}}\approx3{,}091\,\text{V}$ e verificar a redução da queda de tensão com o uso do LM741.
-
-%     \item \textbf{Amplificador Não Inversor:} Para o ganho especificado $G=11{,}8$, foram utilizados $R_g=1{,}5\,\text{k}\Omega$ e $R_f=15\,\text{k}\Omega+1{,}2\,\text{k}\Omega$, resultando em ganho realizado de aproximadamente $11{,}83$.
-
-%     \item \textbf{Somador Inversor:} Para os pesos $k_1=2$ e $k_2=7$, foram utilizados $R_f=6,8\,\text{k}\Omega$, $R_1=3{,}3\,\text{k}\,\Omega$ e $R_2=1\,\text{k}\Omega$, resultando em pesos realizados de aproximadamente $2{,}08$ e $6{,}82$.
-
-%     \item \textbf{Amplificador de Diferença:} Para o ganho diferencial especificado $A_d=10{,}6$, foram utilizados $R_1=R_3=10\,\text{k}\Omega$ e $R_2=R_4=82\,\text{k}\Omega+22\,\text{k}\Omega$, obtendo ganho realizado de $10{,}4$.
-% \end{itemize}
-
-% \begin{figure}[H]
-% \centering
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{daniel_simulação/Relatorio2/item_1_esquematico.png}
-%     \vspace{2pt}
-%     {\small (a) Seguidor de Tensão}
-% \end{minipage}\hfill
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{daniel_simulação/Relatorio2/item_2_esquematico.png}
-%     \vspace{2pt}
-%     {\small (b) Não Inversor}
-% \end{minipage}
-
-% \vspace{12pt}
-
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{daniel_simulação/Relatorio2/item_3_esquematico.png}
-%     \vspace{2pt}
-%     {\small (c) Somador Inversor}
-% \end{minipage}\hfill
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{daniel_simulação/Relatorio2/item_5_esquematico.png}
-%     \vspace{2pt}
-%     {\small (d) Amplificador de Diferença}
-% \end{minipage}
-
-% \caption{Esquemáticos dos circuitos individuais para a matrícula 23/1036775.}
-% \label{fig:circs_daniel}
-% \end{figure}
+\caption{Esquemáticos projetados para a matrícula 22/2005395, contendo os resistores E12 dimensionados e as diretivas de simulação aplicadas.}
+\label{fig:circs_luri}
+\end{figure}
 
 \subsection{Montagem em bancada}
 
