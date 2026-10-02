@@ -1,8 +1,9 @@
-# Lab eletronica 2026/2
+# Tutorial: configurando o LaTeX Localmente
 
-# Tutorial: configurando o LaTeX Live
+As duas principais libs para compilar latex são:
 
-O **LaTeX Live** é uma distribuição completa do LaTeX, usada para criar documentos científicos, acadêmicos e técnicos.
+- [MikTEX](https://miktex.org/download)
+- [TEXLive](https://www.tug.org/texlive/)
 
 ## Linux
 
