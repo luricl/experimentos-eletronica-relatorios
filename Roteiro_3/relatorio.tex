@@ -1353,63 +1353,50 @@ No que tange à distorção por \textit{Slew Rate} (SR), o limite de frequência
 
 \subsubsection{Lurian Correia Lima (22/2005395)}
 
-% A Tabela a seguir ilustra os parâmetros teóricos com os resultados numéricos extraídos da simulação.
+A Figura~\ref{fig:graficos_luri} reúne as simulações dinâmicas do projeto: as respostas em frequência dos dois ganhos com o LM741 e os ensaios de \textit{slew rate} do LM741 e do TL064.
 
-% \begin{table}[H]
-%     \centering
-%     \caption{Comparação entre Analítico x Simulado}
-%     \label{tab:resultados_luri}
-%     \renewcommand{\arraystretch}{1.2}
-%     \begin{tabular}{@{}lrrr@{}}
-%     \toprule
-%     \textbf{Grandeza} & \textbf{Analítico (E12)} & \textbf{Simulado} & \textbf{Erro (\%)} \\
-%     \midrule
-%     $V_{\text{carga}}$ direta (Seguidor) & $2{,}143\text{ V}$ & $2{,}143\text{ V}$ & $0{,}00\%$ \\
-%     Queda de tensão (Seguidor) & $47{,}14\%$ & $47{,}14\%$ & $0{,}00\%$ \\
-%     Ganho $G$ (Não inversor) & $11{,}104$ & $11{,}100$ & $0{,}04\%$ \\
-%     Peso $k_1$ (Somador) & $3{,}000$ & $3{,}000$ & $0{,}00\%$ \\
-%     Peso $k_2$ (Somador) & $9{,}000$ & $9{,}000$ & $0{,}00\%$ \\
-%     Ganho Diferencial $A_d$ & $10{,}600$ & $10{,}600$ & $0{,}00\%$ \\
-%     \bottomrule
-%     \end{tabular}
-% \end{table}
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/Resposta em frequencia LM741(g25).png}
+        \vspace{2pt}
+        {\small (a) Resposta em frequência (ganho $G_1=25$).}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/Resposta em frequencia LM741(g119).png}
+        \vspace{2pt}
+        {\small (b) Resposta em frequência (ganho $G_2=119$).}
+    \end{minipage}
 
-% A seguir, os gráficos das formas de onda resultantes das simulações de varreduras (\texttt{.dc}) e de transientes (\texttt{.tran}) para os circuitos não inversor, somador inversor e amplificador de diferença.
+    \vspace{12pt}
 
-% \begin{figure}[H]
-%     \centering
-%     \begin{minipage}[b]{0.48\linewidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{lurian_simulacao/graph_amp_non_inv.png}
-%         \vspace{2pt}
-%         {\small (a) Amplificador Não Inversor.}
-%     \end{minipage}%
-%     \hfill
-%     \begin{minipage}[b]{0.48\linewidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{lurian_simulacao/graph_reta_dc_somador.png}
-%         \vspace{2pt}
-%         {\small (b) Reta DC do Somador Inversor.}
-%     \end{minipage}
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/slew_rate_lm741.png}
+        \vspace{2pt}
+        {\small (c) \textit{Slew rate} (LM741), 5~kHz e 50~kHz.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/slew_rate_tl064.png}
+        \vspace{2pt}
+        {\small (d) \textit{Slew rate} (TL064), 30~kHz e 400~kHz.}
+    \end{minipage}
+    \caption{Resultados gráficos das simulações de projeto (matrícula 22/2005395).}
+    \label{fig:graficos_luri}
+\end{figure}
 
-%     \vspace{12pt}
+\paragraph{Análise AC:}
+Nas Figuras~\ref{fig:graficos_luri}a e \ref{fig:graficos_luri}b, o patamar de baixa frequência está em cerca de $28\text{ dB}$ para $G_1=25$ e em cerca de $41{,}5\text{ dB}$ para $G_2=119$, o que corresponde aos ganhos realizados de $1+24/1=25$ e $1+118/1=119$. A frequência de corte de $-3\text{ dB}$, lida nas curvas, ficou em torno de $40\text{ kHz}$ para o ganho baixo e de $8\text{ kHz}$ para o ganho alto. As duas curvas de módulo cruzam $0\text{ dB}$ praticamente no mesmo ponto, perto de $1\text{ MHz}$, e a fase passa por $-45^\circ$ nas respectivas frequências de corte, como esperado para um polo dominante. Os produtos ganho-banda ficam então em $25\times40\text{ kHz}\approx119\times8\text{ kHz}\approx1\text{ MHz}$, o que concorda com o valor obtido pelos outros integrantes ($\approx 1\text{ MHz}$) e confirma $f_c\approx \mathrm{GBW}/G$. Esses valores foram lidos graficamente, sem cursores, e por isso carregam a incerteza da leitura.
 
-%     \begin{minipage}[b]{0.48\linewidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{lurian_simulacao/graph_amp_diff_diff_out.png}
-%         \vspace{2pt}
-%         {\small (c) Saída Diferencial.}
-%     \end{minipage}
-%     \hfill
-%     \begin{minipage}[b]{0.48\linewidth}
-%         \centering
-%         \includegraphics[width=\linewidth]{lurian_simulacao/graph_amp_diff_cmm.png}
-%         \vspace{2pt}
-%         {\small (d) Saída de Modo Comum.}
-%     \end{minipage}
-%     \caption{Resultados gráficos das simulações de projeto para matrícula 22/2005395.}
-%     \label{fig:graficos_luri}
-% \end{figure}
+\paragraph{Análise do \textit{slew rate}:}
+Com $V_p=4{,}5\text{ V}$, o limite teórico de frequência sem distorção é $f_{max}=\mathrm{SR}/(2\pi V_p)$. Nas Figuras~\ref{fig:graficos_luri}c e \ref{fig:graficos_luri}d, a senoide de frequência baixa (5~kHz no LM741 e 30~kHz no TL064) é reproduzida na saída com os $4{,}5\text{ V}$ de pico, ou seja, o amplificador acompanha o sinal. Na frequência alta (50~kHz no LM741 e 400~kHz no TL064), a saída vira um triângulo de amplitude muito menor que a da entrada, e a inclinação da rampa passa a ser o \textit{slew rate} do componente. Para um triângulo de pico $A$ e frequência $f$, a rampa sobe $2A$ em meio período, de modo que $\mathrm{SR}=4fA$.
+
+No LM741, o triângulo tem pico de aproximadamente $1{,}6\text{ V}$ a $50\text{ kHz}$, o que dá $\mathrm{SR}\approx4\cdot50\text{ kHz}\cdot1{,}6\text{ V}\approx0{,}32\text{ V/}\mu\text{s}$, cerca de $36\%$ abaixo dos $0{,}5\text{ V/}\mu\text{s}$ típicos do \textit{datasheet}. A frequência máxima correspondente é $f_{max}\approx11{,}3\text{ kHz}$. No TL064, o pico é de aproximadamente $2{,}0\text{ V}$ a $400\text{ kHz}$, resultando em $\mathrm{SR}\approx3{,}2\text{ V/}\mu\text{s}$, próximo dos $3{,}0\text{ V/}\mu\text{s}$ usados como referência ($\approx 7\%$ de diferença), com $f_{max}\approx113\text{ kHz}$. O TL064 é, portanto, cerca de dez vezes mais rápido que o LM741 na simulação, e a distorção só aparece nele em frequências muito mais altas. Os picos dos triângulos foram lidos nos gráficos, e os valores de \textit{slew rate} são estimativas com a incerteza dessa leitura.
 
 
 \subsection{Projeto da Equipe}
