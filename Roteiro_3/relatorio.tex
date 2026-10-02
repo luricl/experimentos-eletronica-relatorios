@@ -799,7 +799,7 @@ V_{OS,\mathrm{sim}}=
 \approx 1{,}13\times 10^{-3}~\mathrm{V}.
 $$
 
-Para o TL064 (Figuras~\ref{fig:sim_offset_tl064} e~\ref{fig:sim_res_offset_tl064}), a mesma divisão resulta em $V_{OS,\mathrm{sim}}\approx0{,}027$~mV. A divisão por 101 usa o ganho nominal; com o ganho dos resistores medidos, $103{,}75$, o offset do modelo do LM741 é $0{,}113975/103{,}75\approx1{,}10$~mV, como discutido na Seção~6.2.
+Para o TL064 (Figuras~\ref{fig:sim_offset_tl064} e~\ref{fig:sim_res_offset_tl064}), a mesma divisão resulta em $V_{OS,\mathrm{sim}}\approx0{,}027$~mV. A divisão por 101 usa o ganho nominal; com o ganho dos resistores medidos, $103{,}75$, a mesma divisão para o LM741 dá $0{,}113975/103{,}75\approx1{,}10$~mV, como discutido na Seção~6.2.
 
 \subsubsection{Corrente de polarização}
 
@@ -1039,7 +1039,7 @@ A Figura~\ref{fig:graficos_cardoso} exibe as formas de onda resultantes das simu
 \end{figure}
 
 \paragraph{Análise Analítica AC e Transiente:}
-A partir das curvas de resposta em frequência (Figuras~\ref{fig:graficos_cardoso}a e \ref{fig:graficos_cardoso}b), determinou-se analiticamente  o Produto Ganho-Banda (GBW) de cada configuração. Para o ganho real de malha fechada $G_1=37$ (realizado com a associação de resistores da série E12 resultando numa proporção de $36{,}87$), a frequência de corte a $-3\text{ dB}$ medida foi de $f_{c1} \approx 26{,}95\text{ kHz}$, o que acarreta num produto $GBW_1=36{,}86 \times 26{,}95\text{ kHz} \approx 993{,}3\text{ kHz}$. Para o ganho $G_2=101$, obteve-se $f_{c2} \approx 9{,}82\text{ kHz}$, gerando um produto $GBW=100{,}95 \times 9{,}82\text{ kHz} \approx 991{,}3\text{ kHz}$.
+A partir das curvas de resposta em frequência (Figuras~\ref{fig:graficos_cardoso}a e \ref{fig:graficos_cardoso}b), determinou-se analiticamente  o Produto Ganho-Banda (GBW) de cada configuração. Para o ganho real de malha fechada $G_1=37$ (realizado com a associação de resistores da série E12 resultando numa proporção de $35{,}87$), a frequência de corte a $-3\text{ dB}$ medida foi de $f_{c1} \approx 26{,}95\text{ kHz}$, o que acarreta num produto $GBW_1=36{,}86 \times 26{,}95\text{ kHz} \approx 993{,}3\text{ kHz}$. Para o ganho $G_2=101$, obteve-se $f_{c2} \approx 9{,}82\text{ kHz}$, gerando um produto $GBW=100{,}95 \times 9{,}82\text{ kHz} \approx 991{,}3\text{ kHz}$.
 
 No que tange à distorção por \textit{Slew Rate} (SR), o limite de frequência teórica a partir da qual uma senoide de amplitude $V_p = 5\text{ V}$ sofre ceifamento triangular é calculado por $f_{max} = \frac{SR}{2\pi V_p}$. Através da inclinação da rampa medida com os cursores no LTspice, o SR simulado do LM741 foi de $0{,}315\text{ V/}\mu\text{s}$, projetando uma distorção limite a partir de $f_{max} \approx 10{,}0\text{ kHz}$. Em contrapartida, a medição da rampa para o TL064 resultou num SR de $3{,}286\text{ V/}\mu\text{s}$ (próximo aos $3{,}0\text{ V/}\mu\text{s}$ nominais de \textit{datasheet}), o que eleva a frequência máxima sem distorção para $f_{max} \approx 104{,}6\text{ kHz}$. A comparação evidencia de forma prática que o modelo JFET (TL064) é substancialmente mais veloz que o modelo bipolar (LM741) para lidar com variações abruptas de tensão. 
 
@@ -1058,8 +1058,8 @@ A Tabela~\ref{tab:resultados_daniel} apresenta os parâmetros de não idealidade
     \midrule    
     Ganho $G_1$ & $35{,}00$ & $35{,}02$ & $0{,}06\%$ \\
     Ganho $G_2$ & $116{,}00$ & $115{,}88$ & $0{,}10\%$ \\
-    Tensão de Offset $V_{os}$ (LM741)* & $1{,}00\text{ mV}$ & $1{,}21\text{ mV}$ & $21{,}00\%$ \\
-    Corrente de Polarização $I_b$ (LM741)* & $80{,}00\text{ nA}$ & $68{,}04\text{ nA}$ & $14{,}95\%$ \\
+    Tensão de Offset $V_{os}$ (LM741)* & $1{,}00\text{ mV}$ & $1{,}05\text{ mV}$ & $5{,}00\%$ \\
+    Corrente de Polarização $I_b$ (LM741)* & $80{,}00\text{ nA}$ & $59{,}10\text{ nA}$ & $26{,}12\%$ \\
     \textit{Slew Rate} (LM741)* & $0{,}50\text{ V/}\mu\text{s}$ & $0{,}320\text{ V/}\mu\text{s}$ & $36{,}00\%$ \\
     \textit{Slew Rate} (TL064)* & $3{,}00\text{ V/}\mu\text{s}$ & $3{,}250\text{ V/}\mu\text{s}$ & $8{,}33\%$ \\
     \bottomrule
@@ -1068,9 +1068,9 @@ A Tabela~\ref{tab:resultados_daniel} apresenta os parâmetros de não idealidade
 \end{table}
 
 \paragraph{Análise Analítica DC:}
-A tensão de offset do LM741 foi calculada refletindo a tensão de saída para a entrada do amplificador não inversor de ganho $101$ ($R_f=100\text{ k}\Omega$ e $R_g=1\text{ k}\Omega$, Figura~\ref{fig:circs_daniel}a), resultando em $V_{os}=\frac{121{,}80\text{ mV}}{101}=1{,}21\text{ mV}$. Este valor encontra-se perfeitamente dentro da faixa típica informada no \textit{datasheet} do componente. 
+A tensão de offset do LM741 foi calculada refletindo a tensão de saída para a entrada do amplificador não inversor de ganho $116$, resultando em $V_{os}=\frac{121{,}80\text{ mV}}{116}=1{,}05\text{ mV}$. Este valor encontra-se perfeitamente dentro da faixa típica informada no \textit{datasheet} do componente. 
 
-A corrente de polarização foi determinada através da variação da tensão de saída ($\Delta V_o$) ao inserir o resistor $R_s=100\text{ k}\Omega$. Para o LM741, a diferença medida foi de $\Delta V_o=|-565{,}40\text{ mV}-121{,}80\text{ mV}|=687{,}20\text{ mV}.$ Pela relação $I_b=\frac{\Delta V_o}{101 \cdot R_s}$, obteve-se $I_b=68{,}04\text{ nA}$, compatível com a tecnologia bipolar do AmpOp. O mesmo procedimento aplicado ao TL064 (tecnologia JFET) resultou em uma variação de saída quase nula, comprovando que a sua corrente de polarização é da ordem dos picoamperes (pA), sendo desprezível na simulação e resultando numa razão $\frac{I_{b(LM741)}}{I_{b(TL064)}} \to \infty$.
+A corrente de polarização foi determinada através da variação da tensão de saída ($\Delta V_o$) ao inserir o resistor $R_s=100\text{ k}\Omega$. Para o LM741, a diferença medida foi de $\Delta V_o=|-565{,}40\text{ mV}-121{,}80\text{ mV}|=687{,}20\text{ mV}.$ Pela relação $I_b=\frac{\Delta V_o}{116 \cdot R_s}$, obteve-se $I_b=59{,}10\text{ nA}$, compatível com a tecnologia bipolar do AmpOp. O mesmo procedimento aplicado ao TL064 (tecnologia JFET) resultou em uma variação de saída quase nula, comprovando que a sua corrente de polarização é da ordem dos picoamperes (pA), sendo desprezível na simulação e resultando numa razão $\frac{I_{b(LM741)}}{I_{b(TL064)}} \to \infty$.
 
 A Figura~\ref{fig:graficos_daniel} exibe as formas de onda resultantes das simulações dinâmicas em frequência (\texttt{.ac}) e de regime transiente (\texttt{.tran}), evidenciando as limitações de largura de banda para os diferentes ganhos e as distorções causadas pela taxa de subida (\textit{slew rate}).
 
@@ -1112,9 +1112,41 @@ A Figura~\ref{fig:graficos_daniel} exibe as formas de onda resultantes das simul
 \paragraph{Análise Analítica AC e Transiente:}
 A partir das curvas de resposta em frequência (Figuras~\ref{fig:graficos_daniel}a e \ref{fig:graficos_daniel}b), determinou-se analiticamente o Produto Ganho-Banda (GBW) de cada configuração. Para o ganho real de malha fechada $G_1=35$ (realizado com os resistores $R_g = 1{,}5\text{ k}\Omega$ e $R_f = 51\text{ k}\Omega$), a frequência de corte a $-3\text{ dB}$ medida foi de $f_{c1} \approx 28{,}45\text{ kHz}$, o que acarreta em um produto $GBW_1=35{,}02 \times 28{,}45\text{ kHz} \approx 996{,}3\text{ kHz}$. Para o ganho $G_2=116$ (utilizando $R_g = 1\text{ k}\Omega$ e $R_f = 115\text{ k}\Omega$), obteve-se $f_{c2} \approx 8{,}62\text{ kHz}$, gerando um produto $GBW_2=115{,}88 \times 8{,}62\text{ kHz} \approx 998{,}9\text{ kHz}$.
 
-No que tange à distorção por \textit{Slew Rate} (SR), o limite de frequência teórica a partir da qual uma senoide de amplitude $V_p = 4{,}5\text{ V}$ sofre ceifamento triangular é calculado por $f_{max} = \frac{SR}{2\pi V_p}$. Através da inclinação da rampa medida com os cursores no LTspice, o SR simulado do LM741 foi de $0{,}320\text{ V/}\mu\text{s}$, projetando uma distorção limite a partir de $f_{max} \approx 11{,}32\text{ kHz}$. Em contrapartida, a medição da rampa para o TL064 resultou em um SR de $3{,}250\text{ V/}\mu\text{s}$ (próximo aos $3{,}0\text{ V/}\mu\text{s}$ nominais de \textit{datasheet}), o que eleva a frequência máxima sem distorção para $f_{max} \approx 114{,}9\text{ kHz}$. A comparação evidencia de forma prática que o modelo JFET (TL064) é substancialmente mais veloz que o modelo bipolar (LM741) para lidar com variações abruptas de tensão.
+No que tange à distorção por \textit{Slew Rate} (SR), o limite de frequência teórica a partir da qual uma senoide de amplitude $V_p = 5\text{ V}$ sofre ceifamento triangular é calculado por $f_{max} = \frac{SR}{2\pi V_p}$. Através da inclinação da rampa medida com os cursores no LTspice, o SR simulado do LM741 foi de $0{,}320\text{ V/}\mu\text{s}$, projetando uma distorção limite a partir de $f_{max} \approx 10{,}19\text{ kHz}$. Em contrapartida, a medição da rampa para o TL064 resultou em um SR de $3{,}250\text{ V/}\mu\text{s}$ (próximo aos $3{,}0\text{ V/}\mu\text{s}$ nominais de \textit{datasheet}), o que eleva a frequência máxima sem distorção para $f_{max} \approx 103{,}46\text{ kHz}$. A comparação evidencia de forma prática que o modelo JFET (TL064) é substancialmente mais veloz que o modelo bipolar (LM741) para lidar com variações abruptas de tensão.
 
 \subsubsection{Lurian Correia Lima (22/2005395)}
+
+A Tabela~\ref{tab:resultados_luri} confronta, para cada grandeza, o valor analítico (ganho realizado com os resistores E12 ou valor típico do \textit{datasheet}) e o valor simulado. Os valores de corrente contínua vêm dos registros do ponto de operação (\texttt{.op}) do LTspice para os circuitos das Figuras~\ref{fig:circs_luri}a e~\ref{fig:circs_luri}b.
+
+\begin{table}[H]
+    \centering
+    \caption{Resultados analíticos e simulados (Matrícula 22/2005395).}
+    \label{tab:resultados_luri}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Analítico (E12)} & \textbf{Simulado} & \textbf{Erro (\%)} \\
+    \midrule
+    Ganho $G_1$ & $25$ ($27{,}96$~dB) & $\approx28$~dB & $<1\%$ \\
+    Ganho $G_2$ & $119$ ($41{,}51$~dB) & $\approx41{,}5$~dB & $<1\%$ \\
+    Tensão de Offset $V_{os}$ (LM741)* & $1{,}00\text{ mV}$ & $1{,}10\text{ mV}$ & $10{,}0\%$ \\
+    Corrente de Polarização $I_b$ (LM741)* & $80{,}0\text{ nA}$ & $57{,}8\text{ nA}$ & $27{,}7\%$ \\
+    \textit{Slew Rate} (LM741)* & $0{,}50\text{ V/}\mu\text{s}$ & $\approx0{,}32\text{ V/}\mu\text{s}$ & $36\%$ \\
+    \textit{Slew Rate} (TL064)* & $3{,}5\text{ V/}\mu\text{s}$ & $\approx3{,}2\text{ V/}\mu\text{s}$ & $9\%$ \\
+    \bottomrule
+    \multicolumn{4}{l}{\footnotesize * Para as grandezas não ideais, o valor analítico é o típico do \textit{datasheet}.} \\
+    \multicolumn{4}{l}{\footnotesize \phantom{*} Ganhos e \textit{slew rates} simulados lidos nos gráficos da Figura~\ref{fig:graficos_luri}.}
+    \end{tabular}
+\end{table}
+
+\paragraph{Análise DC:}
+Com a entrada não inversora aterrada, o \texttt{.op} fornece $V(v_o)=111{,}131$~mV. Refletida para a entrada pelo ganho 101, essa tensão dá $V_{os}=111{,}131/101=1{,}10$~mV. Com $R_s=100\text{ k}\Omega$, a saída passa a $V(v_o)=-472{,}875$~mV, de modo que $\Delta V_o=-472{,}875-111{,}131=-584{,}0$~mV e, pela Equação~\eqref{eq:ib},
+\[
+I_b=\frac{\Delta V_o}{101\,R_s}=\frac{-584{,}0\text{ mV}}{101\cdot100\text{ k}\Omega}=-57{,}8\text{ nA}.
+\]
+O sinal negativo indica corrente entrando no pino, como esperado para o par de entrada bipolar. O registro permite conferir essa conta diretamente: a corrente em $R_s$ é $I(R_s)=-57{,}85$~nA, e a tensão no nó não inversor é $V(\mathit{ninv})=-5{,}785$~mV $=I(R_s)\,R_s$. O método da diferença de saídas reproduz a corrente do pino com diferença de $0{,}05\%$.
+
+O registro mostra ainda que as duas entradas do modelo não drenam a mesma corrente: $57{,}9$~nA na entrada não inversora e $101{,}9$~nA na inversora. A média, $79{,}9$~nA, coincide com o típico de $80$~nA do \textit{datasheet}, e a diferença, $44$~nA, é a corrente de offset do modelo. O ensaio do roteiro mede só a corrente da entrada não inversora, por isso o valor simulado é $57{,}8$~nA, e não $80$~nA. A corrente da entrada inversora também explica por que $V_o/101$ fica acima do offset do modelo. Sem $R_s$, a tensão na entrada inversora é $V(\mathit{inv})=0{,}999$~mV, que é o próprio $V_{os}$ do modelo. Ela contribui com $101\cdot0{,}999=100{,}9$~mV na saída, e os $10{,}2$~mV restantes vêm da corrente da entrada inversora atravessando $R_f$, $101{,}9~\text{nA}\cdot100\text{ k}\Omega$, que é o termo $-I_BR_f$ da Equação~\eqref{eq:vo_rs}. O valor de $1{,}10$~mV obtido pelo método do roteiro superestima o offset em cerca de $10\%$ por causa desse termo.
 
 A Figura~\ref{fig:graficos_luri} reúne as simulações dinâmicas do projeto: as respostas em frequência dos dois ganhos com o LM741 e os ensaios de \textit{slew rate} do LM741 e do TL064.
 
@@ -1159,7 +1191,7 @@ Nas Figuras~\ref{fig:graficos_luri}a e \ref{fig:graficos_luri}b, o patamar de ba
 \paragraph{Análise do \textit{slew rate}:}
 Com $V_p=4{,}5\text{ V}$, o limite teórico de frequência sem distorção é $f_{max}=\mathrm{SR}/(2\pi V_p)$. Nas Figuras~\ref{fig:graficos_luri}c e \ref{fig:graficos_luri}d, a senoide de frequência baixa (5~kHz no LM741 e 30~kHz no TL064) é reproduzida na saída com os $4{,}5\text{ V}$ de pico, ou seja, o amplificador acompanha o sinal. Na frequência alta (50~kHz no LM741 e 400~kHz no TL064), a saída vira um triângulo de amplitude muito menor que a da entrada, e a inclinação da rampa passa a ser o \textit{slew rate} do componente. Para um triângulo de pico $A$ e frequência $f$, a rampa sobe $2A$ em meio período, de modo que $\mathrm{SR}=4fA$.
 
-No LM741, o triângulo tem pico de aproximadamente $1{,}6\text{ V}$ a $50\text{ kHz}$, o que dá $\mathrm{SR}\approx4\cdot50\text{ kHz}\cdot1{,}6\text{ V}\approx0{,}32\text{ V/}\mu\text{s}$, cerca de $36\%$ abaixo dos $0{,}5\text{ V/}\mu\text{s}$ típicos do \textit{datasheet}. A frequência máxima correspondente é $f_{max}\approx11{,}3\text{ kHz}$. No TL064, o pico é de aproximadamente $2{,}0\text{ V}$ a $400\text{ kHz}$, resultando em $\mathrm{SR}\approx3{,}2\text{ V/}\mu\text{s}$, próximo dos $3{,}0\text{ V/}\mu\text{s}$ usados como referência ($\approx 7\%$ de diferença), com $f_{max}\approx113\text{ kHz}$. O TL064 é, portanto, cerca de dez vezes mais rápido que o LM741 na simulação, e a distorção só aparece nele em frequências muito mais altas. Os picos dos triângulos foram lidos nos gráficos, e os valores de \textit{slew rate} são estimativas com a incerteza dessa leitura.
+No LM741, o triângulo tem pico de aproximadamente $1{,}6\text{ V}$ a $50\text{ kHz}$, o que dá $\mathrm{SR}\approx4\cdot50\text{ kHz}\cdot1{,}6\text{ V}\approx0{,}32\text{ V/}\mu\text{s}$, cerca de $36\%$ abaixo dos $0{,}5\text{ V/}\mu\text{s}$ típicos do \textit{datasheet}. A frequência máxima correspondente é $f_{max}\approx11{,}3\text{ kHz}$. No TL064, o pico é de aproximadamente $2{,}0\text{ V}$ a $400\text{ kHz}$, resultando em $\mathrm{SR}\approx3{,}2\text{ V/}\mu\text{s}$, cerca de $9\%$ abaixo do típico de $3{,}5\text{ V/}\mu\text{s}$ do \textit{datasheet}, com $f_{max}\approx113\text{ kHz}$. O TL064 é, portanto, cerca de dez vezes mais rápido que o LM741 na simulação, e a distorção só aparece nele em frequências muito mais altas. Os picos dos triângulos foram lidos nos gráficos, e os valores de \textit{slew rate} são estimativas com a incerteza dessa leitura.
 
 
 \subsection{Projeto da Equipe}
@@ -1399,16 +1431,23 @@ simulado do LM741 foi o mesmo nos três projetos ($0{,}315$ a $0{,}32$~V/$\mu$s)
 amplitudes fossem $5$~V (Guilherme) e $4{,}5$~V (Daniel e Lurian). Isso confirma que o
 \textit{slew rate} é uma propriedade da peça e não do sinal. O que muda com a amplitude é a
 fronteira da Equação~\eqref{eq:fsr}: $10{,}0$~kHz com $5$~V e $11{,}3$~kHz com $4{,}5$~V, razão
-$1{,}11$, igual a $5/4{,}5$. Os ensaios de corrente contínua não variam entre os integrantes,
-porque o ganho 101 e o resistor $R_s=100$~k$\Omega$ são fixados pelo roteiro.
+$1{,}11$, igual a $5/4{,}5$. Nos ensaios de corrente contínua, o ganho 101 e o resistor
+$R_s=100$~k$\Omega$ são fixados pelo roteiro, e o circuito é o mesmo para todos. As saídas
+simuladas por Guilherme e Lurian coincidem ($111{,}13$~mV sem $R_s$ e $-472{,}9$~mV com $R_s$), como
+esperado.
 
 \paragraph{Grandezas do componente.} Para offset, corrente de polarização e \textit{slew rate}
 não existe cálculo analítico, e a comparação é entre o modelo e o valor típico do
-\textit{datasheet}. O modelo do LM741 tem $V_{OS}=1{,}10$~mV (típico $1$~mV) e $I_B=57{,}8$~nA
-(típico $80$~nA), ambos plausíveis. O \textit{slew rate} do modelo, $\approx0{,}32$~V/$\mu$s, está
+\textit{datasheet}. Os registros do \texttt{.op} (Seção~5.1, Lurian) mostram que o modelo do LM741
+tem $V_{OS}=1{,}00$~mV e corrente de polarização média de $79{,}9$~nA, praticamente iguais aos
+típicos de $1$~mV e $80$~nA. Os valores de $1{,}10$~mV e $57{,}8$~nA obtidos pelo método do roteiro
+diferem dos típicos por limitação do método, e não do modelo: o ensaio mede apenas a corrente da
+entrada não inversora ($57{,}9$~nA, contra $101{,}9$~nA na inversora), e a leitura de offset inclui
+o termo $I_BR_f$ da entrada inversora. Esse resultado vale também para a bancada, onde o método é o
+mesmo. O \textit{slew rate} do modelo, $\approx0{,}32$~V/$\mu$s, está
 cerca de $36\%$ abaixo do típico de $0{,}5$~V/$\mu$s. No TL064, o modelo tem $SR\approx3{,}2$ a
 $3{,}3$~V/$\mu$s, $6$ a $9\%$ abaixo do típico de $3{,}5$~V/$\mu$s da Tabela~\ref{tab:datasheet_equipe}
-(as tabelas da Seção~5.1 usaram $3{,}0$~V/$\mu$s como referência), e corrente de polarização nula
+(as tabelas de Guilherme e Daniel usaram $3{,}0$~V/$\mu$s como referência), e corrente de polarização nula
 para fins práticos. No modelo, o TL064 é cerca de dez vezes mais rápido que o LM741, contra sete
 vezes pelos valores típicos. Essas diferenças dizem o que o modelo representa, e não indicam erro
 de projeto.
@@ -1424,7 +1463,7 @@ abaixo, os desvios quase se cancelam na razão, e o ganho passou de $13{,}20$ pa
 
 \paragraph{Offset e corrente de polarização.} A saída simulada do LM741 subiu de $111{,}13$~mV
 (projeto) para $113{,}98$~mV (montagem), aumento de $2{,}6\%$, praticamente igual ao aumento do
-ganho. Dividindo pelo ganho real, o offset do modelo é $0{,}113975/103{,}75=1{,}10$~mV, o mesmo da
+ganho. Dividindo pelo ganho real, obtém-se $0{,}113975/103{,}75=1{,}10$~mV, o mesmo da
 simulação de projeto. O valor de $1{,}13$~mV da Seção~4.3 resulta apenas de dividir pelo ganho
 nominal. O mesmo vale para a corrente de polarização: com o ganho real e $R_s=98{,}77$~k$\Omega$,
 $I_B=0{,}592477/(103{,}75\cdot98{,}77~\text{k}\Omega)=57{,}8$~nA, idêntico aos $57{,}8$~nA do
