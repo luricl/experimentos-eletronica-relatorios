@@ -37,18 +37,17 @@
 \capa
 
 \begin{resumo}
-
-% Este relatório apresenta o projeto, a simulação e a verificação experimental de quatro
-% configurações de amplificadores operacionais: seguidor de tensão, amplificador não inversor,
-% somador inversor e amplificador de diferença. As simulações individuais foram definidas pelas
-% matrículas dos três integrantes e realizadas no LTspice com resistores da série E12. Em bancada,
-% foi montado o conjunto correspondente à Equipe 2, utilizando os valores reais dos resistores
-% medidos antes da montagem. Entre os resultados, o seguidor manteve $1{,}96\,\mathrm{V}$ na carga,
-% enquanto a conexão direta produziu $1{,}28\,\mathrm{V}$; o amplificador não inversor apresentou
-% ganho medido de $2{,}46$; o somador apresentou extremos de $8{,}8\,\mathrm{V}$ e $0{,}6\,\mathrm{V}$;
-% e o amplificador de diferença apresentou ganho diferencial de $2{,}16$. O ensaio de modo comum
-% foi limitado pela resolução da aquisição.
-
+Este relatório investiga as não idealidades de dois amplificadores operacionais, o LM741 (entrada
+bipolar) e o TL064 (entrada JFET): tensão de offset, corrente de polarização, produto ganho-banda
+e \textit{slew rate}. Cada integrante dimensionou, com resistores da série E12, dois amplificadores
+não inversores com os ganhos definidos pela própria matrícula e simulou no LTspice os seis ensaios
+do roteiro. Em bancada, a Equipe 2 montou o ganho baixo de 13, o ganho alto de 101 e o seguidor com
+$V_p=2{,}5$~V, e refez a simulação com os valores medidos dos resistores. As simulações de projeto
+confirmaram $f_c=GBW/G$, com $GBW\approx1$~MHz em todos os ganhos. Na bancada, o LM741 apresentou
+$V_{OS}=1{,}63$~mV, $I_B=16$~nA, $GBW\approx0{,}70$~MHz nos dois ganhos e
+$SR=0{,}51$~V/$\mu$s, todos dentro da especificação do fabricante. A corrente de polarização e o
+\textit{slew rate} medidos no TL064 ficaram fora da especificação, o que indica falha na montagem
+desses ensaios, e não uma característica da peça.
 \end{resumo}
 
 \section{Introdução}
@@ -279,195 +278,6 @@ $R_f$ para $G_2=119$ ($R_g=1\text{ k}\Omega$) & $118\text{ k}\Omega$ & $100\text
 \end{tabular}
 \end{center}
 
-% \begin{espec}
-% \label{espec:luri}
-
-% Matrícula \mat{22/2005395}. \\ Logo,
-
-% \begin{equation}
-%     A=2,\; B=2,\; C=2,\; D=0,\; E=0,\; F=5,\; G=3,\; H=9,\; I=5
-% \end{equation}
-
-% A partir desses valores, as especificações individuais exigidas pelo roteiro são:
-
-% \begin{itemize}
-%     \item \textbf{Seção 2.2 (Seguidor):} $V_{\text{carga}}=2+\dfrac{EF}{33}\approx2{,}15\text{ V}$, com queda minima $=25+\dfrac{GH}{5}\approx32{,}8\%$.
-    
-%     \item \textbf{Seção 2.3 (Não inversor):} $G=4+\dfrac{(7\,EF+3\,GH)\bmod 81}{10}\approx11{,}1$
-
-%     \item \textbf{Seção 2.4 (Somador):} $k_1=2+(EF\bmod4)=3$; \quad $k_2=6+(GH\bmod 4)=9$
-
-%     \item \textbf{Seção 2.5 (Diferença):} $A_d=2+\dfrac{(3\,GH+7\,I)\bmod90}{10}\approx8{,}2$
-% \end{itemize}
-% \end{espec}
-
-% Os componentes E12 correspondentes para a especificação apresentada e o desvio de cada escolha em relação ao valor teórico são apresentados a seguir:
-
-% \begin{itemize}
-%     \item \textbf{Seguidor de tensão:} Para obter a tensão sobre a carga
-% $V_{\text{carga}}=2{,}152\text{ V}$ e atender à queda mínima especificada
-% de $32{,}8\%$, foram utilizados os mesmos valores do divisor do Roteiro 1:
-% $R_1=2{,}2\text{ k}\Omega$, $R_2=1{,}5\text{ k}\Omega$ e
-% $R_L=1\text{ k}\Omega$. A resistência equivalente em paralelo com a carga é
-% $R_p=R_2\parallel R_L=1{,}5\text{ k}\Omega\parallel1\text{ k}\Omega
-% =0{,}6\text{ k}\Omega$. A tensão em vazio do divisor é
-% $V_{\text{vazio}}=10\cdot\frac{1{,}5}{2{,}2+1{,}5}
-% \approx4{,}054\text{ V}$, enquanto a tensão com a carga ligada diretamente é
-% $V_{\text{carga,direta}}=10\cdot\frac{0{,}6}{2{,}2+0{,}6}
-% \approx2{,}143\text{ V}$. O desvio em relação aos $2{,}152\text{ V}$
-% especificados é de aproximadamente $0{,}41\%$. A queda de tensão causada pela
-% carga é
-% $\frac{4{,}054-2{,}143}{4{,}054}\times100\approx47{,}14\%$,
-% superior à queda mínima de $32{,}8\%$.
-
-%     \item \textbf{Amplificador não inversor:} Para obter o ganho especificado pela matrícula, 
-%     $G=11{,}1$, adotou-se $R_g=4{,}8\text{ k}\Omega$, construído com uma associação em série de $3{,}3\text{ k}\Omega$ e $1{,}5\text{ k}\Omega$. Para a realimentação, adotou-se uma associação em série de $47\text{ k}\Omega$ e $1{,}5\text{ k}\Omega$, totalizando $R_f=48{,}5\text{ k}\Omega$. O ganho realizado é
-%     \[
-%     G_{\text{real}}=1+\frac{48{,}5\text{ k}\Omega}{4{,}8\text{ k}\Omega}
-%     \approx 11{,}104,
-%     \]
-%     representando um desvio de aproximadamente
-%     \[
-%     \frac{|11{,}104-11{,}1|}{11{,}1}\times100\%\approx 0{,}038\%.
-%     \]
-
-%     \item \textbf{Somador inversor:} Para os pesos definidos pela matrícula, $k_1=3$ e $k_2=9$, adotou-se $R_f=27\text{ k}\Omega$. O resistor da entrada 1 foi escolhido como $R_1=9\text{ k}\Omega$, resultando em
-%     \[
-%     k_1=\frac{R_f}{R_1}=\frac{27\text{ k}\Omega}{9\text{ k}\Omega}=3,
-%     \]
-%     com desvio nulo. Para a entrada 2, adotou-se $R_2=3\text{ k}\Omega$, resultando em
-%     \[
-%     k_2=\frac{R_f}{R_2}=\frac{27\text{ k}\Omega}{3\text{ k}\Omega}=9,
-%     \]
-%     também com desvio nulo.
-
-%     \item \textbf{Amplificador de diferença:} Para o ganho diferencial especificado pela matrícula, $A_d=8{,}2$, adotaram-se resistores de entrada $R_1=R_3=10\text{ k}\Omega$ e os resistores de realimentação/aterramento $R_2=R_4=82\text{ k}\Omega$. O ganho realizado é
-%     \[
-%     A_d=\frac{R_2}{R_1}=\frac{82\text{ k}\Omega}{10\text{ k}\Omega}=8{,}2,
-%     \]
-%     alcançando a especificação com desvio nulo ($0\%$).
-    
-% \end{itemize}
-
-% \begin{center}
-% \renewcommand{\arraystretch}{1.2}
-% \begin{tabular}{@{}lrrr@{}}
-% \toprule
-% \textbf{Grandeza} & \textbf{Teórico} & \textbf{Adotado} & \textbf{Desvio} \\
-% \midrule
-% $V_{\text{carga}}$ (Seguidor)
-% & $2{,}152$
-% & $2{,}152$
-% & $0{,}00\%$ \\
-
-% Ganho $G$ (Não inversor)
-% & $11{,}100$
-% & $11{,}104$
-% & $0{,}038\%$ \\
-
-% Peso $k_1$ (Somador)
-% & $3{,}000$
-% & $3{,}000$
-% & $0{,}00\%$ \\
-
-% Peso $k_2$ (Somador)
-% & $9{,}000$
-% & $9{,}000$
-% & $0{,}00\%$ \\
-
-% Ganho diferencial $A_d$
-% & $8{,}200$
-% & $8{,}200$
-% & $0{,}00\%$ \\
-% \bottomrule
-% \end{tabular}
-% \end{center}
-
-% \begin{espec}
-% \textbf{Matrícula: 23/1036775.}
-
-% Para os nove dígitos \(ABCDEFGHI\), tem-se:
-
-% $$
-% A=2,\ B=3,\ C=1,\ D=0,\ E=3,\ F=6,\ G=7,\ H=7,\ I=5,
-% $$
-
-% portanto, \(EF=36\) e \(GH=77\).
-
-% As especificações individuais são:
-
-% \begin{itemize}
-
-
-% \item \textbf{Seção 2.2 — Seguidor:}
-% \[
-% V_{\text{carga}}=2+\frac{36}{33}\approx3{,}091\,\text{V},
-% \qquad
-% \text{queda mínima}=25+\frac{77}{5}=40{,}4\%.
-% \]
-
-% \item \textbf{Seção 2.3 — Não inversor:}
-% \[
-% G=4+\frac{(7\cdot36+3\cdot77)\bmod81}{10}
-% =11{,}8.
-% \]
-
-% \item \textbf{Seção 2.4 — Somador:}
-% \[
-% k_1=2+(36\bmod4)=2,
-% \qquad
-% k_2=6+(77\bmod4)=7.
-% \]
-
-% \item \textbf{Seção 2.5 — Diferença:}
-% \[
-% A_d=2+\frac{(3\cdot77+7\cdot5)\bmod90}{10}
-% =10{,}6.
-% \]
-
-
-% \end{itemize}
-
-% \end{espec}
-
-% \begin{itemize}
-%     \item \textbf{Seguidor de tensão:} Adotaram-se $R_1=2{,}2\text{ k}\Omega$ e $R_2=1\text{ k}\Omega$. Com a carga de $1\text{ k}\Omega$ ligada diretamente, $R_p=0{,}5\text{ k}\Omega$ e $V_{\text{carga,direta}}\approx1{,}852\text{ V}$. Em vazio, o divisor fornece $V_{\text{vazio}}\approx3{,}125\text{ V}$, e a queda provocada pela carga é $40{,}7\%$, superior aos $40{,}4\%$ exigidos.
-
-%     \item \textbf{Amplificador não inversor:} Para o ganho especificado $G=11{,}8$, adotaram-se $R_g=1{,}5\text{ k}\Omega$ e $R_f=16{,}2\text{ k}\Omega$, obtido por $15\text{ k}\Omega+1{,}2\text{ k}\Omega$. Assim,
-%     \[
-%     G_{\text{real}}=1+\frac{16{,}2}{1{,}5}=11{,}8.
-%     \]
-
-%     \item \textbf{Somador inversor:} Adotaram-se $R_f=6{,}8\text{ k}\Omega$, $R_1=3{,}3\text{ k}\Omega$ e $R_2=1\text{ k}\Omega$. Os pesos efetivamente realizados são
-%     \[
-%     k_1=\frac{6{,}8}{3{,}3}\approx2{,}061,
-%     \qquad
-%     k_2=\frac{6{,}8}{1}=6{,}800.
-%     \]
-
-%     \item \textbf{Amplificador de diferença:} Adotaram-se $R_1=R_3=10\text{ k}\Omega$ e $R_2=R_4=104\text{ k}\Omega$, obtidos por $82\text{ k}\Omega+22\text{ k}\Omega$. O ganho diferencial realizado é
-%     \[
-%     A_d=\frac{104}{10}=10{,}4,
-%     \]
-%     correspondente a um desvio de aproximadamente $1{,}89\%$ em relação aos $10{,}6$ especificados.
-
-% \end{itemize}
-
-% \begin{center}
-% \renewcommand{\arraystretch}{1.2}
-% \begin{tabular}{@{}lrrr@{}}
-% \toprule
-% \textbf{Grandeza} & \textbf{Teórico} & \textbf{Adotado} & \textbf{Desvio} \\
-% \midrule
-% $V_{\text{vazio}}$ (Seguidor)& $3{,}091\text{ V}$ & $3{,}125\text{ V}$& $1{,}10\%$ \\
-% Ganho $G$ (Não inversor)& $11{,}800$ & $11{,}800$ & $0{,}00\%$ \\
-% Peso $k_1$ (Somador)& $2{,}000$ & $2{,}061$ & $3{,}03\%$ \\
-% Peso $k_2$ (Somador)& $7{,}000$ & $6{,}800$ & $2{,}86\%$ \\
-% Ganho diferencial $A_d$ & $10{,}600$ & $10{,}400$ & $1{,}89\%$ \\
-% \bottomrule
-% \end{tabular}
-% \end{center}
-
 \begin{especbancada}
 \textbf{Equipe 2}. A partir da equipe as especificações apresentadas pelo roteiro são:
 
@@ -504,13 +314,21 @@ Ganho baixo $G_1$ & $13{,}000$ & $13{,}195$ & $1{,}50\%$ \\
 
 \section{Metodologia}
 
-% Conte o que você fez e com quais parâmetros, de modo que um colega consiga repetir sem
-% precisar perguntar nada. Explique as escolhas que não são evidentes: por que essa faixa de
-% varredura, por que esse passo de integração, por que esse intervalo de gravação.
+Todos os ensaios usam o amplificador não inversor da Seção~2 ou o seguidor de tensão, com
+alimentação simétrica de $\pm15$~V. O trabalho foi feito em três etapas. Primeiro, cada integrante
+desenhou e simulou no LTspice os seis circuitos do roteiro com os componentes do próprio projeto:
+tensão de offset, corrente de polarização com o LM741 e com o TL064, resposta em frequência com os
+dois ganhos da matrícula, e \textit{slew rate} com as duas peças (Seção~4.1). Depois, a equipe
+montou em bancada a especificação da Equipe 2, medindo antes cada resistor com o multímetro
+(Seção~4.2). As tensões contínuas foram lidas com o multímetro, e as formas de onda com o
+osciloscópio Agilent DSO1002A, excitando o circuito com o gerador Agilent 33220A. Por fim, os
+circuitos de bancada foram simulados de novo com os valores medidos dos resistores (Seção~4.3).
 
-% Inclua a figura do esquemático, com legenda que descreva o que ela mostra, e cite-a no
-% texto, como na Figura~\ref{fig:exemplo}. Se uma figura não for mencionada em nenhum
-% parágrafo, ela provavelmente não precisa estar aqui.
+Os ensaios de corrente contínua usam \texttt{.op}, porque offset e corrente de polarização são
+grandezas de ponto de operação. A resposta em frequência usa varredura \texttt{.ac} decádica de
+10~Hz a 10~MHz, faixa que contém as frequências de corte esperadas ($GBW/G$, entre cerca de 8 e
+100~kHz) e o cruzamento por $0$~dB, perto de 1~MHz. O \textit{slew rate} exige análise
+\texttt{.tran}, já que é um efeito não linear que a análise de pequenos sinais não representa.
 
 \subsection{Simulação de projeto, uma por integrante}
 
@@ -523,11 +341,11 @@ Para comprovar que o projeto atende às especificações apresentadas na seção
 \begin{itemize}
     \item \textbf{Tensão de Offset (Fig.~\ref{fig:circs_guilherme}a):} Para medir a tensão de offset, montou-se um amplificador não inversor com um ganho de 101, empregando resistências de $R_f=100\text{ k}\Omega$ e $R_g=1\text{ k}\Omega$, e com a entrada inversora ligada diretamente ao terra. Utilizou-se a diretiva de ponto de operação (\texttt{.op}) para medir a tensão em corrente contínua amplificada na saída do componente LM741.
     
-    \item \textbf{Corrente de Polarização (Fig.~\ref{fig:circs_guilherme}b e \ref{fig:circs_guilherme}c):} O circuito da seção anterior foi alterado mediante a adição de uma resistência $R_s=100\text{ k}\Omega$ entre o terra e a entrada não inversora. A análise de ponte de operação \texttt{.op} foi realizada em dois esquemáticos distintos, sendo o primeiro com o amplificador LM741 e o segundo utilizando o TL064. A diferença obtida entre os dois ensaios (com e sem $R_s$) permite a determinação analítica da corrente de polarização.
+    \item \textbf{Corrente de Polarização (Fig.~\ref{fig:circs_guilherme}b e \ref{fig:circs_guilherme}c):} O circuito da seção anterior foi alterado mediante a adição de uma resistência $R_s=100\text{ k}\Omega$ entre o terra e a entrada não inversora. A análise de ponto de operação \texttt{.op} foi realizada em dois esquemáticos distintos, sendo o primeiro com o amplificador LM741 e o segundo utilizando o TL064. A diferença obtida entre os dois ensaios (com e sem $R_s$) permite a determinação analítica da corrente de polarização.
 
-    \item \textbf{Resposta em Frequência (Fig.~\ref{fig:circs_guilherme}e):} Dois amplificadores não inversores baseados no LM741 foram montados no mesmo esquemáticos e alimentados por uma fonte de sinal alternado (\texttt{AC 1}). Para aproximar o ganho calculado de $G_1$ com base na série E12, utilizou-se $R_g=1{,}5\text{ k}\Omega$ em conjunto com uma malha de realimentação  $R_f$ composta por duas resistências em série ($47\text{ k}\Omega$ e $6{,}8\text{ k}\Omega$). O ganho de $G_2$ foi implementado de forma exata com $R_{g_{2}}=1\text{ k}\Omega$ e $R_{f_{2}}=100\text{ k}\Omega$. Aplicou-se a análise em frequência (\texttt{.ac dec 50 10 10meg}), através de uma varredura decádica de 10 Hz a 10 MHz com 50 pontos por década, para levantar a curva e identificar as frequências de corte.     
+    \item \textbf{Resposta em Frequência (Fig.~\ref{fig:circs_guilherme}d):} Dois amplificadores não inversores baseados no LM741 foram montados no mesmo esquemático e alimentados por uma fonte de sinal alternado (\texttt{AC 1}). Para aproximar o ganho calculado de $G_1$ com base na série E12, utilizou-se $R_g=1{,}5\text{ k}\Omega$ em conjunto com uma malha de realimentação  $R_f$ composta por duas resistências em série ($47\text{ k}\Omega$ e $6{,}8\text{ k}\Omega$). O ganho de $G_2$ foi implementado de forma exata com $R_{g_{2}}=1\text{ k}\Omega$ e $R_{f_{2}}=100\text{ k}\Omega$. Aplicou-se a análise em frequência (\texttt{.ac dec 50 10 10meg}), através de uma varredura decádica de 10 Hz a 10 MHz com 50 pontos por década, para levantar a curva e identificar as frequências de corte.     
     
-    \item \textbf{Slew Rate (Fig.~\ref{fig:circs_guilherme}e e \ref{fig:circs_guilherme}f):} O circuito foi configurado como um seguidor de tensão e alimentado por um sinal senoidal de amplitude correspondente à matrícula ($V_p=5\text{ V}$). Utilizou-se a análise de regime transitório (\texttt{.tran}) combinada com uma varredura paramétrica de frequência (\texttt{.step param f\_var}). No ensaio com o LM741, testaram-se as frequências de 10 kHz e 30 kHz em um intervalo de 1 ms. Para o TL064, considerando que ele é relativamente mais rápido do que o LM741, a sua simulação exigiu frequências mais elevadas (50 kHz e 400 kHz) para evidenciar a distorção triangular num intervalo de 200 $mu$s. 
+    \item \textbf{Slew Rate (Fig.~\ref{fig:circs_guilherme}e e \ref{fig:circs_guilherme}f):} O circuito foi configurado como um seguidor de tensão e alimentado por um sinal senoidal de amplitude correspondente à matrícula ($V_p=5\text{ V}$). Utilizou-se a análise de regime transitório (\texttt{.tran}) combinada com uma varredura paramétrica de frequência (\texttt{.step param f\_var}). No ensaio com o LM741, testaram-se as frequências de 10 kHz e 30 kHz em um intervalo de 1 ms. Para o TL064, considerando que ele é relativamente mais rápido do que o LM741, a sua simulação exigiu frequências mais elevadas (50 kHz e 400 kHz) para evidenciar a distorção triangular num intervalo de 200~$\mu$s. 
 \end{itemize}
 
 \begin{figure}[H]
@@ -735,7 +553,7 @@ $R_s$ & $100~\mathrm{k}\Omega$ & $98{,}770~\mathrm{k}\Omega$ \\
 
 \subsubsection{Tensão de offset}
 
-Inicialmente, foi montado o amplificador não inversor com ganho nominal 101, utilizando $R_f=100~\mathrm{k}\Omega$ e $R_g=1~\mathrm{k}\Omega$. A entrada não inversora foi conectada diretamente ao terra, de modo que qualquer tensão contínua observada na saída estivesse associada principalmente à tensão de offset do amplificador operacional.
+Inicialmente, foi montado o amplificador não inversor com ganho nominal 101 (Figuras~\ref{fig:montagem_offset_lm741} e~\ref{fig:montagem_offset_tl064}), utilizando $R_f=100~\mathrm{k}\Omega$ e $R_g=1~\mathrm{k}\Omega$. A entrada não inversora foi conectada diretamente ao terra, de modo que qualquer tensão contínua observada na saída estivesse associada principalmente à tensão de offset do amplificador operacional.
 
 Para o LM741, foi medida uma tensão contínua de saída de $169$~mV. Considerando o ganho de 101 utilizado no ensaio, a tensão de offset correspondente é
 
@@ -771,7 +589,7 @@ TL064 & $-49{,}5$~mV & $-0{,}490$~mV \\
 % Inserir aqui a fotografia da montagem utilizada no ensaio de tensão de offset.
 \includegraphics[width=0.65\textwidth]{imgs/montagem/3.3tensaooffset.jpg}
 \caption{LM741: Montagem em bancada utilizada para a medição da tensão de offset.}
-\label{fig:montagem_offset}
+\label{fig:montagem_offset_lm741}
 \end{figure}
 
 \begin{figure}[H]
@@ -779,12 +597,12 @@ TL064 & $-49{,}5$~mV & $-0{,}490$~mV \\
 % Inserir aqui a fotografia da montagem utilizada no ensaio de tensão de offset.
 \includegraphics[width=0.65\textwidth]{imgs/montagem/3.3tensaooffset2.jpg}
 \caption{TL064: Montagem em bancada utilizada para a medição da tensão de offset.}
-\label{fig:montagem_offset}
+\label{fig:montagem_offset_tl064}
 \end{figure}
 
 \subsubsection{Corrente de polarização}
 
-Para a medição da corrente de polarização, o fio que conectava a entrada não inversora ao terra foi substituído pelo resistor $R_s=98{,}770~\mathrm{k}\Omega$. A tensão de saída foi então medida novamente, permitindo determinar a variação de tensão causada pela corrente de polarização.
+Para a medição da corrente de polarização, o fio que conectava a entrada não inversora ao terra foi substituído pelo resistor $R_s=98{,}770~\mathrm{k}\Omega$ (Figuras~\ref{fig:montagem_polarizacao_lm741} e~\ref{fig:montagem_polarizacao_tl064}). A tensão de saída foi então medida novamente, permitindo determinar a variação de tensão causada pela corrente de polarização.
 
 Para o LM741, a tensão de saída passou de $169$~mV, obtida no ensaio de offset, para $2{,}7$~mV. Assim,
 
@@ -844,7 +662,7 @@ A diferença entre os degraus observados para o LM741 e o TL064 está associada 
 % Inserir aqui a fotografia da montagem com o resistor Rs.
 \includegraphics[width=0.65\textwidth]{imgs/montagem/3.4LM741.jpg}
 \caption{LM741: Montagem utilizada para a medição da corrente de polarização.}
-\label{fig:montagem_polarizacao}
+\label{fig:montagem_polarizacao_lm741}
 \end{figure}
 
 \begin{figure}[H]
@@ -852,7 +670,7 @@ A diferença entre os degraus observados para o LM741 e o TL064 está associada 
 % Inserir aqui a fotografia da montagem com o resistor Rs.
 \includegraphics[width=0.65\textwidth]{imgs/montagem/3.4TL064.jpg}
 \caption{TL064: Montagem utilizada para a medição da corrente de polarização.}
-\label{fig:montagem_polarizacao}
+\label{fig:montagem_polarizacao_tl064}
 \end{figure}
 
 \subsubsection{Resposta em frequência}
@@ -877,7 +695,7 @@ G_{101,\mathrm{med}}=
 \approx103{,}75.
 $$
 
-A resposta em frequência foi obtida mantendo a amplitude de entrada constante e aumentando progressivamente a frequência do sinal. Os valores medidos são apresentados nas tabelas a seguir.
+A resposta em frequência foi obtida mantendo a amplitude de entrada constante e aumentando progressivamente a frequência do sinal. A montagem está na Figura~\ref{fig:resposta_frequencia}, e os valores medidos são apresentados nas Tabelas~\ref{tab:freq_g1_equipe} e~\ref{tab:freq_g2_equipe} da Seção~5.2.
 
 
 
@@ -894,7 +712,7 @@ A frequência de corte de cada estágio e o respectivo produto ganho-banda serã
 
 \subsubsection{Slew rate}
 
-O ensaio de \textit{slew rate} foi realizado configurando o amplificador operacional como seguidor de tensão. Para a Equipe 2, a senoide aplicada possui amplitude de pico $V_p=2{,}5$~V. A frequência foi aumentada progressivamente até que a saída deixasse de apresentar comportamento senoidal e passasse a apresentar formato aproximadamente triangular.
+O ensaio de \textit{slew rate} foi realizado configurando o amplificador operacional como seguidor de tensão. Para a Equipe 2, a senoide aplicada possui amplitude de pico $V_p=2{,}5$~V. A frequência foi aumentada progressivamente até que a saída deixasse de apresentar comportamento senoidal e passasse a apresentar formato aproximadamente triangular. A montagem está na Figura~\ref{fig:montagem_slew}.
 
 
 
@@ -913,13 +731,30 @@ Assim, após a determinação do \textit{slew rate} a partir da inclinação da 
 % Inserir aqui a captura do osciloscópio para o TL064.
 \includegraphics[width=0.75\textwidth]{imgs/montagem/3.6slewrate.jpg}
 \caption{Montagem do circuito para o ensaio de \textit{slew rate}.}
-\label{fig:slew_tl064}
+\label{fig:montagem_slew}
 \end{figure}
 
 
 \subsection{Simulação da montagem}
 
 Nesta etapa, os circuitos utilizados na bancada foram reconstruídos no LTspice utilizando os valores reais dos componentes medidos antes da montagem. Dessa forma, buscou-se reproduzir nas simulações as mesmas condições utilizadas experimentalmente, permitindo posteriormente confrontar os resultados de projeto, simulação e medição.
+
+\begin{nota}{Três comparações, três causas diferentes}
+Os resultados são confrontados em três pares, discutidos separadamente na Seção~6.
+
+\smallskip
+\textbf{Cálculo analítico contra simulação de projeto.} Verifica a álgebra e o esquemático de cada
+integrante.
+
+\smallskip
+\textbf{Simulação de projeto contra simulação da montagem.} Mede o efeito da tolerância dos
+resistores, isto é, da distância entre o valor nominal e o valor real das peças usadas.
+
+\smallskip
+\textbf{Simulação da montagem contra medição.} Verifica se o modelo descreve o circuito real.
+Diferenças aqui apontam para o que o modelo não representa: a dispersão entre unidades do mesmo
+CI, a fuga no protoboard ou os limites dos instrumentos.
+\end{nota}
 
 \subsubsection{Tensão de offset}
 
@@ -955,7 +790,7 @@ O mesmo procedimento e análise foram realizados para o TL064:
 \label{fig:sim_res_offset_tl064}
 \end{figure}
 
-A tensão de saída obtida na simulação foi de $0{,}113975~\mathrm{V}$, correspondendo a uma tensão de offset de
+Para o LM741 (Figuras~\ref{fig:sim_offset_lm741} e~\ref{fig:sim_res_offset_lm741}), a tensão de saída obtida na simulação foi de $0{,}113975~\mathrm{V}$, correspondendo a uma tensão de offset de
 
 $$
 V_{OS,\mathrm{sim}}=
@@ -964,7 +799,7 @@ V_{OS,\mathrm{sim}}=
 \approx 1{,}13\times 10^{-3}~\mathrm{V}.
 $$
 
-Esse valor será comparado posteriormente ao resultado obtido na bancada.
+Para o TL064 (Figuras~\ref{fig:sim_offset_tl064} e~\ref{fig:sim_res_offset_tl064}), a mesma divisão resulta em $V_{OS,\mathrm{sim}}\approx0{,}027$~mV. A divisão por 101 usa o ganho nominal; com o ganho dos resistores medidos, $103{,}75$, o offset do modelo do LM741 é $0{,}113975/103{,}75\approx1{,}10$~mV, como discutido na Seção~6.2.
 
 \subsubsection{Corrente de polarização}
 
@@ -1001,7 +836,7 @@ I_{B,\mathrm{sim}}=
 \approx -5{,}94\times 10^{-8}~\mathrm{A}.
 $$
 
-O mesmo procedimento foi realizado para o TL064.
+O mesmo procedimento foi realizado para o TL064 (Figuras~\ref{fig:sim_polarizacao_tl064} e~\ref{fig:sim_res_polarizacao_tl064}). O modelo não apresenta corrente de entrada mensurável: a corrente em $R_s$ é da ordem de $10^{-23}$~A e a saída varia apenas $\Delta V_{O,\mathrm{sim}}=-72~\mu$V, de modo que $I_{B,\mathrm{sim}}\approx0$.
 
 \begin{figure}[H]
 \centering
@@ -1044,7 +879,7 @@ $$
 \label{fig:sim_resposta_frequencia}
 \end{figure}
 
-A resposta em frequência simulada apresentou frequências de corte de aproximadamente $95{,}0~\mathrm{kHz}$ para o ganho baixo e $10{,}0~\mathrm{kHz}$ para o ganho alto.
+O circuito está na Figura~\ref{fig:sim_resposta_frequencia}. A resposta em frequência simulada (Figura~\ref{fig:sim_gbw}) apresentou frequências de corte de aproximadamente $95{,}0~\mathrm{kHz}$ para o ganho baixo e $10{,}0~\mathrm{kHz}$ para o ganho alto.
 
 Os respectivos produtos ganho--banda são
 
@@ -1078,7 +913,7 @@ O ensaio de \textit{slew rate} foi reproduzido no LTspice utilizando o LM741 con
 \label{fig:sim_slew_lm741}
 \end{figure}
 
-Resultados obtidos para diferentes frequências no LM741:
+O circuito está na Figura~\ref{fig:sim_slew_lm741}. As Figuras~\ref{fig:sim_slew_lm741_10hz} a~\ref{fig:sim_slew_lm741_1khz} mostram a saída para frequências de 10~Hz a 1~kHz:
 
 \begin{figure}[H]
 \centering
@@ -1108,7 +943,9 @@ Resultados obtidos para diferentes frequências no LM741:
 \label{fig:sim_slew_lm741_1khz}
 \end{figure}
 
-Para o TL064, o mesmo procedimento foi repetido utilizando o modelo correspondente.
+Nas quatro frequências a saída acompanha a senoide de entrada, o que é esperado: todas estão abaixo de $f_{\mathrm{SR}}=SR/(2\pi V_p)\approx20$~kHz, calculado com o \textit{slew rate} do modelo ($\approx0{,}32$~V/$\mu$s, Seção~5.1). Essas simulações confirmam o regime linear em baixa frequência, mas não fornecem o \textit{slew rate}. Como o seguidor não tem resistores, a tolerância dos componentes não entra nesse ensaio, e o \textit{slew rate} das simulações de projeto (Seção~5.1) vale também para a montagem.
+
+Para o TL064, o mesmo procedimento foi repetido utilizando o modelo correspondente (Figuras~\ref{fig:sim_slew_tl064} e~\ref{fig:sim_res_slew_tl064}).
 
 \begin{figure}[H]
 \centering
@@ -1130,7 +967,7 @@ $$
 f_{\mathrm{SR}}=\frac{SR}{2\pi V_p}.
 $$
 
-Os valores obtidos na simulação serão posteriormente confrontados com as frequências observadas na bancada e com os valores especificados nos \textit{datasheets} dos componentes.
+Os valores de simulação são confrontados com a bancada e com os \textit{datasheets} na Seção~6.
 \section{Resultados}
 
 \subsection{Projeto de cada integrante}
@@ -1155,14 +992,14 @@ A Tabela~\ref{tab:resultados_cardoso} apresenta os parâmetros de não idealidad
     \textit{Slew Rate} (LM741)* & $0{,}50\text{ V/}\mu\text{s}$ & $0{,}315\text{ V/}\mu\text{s}$ & $37{,}00\%$ \\
     \textit{Slew Rate} (TL064)* & $3{,}00\text{ V/}\mu\text{s}$ & $3{,}286\text{ V/}\mu\text{s}$ & $9{,}53\%$ \\
     \bottomrule
-    \multicolumn{4}{l}{\footnotesize * Para as grandezas não ideias, o valor analítico reflete o típico de \textbf{datasheet}.}
+    \multicolumn{4}{l}{\footnotesize * Para as grandezas não ideais, o valor analítico reflete o típico de \textit{datasheet}.}
     \end{tabular}
 \end{table}
 
-\paragraph{Análise Analítca DC:}
+\paragraph{Análise Analítica DC:}
 A tensão de offset do LM741 foi calculada refletindo a tensão de saída para a entrada do amplificador não inversor de ganho 101, resultando em $V_{os}=\frac{111{,}13\text{ mV}}{101}=1{,}10\text{ mV}$. Este valor encontra-se perfeitamente dentro da faixa típica informada no \textit{datasheet} do componente. 
 
-A corrente de polarização foi determinada através da variação da tensão de saída ($\Delta V_o$) ao inserir o resistor $R_s=100\text{ k}\Omega$. Para o LM741, a diferença foi de $\Delta V_o=|-472{,}85\text{ mV}-111{,}13\text{ mV}|=583{,}98\text{ mV}.$ Pela relação $I_b=\frac{\Delta V_o}{101 \cdot R_s}$, obteve-se $I_b=57{,}82\text{ nA}$, compatível com a tecnologia bipolar do AmpOp. O mesmo procedimento aplicado  ao TL064 (tecnologia JFET) resultou uma variação de saída quase nula, comprovando que a sua corrente  de polarização é na ordem dos picoamperes (pA), sendo desprezível na simulação e resultando numa razão $\frac{I_{b(LM741)}}{I_{b(TL061)}} \to \infty$.
+A corrente de polarização foi determinada através da variação da tensão de saída ($\Delta V_o$) ao inserir o resistor $R_s=100\text{ k}\Omega$. Para o LM741, a diferença foi de $\Delta V_o=|-472{,}85\text{ mV}-111{,}13\text{ mV}|=583{,}98\text{ mV}.$ Pela relação $I_b=\frac{\Delta V_o}{101 \cdot R_s}$, obteve-se $I_b=57{,}82\text{ nA}$, compatível com a tecnologia bipolar do AmpOp. O mesmo procedimento aplicado ao TL064 (tecnologia JFET) resultou uma variação de saída quase nula, comprovando que a sua corrente  de polarização é na ordem dos picoamperes (pA), sendo desprezível na simulação e resultando numa razão $\frac{I_{b(LM741)}}{I_{b(TL064)}} \to \infty$.
 
 A Figura~\ref{fig:graficos_cardoso} exibe as formas de onda resultantes das simulações dinâmicas em frequência (\texttt{.ac}) e de regime transiente (\texttt{.tran}), evidenciando as limitações de largura de banda para os diferentes ganhos e as distorções causadas pela taxa de subida (\textit{slew rate}).
 
@@ -1202,7 +1039,7 @@ A Figura~\ref{fig:graficos_cardoso} exibe as formas de onda resultantes das simu
 \end{figure}
 
 \paragraph{Análise Analítica AC e Transiente:}
-A partir das curvas de resposta em frequência (Figuras~\ref{fig:graficos_cardoso}a e \ref{fig:graficos_cardoso}b), determinou-se analiticamente  o Produto Ganho-Banda (GBW) de cada configuração. Para o ganho real de malha fechada $G_1=37$ (realizado com a associação de resistores da série E12 resultando numa proporçãode $35{,}87$, a frequência de corte a $-3\text{ dB}$ medida foi de $f_{c1} \approx 26{,}95\text{ kHz}$, o que acarreta num produto $GBW_1=36{,}86 \times 26{,}95\text{ kHz} \approx 993{,}3\text{ kHz}$. Para o ganho $G_2=101$, obteve-se $f_{c2} \approx 9{,}82\text{ kHz}$, gerando um produto $GBW=100{,}95 \times 9{,}82\text{ kHz} \approx 991{,}3\text{ kHz}$.
+A partir das curvas de resposta em frequência (Figuras~\ref{fig:graficos_cardoso}a e \ref{fig:graficos_cardoso}b), determinou-se analiticamente  o Produto Ganho-Banda (GBW) de cada configuração. Para o ganho real de malha fechada $G_1=37$ (realizado com a associação de resistores da série E12 resultando numa proporção de $36{,}87$), a frequência de corte a $-3\text{ dB}$ medida foi de $f_{c1} \approx 26{,}95\text{ kHz}$, o que acarreta num produto $GBW_1=36{,}86 \times 26{,}95\text{ kHz} \approx 993{,}3\text{ kHz}$. Para o ganho $G_2=101$, obteve-se $f_{c2} \approx 9{,}82\text{ kHz}$, gerando um produto $GBW=100{,}95 \times 9{,}82\text{ kHz} \approx 991{,}3\text{ kHz}$.
 
 No que tange à distorção por \textit{Slew Rate} (SR), o limite de frequência teórica a partir da qual uma senoide de amplitude $V_p = 5\text{ V}$ sofre ceifamento triangular é calculado por $f_{max} = \frac{SR}{2\pi V_p}$. Através da inclinação da rampa medida com os cursores no LTspice, o SR simulado do LM741 foi de $0{,}315\text{ V/}\mu\text{s}$, projetando uma distorção limite a partir de $f_{max} \approx 10{,}0\text{ kHz}$. Em contrapartida, a medição da rampa para o TL064 resultou num SR de $3{,}286\text{ V/}\mu\text{s}$ (próximo aos $3{,}0\text{ V/}\mu\text{s}$ nominais de \textit{datasheet}), o que eleva a frequência máxima sem distorção para $f_{max} \approx 104{,}6\text{ kHz}$. A comparação evidencia de forma prática que o modelo JFET (TL064) é substancialmente mais veloz que o modelo bipolar (LM741) para lidar com variações abruptas de tensão. 
 
@@ -1221,19 +1058,19 @@ A Tabela~\ref{tab:resultados_daniel} apresenta os parâmetros de não idealidade
     \midrule    
     Ganho $G_1$ & $35{,}00$ & $35{,}02$ & $0{,}06\%$ \\
     Ganho $G_2$ & $116{,}00$ & $115{,}88$ & $0{,}10\%$ \\
-    Tensão de Offset $V_{os}$ (LM741)* & $1{,}00\text{ mV}$ & $1{,}05\text{ mV}$ & $5{,}00\%$ \\
-    Corrente de Polarização $I_b$ (LM741)* & $80{,}00\text{ nA}$ & $59{,}10\text{ nA}$ & $26{,}12\%$ \\
+    Tensão de Offset $V_{os}$ (LM741)* & $1{,}00\text{ mV}$ & $1{,}21\text{ mV}$ & $21{,}00\%$ \\
+    Corrente de Polarização $I_b$ (LM741)* & $80{,}00\text{ nA}$ & $68{,}04\text{ nA}$ & $14{,}95\%$ \\
     \textit{Slew Rate} (LM741)* & $0{,}50\text{ V/}\mu\text{s}$ & $0{,}320\text{ V/}\mu\text{s}$ & $36{,}00\%$ \\
     \textit{Slew Rate} (TL064)* & $3{,}00\text{ V/}\mu\text{s}$ & $3{,}250\text{ V/}\mu\text{s}$ & $8{,}33\%$ \\
     \bottomrule
-    \multicolumn{4}{l}{\footnotesize * Para as grandezas não ideais, o valor analítico reflete o típico de \textbf{datasheet}.}
+    \multicolumn{4}{l}{\footnotesize * Para as grandezas não ideais, o valor analítico reflete o típico de \textit{datasheet}.}
     \end{tabular}
 \end{table}
 
 \paragraph{Análise Analítica DC:}
-A tensão de offset do LM741 foi calculada refletindo a tensão de saída para a entrada do amplificador não inversor de ganho $116$, resultando em $V_{os}=\frac{121{,}80\text{ mV}}{116}=1{,}05\text{ mV}$. Este valor encontra-se perfeitamente dentro da faixa típica informada no \textit{datasheet} do componente. 
+A tensão de offset do LM741 foi calculada refletindo a tensão de saída para a entrada do amplificador não inversor de ganho $101$ ($R_f=100\text{ k}\Omega$ e $R_g=1\text{ k}\Omega$, Figura~\ref{fig:circs_daniel}a), resultando em $V_{os}=\frac{121{,}80\text{ mV}}{101}=1{,}21\text{ mV}$. Este valor encontra-se perfeitamente dentro da faixa típica informada no \textit{datasheet} do componente. 
 
-A corrente de polarização foi determinada através da variação da tensão de saída ($\Delta V_o$) ao inserir o resistor $R_s=100\text{ k}\Omega$. Para o LM741, a diferença medida foi de $\Delta V_o=|-565{,}40\text{ mV}-121{,}80\text{ mV}|=687{,}20\text{ mV}.$ Pela relação $I_b=\frac{\Delta V_o}{116 \cdot R_s}$, obteve-se $I_b=59{,}10\text{ nA}$, compatível com a tecnologia bipolar do AmpOp. O mesmo procedimento aplicado ao TL064 (tecnologia JFET) resultou em uma variação de saída quase nula, comprovando que a sua corrente de polarização é da ordem dos picoamperes (pA), sendo desprezível na simulação e resultando numa razão $\frac{I_{b(LM741)}}{I_{b(TL064)}} \to \infty$.
+A corrente de polarização foi determinada através da variação da tensão de saída ($\Delta V_o$) ao inserir o resistor $R_s=100\text{ k}\Omega$. Para o LM741, a diferença medida foi de $\Delta V_o=|-565{,}40\text{ mV}-121{,}80\text{ mV}|=687{,}20\text{ mV}.$ Pela relação $I_b=\frac{\Delta V_o}{101 \cdot R_s}$, obteve-se $I_b=68{,}04\text{ nA}$, compatível com a tecnologia bipolar do AmpOp. O mesmo procedimento aplicado ao TL064 (tecnologia JFET) resultou em uma variação de saída quase nula, comprovando que a sua corrente de polarização é da ordem dos picoamperes (pA), sendo desprezível na simulação e resultando numa razão $\frac{I_{b(LM741)}}{I_{b(TL064)}} \to \infty$.
 
 A Figura~\ref{fig:graficos_daniel} exibe as formas de onda resultantes das simulações dinâmicas em frequência (\texttt{.ac}) e de regime transiente (\texttt{.tran}), evidenciando as limitações de largura de banda para os diferentes ganhos e as distorções causadas pela taxa de subida (\textit{slew rate}).
 
@@ -1275,7 +1112,7 @@ A Figura~\ref{fig:graficos_daniel} exibe as formas de onda resultantes das simul
 \paragraph{Análise Analítica AC e Transiente:}
 A partir das curvas de resposta em frequência (Figuras~\ref{fig:graficos_daniel}a e \ref{fig:graficos_daniel}b), determinou-se analiticamente o Produto Ganho-Banda (GBW) de cada configuração. Para o ganho real de malha fechada $G_1=35$ (realizado com os resistores $R_g = 1{,}5\text{ k}\Omega$ e $R_f = 51\text{ k}\Omega$), a frequência de corte a $-3\text{ dB}$ medida foi de $f_{c1} \approx 28{,}45\text{ kHz}$, o que acarreta em um produto $GBW_1=35{,}02 \times 28{,}45\text{ kHz} \approx 996{,}3\text{ kHz}$. Para o ganho $G_2=116$ (utilizando $R_g = 1\text{ k}\Omega$ e $R_f = 115\text{ k}\Omega$), obteve-se $f_{c2} \approx 8{,}62\text{ kHz}$, gerando um produto $GBW_2=115{,}88 \times 8{,}62\text{ kHz} \approx 998{,}9\text{ kHz}$.
 
-No que tange à distorção por \textit{Slew Rate} (SR), o limite de frequência teórica a partir da qual uma senoide de amplitude $V_p = 5\text{ V}$ sofre ceifamento triangular é calculado por $f_{max} = \frac{SR}{2\pi V_p}$. Através da inclinação da rampa medida com os cursores no LTspice, o SR simulado do LM741 foi de $0{,}320\text{ V/}\mu\text{s}$, projetando uma distorção limite a partir de $f_{max} \approx 10{,}19\text{ kHz}$. Em contrapartida, a medição da rampa para o TL064 resultou em um SR de $3{,}250\text{ V/}\mu\text{s}$ (próximo aos $3{,}0\text{ V/}\mu\text{s}$ nominais de \textit{datasheet}), o que eleva a frequência máxima sem distorção para $f_{max} \approx 103{,}46\text{ kHz}$. A comparação evidencia de forma prática que o modelo JFET (TL064) é substancialmente mais veloz que o modelo bipolar (LM741) para lidar com variações abruptas de tensão.
+No que tange à distorção por \textit{Slew Rate} (SR), o limite de frequência teórica a partir da qual uma senoide de amplitude $V_p = 4{,}5\text{ V}$ sofre ceifamento triangular é calculado por $f_{max} = \frac{SR}{2\pi V_p}$. Através da inclinação da rampa medida com os cursores no LTspice, o SR simulado do LM741 foi de $0{,}320\text{ V/}\mu\text{s}$, projetando uma distorção limite a partir de $f_{max} \approx 11{,}32\text{ kHz}$. Em contrapartida, a medição da rampa para o TL064 resultou em um SR de $3{,}250\text{ V/}\mu\text{s}$ (próximo aos $3{,}0\text{ V/}\mu\text{s}$ nominais de \textit{datasheet}), o que eleva a frequência máxima sem distorção para $f_{max} \approx 114{,}9\text{ kHz}$. A comparação evidencia de forma prática que o modelo JFET (TL064) é substancialmente mais veloz que o modelo bipolar (LM741) para lidar com variações abruptas de tensão.
 
 \subsubsection{Lurian Correia Lima (22/2005395)}
 
@@ -1530,251 +1367,208 @@ $f_{SR}$ ($V_p=2{,}5$~V), TL064 & $223$~kHz & -- & $30{,}8$~kHz & $-86\%^{\dagge
 \end{tabular}
 \end{table}
 
-% Apresentam-se a seguir os resultados obtidos no experimento de bancada do Roteiro 2 (Amplificador Operacional). Os valores são registrados com a precisão compatível com as leituras realizadas.
-
-% \subsubsection{Seguidor de Tensão}
-% Para o circuito do divisor de tensão alimentado com senoide de $1\text{ kHz}$ e $4\text{ V}_{\text{pk}}$, foram obtidas as seguintes tensões de saída nas quatro condições de ensaio do roteiro, cujas formas de onda estão documentadas na Figura~\ref{fig:osc_seguidor}:
-
-% \begin{table}[htbp]
-% \centering
-% \caption{Tensões medidas e previstas na saída do divisor e do seguidor de tensão}
-% \begin{tabular}{lcc}
-% \hline
-% \textbf{Condição de Ensaio} & \textbf{Valor Previsto (V)} & \textbf{Valor Medido (V)} \\
-% \hline
-% 1. Saída do divisor em vazio & $2{,}00$ & $1{,}90$ \\
-% 2. Saída do divisor com carga de $1\text{ k}\Omega$ direta & $1{,}33$ & $1{,}28$ \\
-% 3. Saída do seguidor sem carga & $2{,}00$ & $1{,}96$ \\
-% 4. Saída do seguidor com carga de $1\text{ k}\Omega$ & $2{,}00$ & $1{,}96$ \\
-% \hline
-% \end{tabular}
-% \end{table}
-
-% \begin{figure}[H]
-% \centering
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/1 a.jpeg}
-%     \vspace{2pt}
-%     {\small (a) Divisor e vazio.}
-% \end{minipage}\hfill
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/1 b.jpeg}
-%     \vspace{2pt}
-%     {\small (b) Divisor com carga.}
-% \end{minipage}
-
-% \vspace{12pt}
-
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/1 c (sem carga).jpeg}
-%     \vspace{2pt}
-%     {\small (c) Seguidor sem carga.}
-% \end{minipage}\hfill
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/1 c com carga.jpeg}
-%     \vspace{2pt}
-%     {\small (d) Seguidor com carga.}
-% \end{minipage}
-% \caption{Leituras do osciloscópio para o divisor resistivo e seguidor de tensão.}
-% \label{fig:osc_seguidor}
-% \end{figure}
-
-% \subsubsection{Amplificador Não Inversor}
-% Ajustou-se a entrada de $1\text{ kHz}$ para obter a tensão de pico especificada na saída ($10\text{ V}_{\text{pk}}$) e realizou-se o ensaio de saturação com o CI LM741, conforme a Figura~\ref{fig:osc_não_inversor}.
-
-% \begin{table}[htbp]
-% \centering
-% \caption{Ganho realizado e níveis de saturação da saída do amplificador não inversor}
-% \begin{tabular}{lcc}
-% \hline
-% \textbf{Grandeza} & \textbf{Valor Previsto} & \textbf{Valor Medido} \\
-% \hline
-% Ganho de tensão ($V_i = 4{,}0\text{ V}_{\text{pk}}, V_o = 10\text{ V}_{\text{pk}}$) & $2{,}50$ & $2{,}46$ \\
-% Tensão de saturação positiva & $+13\text{ a }+14\text{ V}$ & $+13{,}0\text{ V}$ \\
-% Tensão de saturação negativa & $-13\text{ a }-14\text{ V}$ & $-14{,}8\text{ V}$ \\
-% \hline
-% \end{tabular}
-% \end{table}
-
-% \textit{Nota}: Não foi possível fazer a medição referente ao ensaio de substituição do LM741 pelo CI TL064.
-
-% \begin{figure}[H]
-% \centering
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/2 ganho.jpeg}
-%     \vspace{2pt}
-%     {\small (a) Sinal Linear atestando o ganho.}
-% \end{minipage}\hfill
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/1 b.jpeg}
-%     \vspace{2pt}
-%     {\small (b) Saturação positiva e negativa.}
-% \end{minipage}
-% \caption{Leituras do osciloscópio para o amplificador não inversor.}
-% \label{fig:osc_não_inversor}
-% \end{figure}
-
-% \subsubsection{Somador Inversor}
-% Para as entradas de um sinal senoidal $V_1$ ($1\text{ kHz}$) e um nível contínuo negativo $V_2$, os valores medidos das fontes e dos picos de saída foram:
-
-% \begin{table}[htbp]
-% \centering
-% \caption{Tensões de entrada e picos da tensão de saída no somador inversor}
-% \begin{tabular}{@{}p{0.42\linewidth}ccc@{}}
-% \hline
-% \textbf{Grandeza} & \textbf{Valor Previsto} & \textbf{Valor Medido} & \textbf{Observação} \\
-% \hline
-% Tensão de entrada $V_1$ (antes de ligar) & $4{,}0\text{ V}_{\text{pk}}$ & $4{,}1\text{ V}_{\text{pk}}$ & \\
-% Tensão de entrada $V_2$ (antes de ligar) & $-1{,}5\text{ V}$ & $-1{,}6\text{ V}$ & \\
-% Pico positivo de saída $V_o$ & $8{,}55\text{ V}$ & $8{,}8\text{ V}$ & \\
-% Pico negativo de saída $V_o$ & $0{,}55\text{ V}$ & $0{,}6\text{ V}$ & \\
-% Tensão residual entre as entradas & $0\text{ V}$ & $0{,}12\text{ mV}$ & modelo ideal: $0\text{ V}$ \\
-% Tensão residual do nó inversor para o terra & $0\text{ V}$ & $0{,}13\text{ mV}$ & modelo ideal: $0\text{ V}$ \\
-% \hline
-% \end{tabular}
-% \end{table}
-
-% \textbf{Verificação do Curto Virtual e Residual DC:}
-% Na medição contínua (DC) via multímetro, o terra virtual se comportou de forma quase ideal, apresentando resuduais ínfimos:
-
-% \begin{itemize}
-%     \item Tensão residual entre as duas entradas do amplificador ($V^+ - V^-$): $0{,}12\text{ mV}$ (ideal: $0\text{ V}$).
-%     \item Tensão do nó somador em relação ao terra ($V^-$ ao terra): $0{,}13\text{ mV}$ (ideal: $0\text{ V}$).
-% \end{itemize}
-
-% \begin{figure}[H]
-% \centering
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/3 - V1 e V2 antes de ligar.jpeg}
-%     \vspace{2pt}
-%     {\small (a) Entradas isoladas $V_1$ e $V_2$.}
-% \end{minipage}\hfill
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/3 Vmin.jpeg}
-%     \vspace{2pt}
-%     {\small (b) Onda somada (cursor em $V_{min}$.}
-% \end{minipage}
-
-% \vspace{12pt}
-
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/3 Vmax.jpeg}
-%     \vspace{2pt}
-%     {\small (c) Onda somada (cursor em $V_{max}$.}
-% \end{minipage}\hfill
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/3 - tensão entre a entrada inversora e o terra.jpeg}
-%     \vspace{2pt}
-%     {\small (d) Ondulação CA nó inversor-terra.}
-% \end{minipage}
-
-% \vspace{12pt}
-
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/3 - tensão entre as duas entradas do amplificador.jpeg}
-%     \vspace{2pt}
-%     {\small (e) Ondulação CA entre as entradas.}
-% \end{minipage}\hfill
-
-% \caption{Leituras do osciloscópio para o somador inversor e análise do curto virtual.}
-% \label{fig:osc_somador}
-
-% \end{figure}
-
-% \subsubsection{Amplificador de diferença}
-
-% A partir da Figura~\ref{fig:osc_diferença}, obteve-se para o ensaio diferencial uma tensão de pico a pico na entrada (CH2) de $204\text{ mV}$ (resultando em $102\text{ mV}_{\text{pk}}$) e na saída (CH1) de $440\text{ mV}$ (resultando em $220\text{ mV}_{\text{pk}}$). O ganho diferencial medido é a razão entre essas amplitudes ($440/204 \approx 2{,}16$). O mesmo foi feito para se obter os valores no caso do Modo Comum.
-
-% \begin{table}[htbp]
-% \centering
-% \caption{Resultados do ensaio diferencial e do ensaio de modo comum}
-% \begin{tabular}{lcc}
-% \hline
-% \textbf{Grandeza} & \textbf{Valor Previsto} & \textbf{Valor Medido} \\
-% \hline
-% Amplitude de saída diferencial ($1\text{ kHz}, 100\text{ mV}_{\text{pk}}, V_{\text{ref}} = 0{,}5\text{ V}$) & $214\text{ mV}_{\text{pk}}$ & $220\text{ mV}_{\text{pk}}$ \\
-% Ganho diferencial realizado ($A_d$) & $2{,}14$ & $2{,}16$ \\
-% Amplitude de saída em modo comum (entradas juntas, $100\text{ mV}_{\text{pk}}$) & $0\text{ V}$ & $110\text{ mV}_{\text{pk}}$ \\
-% Ganho de modo comum ($A_{\text{cm}}$) & 0 & 1,08 \\
-% Rejeição de Modo Comum ($CMRR$) & $\infty$ & leitura limitada &  \\
-% \hline
-% \end{tabular}
-% \end{table}
-
-% \begin{figure}[H]
-% \centering
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/4 diferencial.jpeg}
-%     \vspace{2pt}
-%     {\small (a) Ensaio Diferencial ($A_d=2{,}16$).}
-% \end{minipage}\hfill
-% \begin{minipage}{0.48\linewidth}
-%     \centering
-%     \includegraphics[width=\linewidth]{equipe_resultados/4 - modo comum.jpeg}
-%     \vspace{2pt}
-%     {\small (b) Ensaio em Modo Comum ($A_{cm}=1{,}08$).}
-% \end{minipage}
-% \caption{Leituras do osciloscópio para os ensaios do TL064.}
-% \label{fig:osc_diferença}
-% \end{figure}
-
 \section{Discussão}
 
-% A discussão é organizada nas três comparações previstas pelo modelo do relatório. A primeira confronta o cálculo analítico com a simulação de projeto; a segunda verifica o efeito da substituição dos valores nominais pelos valores medidos; e a terceira compara a simulação da montagem com a medição de bancada. Essa separação evita atribuir a uma única causa uma divergência que pode ter origens diferentes.
+A discussão segue as três comparações do quadro da Seção~4: a conta contra a simulação de projeto,
+esta contra a simulação da montagem, e esta contra a medição. Cada passo isola uma causa
+diferente.
 
-% \subsection{Cálculo analítico versus simulação de projeto}
+\subsection{Cálculo analítico contra simulação de projeto}
 
-% Para a matrícula 23/1038626, os resultados do divisor carregado, do ganho do amplificador não inversor e do ganho diferencial apresentaram diferenças muito pequenas entre cálculo e simulação. No divisor, $3{,}143$~V calculados e $3{,}142$~V simulados correspondem a uma diferença de apenas $0{,}03\%$. A queda de $47{,}10\%$ calculada também foi reproduzida como $47{,}14\%$. No amplificador não inversor, o ganho calculado a partir de $R_g=4{,}7$~k$\Omega$ e $R_f=36{,}3$~k$\Omega$ foi $8{,}723$, coerente com a simulação. No amplificador de diferença, o valor nominal de $6{,}8$ também foi reproduzido.
+\paragraph{Ganhos.} Os ganhos simulados reproduzem a Equação~\eqref{eq:ganho_ni} com erro abaixo
+de $0{,}1\%$ nos projetos de Guilherme ($0{,}03\%$ e $0{,}05\%$) e de Daniel ($0{,}06\%$ e
+$0{,}10\%$). Na simulação de Lurian, os patamares de $28$ e $41{,}5$~dB coincidem com
+$20\log 25=27{,}96$~dB e $20\log 119=41{,}51$~dB dentro da resolução da leitura gráfica. O pequeno
+resíduo é sempre negativo e cresce com o ganho, como prevê o ganho de malha aberta finito:
+$G_{\text{real}}\approx G\,(1-G/A_0)$, que, com $A_0\approx2\times10^5$ (200~V/mV, típico do
+LM741), reduz o ganho 101 em $0{,}05\%$, exatamente o desvio simulado por Guilherme. A álgebra e os
+esquemáticos estão, portanto, corretos.
 
-% Para Lurian Correia Lima, o divisor carregado forneceu $2{,}143$~V tanto pelo cálculo quanto pela simulação, e a queda de $47{,}14\%$ também se manteve. O ganho não inversor permaneceu em torno de $11{,}1$, e o ganho diferencial de $10{,}6$ foi preservado. Para Daniel Campos Silva, a simulação reproduziu os pesos $k_1\approx2{,}061$ e $k_2=6{,}8$ e o ganho diferencial de $10{,}4$. A tensão do divisor em vazio foi calculada como $3{,}125$~V, enquanto a simulação indicada no relatório apresentou $3{,}066$~V, uma diferença de aproximadamente $1{,}89\%$.
+\paragraph{Produto ganho-banda.} Nas seis curvas de resposta em frequência, o produto $G\cdot f_c$
+ficou entre $0{,}99$ e $1{,}0$~MHz: $993$ e $991$~kHz para Guilherme, $996$ e $999$~kHz para Daniel
+e cerca de $1$~MHz, por leitura gráfica, para Lurian. A Equação~\eqref{eq:fc_gbw} se confirma no
+modelo, que se comporta como um polo dominante com $GBW\approx1$~MHz.
 
-% As diferenças muito pequenas entre cálculo e simulação são esperadas quando as mesmas resistências nominais e o mesmo modelo de amplificador operacional são utilizados nas duas etapas. Essa concordância, entretanto, não permite concluir que o circuito físico terá os mesmos valores, pois a montagem introduz tolerâncias dos componentes, características reais do amplificador e limitações de medição.
+\paragraph{Comparação entre os integrantes.} Como os ganhos vieram de matrículas diferentes, as
+frequências de corte também diferem, e a diferença é a que a Equação~\eqref{eq:fc_gbw} prevê.
+Entre o menor ganho ($G_1=25$, Lurian) e o maior ($G_2=119$, Lurian), o corte caiu de cerca de
+$40$ para cerca de $8$~kHz, razão de $5$, próxima da razão entre os ganhos, $119/25=4{,}8$. Entre
+os ganhos intermediários, $G=35$ e $37$ deram $28{,}5$ e $27{,}0$~kHz, e $G=101$ e $116$ deram
+$9{,}82$ e $8{,}62$~kHz, novamente na proporção inversa dos ganhos. No \textit{slew rate}, o valor
+simulado do LM741 foi o mesmo nos três projetos ($0{,}315$ a $0{,}32$~V/$\mu$s), embora as
+amplitudes fossem $5$~V (Guilherme) e $4{,}5$~V (Daniel e Lurian). Isso confirma que o
+\textit{slew rate} é uma propriedade da peça e não do sinal. O que muda com a amplitude é a
+fronteira da Equação~\eqref{eq:fsr}: $10{,}0$~kHz com $5$~V e $11{,}3$~kHz com $4{,}5$~V, razão
+$1{,}11$, igual a $5/4{,}5$. Os ensaios de corrente contínua não variam entre os integrantes,
+porque o ganho 101 e o resistor $R_s=100$~k$\Omega$ são fixados pelo roteiro.
 
-% \subsection{Simulação de projeto versus simulação da montagem}
+\paragraph{Grandezas do componente.} Para offset, corrente de polarização e \textit{slew rate}
+não existe cálculo analítico, e a comparação é entre o modelo e o valor típico do
+\textit{datasheet}. O modelo do LM741 tem $V_{OS}=1{,}10$~mV (típico $1$~mV) e $I_B=57{,}8$~nA
+(típico $80$~nA), ambos plausíveis. O \textit{slew rate} do modelo, $\approx0{,}32$~V/$\mu$s, está
+cerca de $36\%$ abaixo do típico de $0{,}5$~V/$\mu$s. No TL064, o modelo tem $SR\approx3{,}2$ a
+$3{,}3$~V/$\mu$s, $6$ a $9\%$ abaixo do típico de $3{,}5$~V/$\mu$s da Tabela~\ref{tab:datasheet_equipe}
+(as tabelas da Seção~5.1 usaram $3{,}0$~V/$\mu$s como referência), e corrente de polarização nula
+para fins práticos. No modelo, o TL064 é cerca de dez vezes mais rápido que o LM741, contra sete
+vezes pelos valores típicos. Essas diferenças dizem o que o modelo representa, e não indicam erro
+de projeto.
 
-% A segunda comparação permite observar diretamente o efeito da substituição das resistências nominais pelos valores medidos na bancada. No seguidor de tensão, os valores medidos foram $0{,}981$, $0{,}986$ e $0{,}978$~k$\Omega$. Com uma entrada de $1{,}9$~V$_{pk}$, a simulação da montagem produziu $0{,}952415$~V no divisor em vazio, $0{,}633757$~V com a carga direta e $0{,}953411$~V após o seguidor. O resultado mostra que a troca dos valores nominais pelos valores reais altera os níveis absolutos, mas não modifica a função de isolamento do seguidor.
+\subsection{Simulação de projeto contra simulação da montagem}
 
-% No amplificador não inversor, os valores medidos $R_g=9{,}78$~k$\Omega$ e $R_f=14{,}50$~k$\Omega$ correspondem a um ganho resistivo de aproximadamente $2{,}48$, diferente do ganho nominal de $2{,}50$. No somador inversor, os valores medidos produzem pesos de aproximadamente $0{,}997$ e $3{,}000$, próximos dos pesos de projeto $1{,}00$ e $3{,}03$. No amplificador de diferença, o pequeno descasamento entre $R_1$ e $R_3$, e entre $R_2$ e $R_4$, deixa de permitir o cancelamento perfeito do modo comum. A partir desses quatro valores, a Equação~\ref{eq:acm} fornece $|A_{cm}|\approx4{,}57\times10^{-4}$, o que corresponde a uma saída prevista da ordem de $2{,}29$~mV$_{pk}$ para uma entrada comum de $5$~V$_{pk}$.
+Os resistores medidos (Tabela~\ref{tab:resistores_bancada}) se afastam no máximo $1{,}8\%$ dos
+nominais. O efeito sobre o ganho depende de como os desvios se combinam. No ganho alto, $R_f$ ficou
+$1{,}0\%$ acima e $R_g$ ficou $1{,}7\%$ abaixo, e os dois desvios somam: o ganho passou de $101$
+para $103{,}75$ ($+2{,}7\%$). No ganho baixo, $R_f'$ e $R_g'$ ficaram ambos cerca de $1{,}7\%$
+abaixo, os desvios quase se cancelam na razão, e o ganho passou de $13{,}20$ para $13{,}16$
+($-0{,}2\%$).
 
-% Essa comparação evidencia que a utilização dos valores medidos é especialmente relevante no amplificador de diferença: pequenas diferenças entre as razões resistivas, inexistentes no projeto nominal perfeitamente casado, produzem uma componente residual de modo comum.
+\paragraph{Offset e corrente de polarização.} A saída simulada do LM741 subiu de $111{,}13$~mV
+(projeto) para $113{,}98$~mV (montagem), aumento de $2{,}6\%$, praticamente igual ao aumento do
+ganho. Dividindo pelo ganho real, o offset do modelo é $0{,}113975/103{,}75=1{,}10$~mV, o mesmo da
+simulação de projeto. O valor de $1{,}13$~mV da Seção~4.3 resulta apenas de dividir pelo ganho
+nominal. O mesmo vale para a corrente de polarização: com o ganho real e $R_s=98{,}77$~k$\Omega$,
+$I_B=0{,}592477/(103{,}75\cdot98{,}77~\text{k}\Omega)=57{,}8$~nA, idêntico aos $57{,}8$~nA do
+projeto. A tolerância muda as leituras de saída em alguns por cento, mas não muda o parâmetro
+extraído, desde que se use o ganho real. Por isso, a Equação~\eqref{eq:ib} foi aplicada à bancada
+também com o ganho medido, o que dá $V_{OS}=169/103{,}75=1{,}63$~mV e
+$I_B=-166{,}3~\text{mV}/(103{,}75\cdot98{,}77~\text{k}\Omega)=-16{,}2$~nA para o LM741, e
+$V_{OS}=-0{,}477$~mV e $I_B=+8{,}0$~nA para o TL064. Esses valores diferem em cerca de $3\%$ dos
+apresentados na Tabela~\ref{tab:offset_ib_equipe}, calculados com o ganho nominal de 101.
 
-% \subsection{Simulação da montagem versus medição}
+\paragraph{Resposta em frequência.} No ganho alto, a montagem simulada deu $f_{c2}=10{,}0$~kHz e
+$GBW_2=1{,}04$~MHz, $4\%$ acima do $\approx1{,}0$~MHz do projeto, diferença compatível com a leitura
+gráfica do corte. No ganho baixo, porém, $f_{c1}=95{,}0$~kHz dá $GBW_1=1{,}25$~MHz, $25\%$ acima.
+Essa diferença não vem da tolerância: o ganho mudou só $0{,}2\%$, e com $GBW=1{,}0$~MHz o corte
+esperado seria $1{,}0~\text{MHz}/13{,}16\approx76$~kHz. Na Figura~\ref{fig:sim_gbw}, as duas curvas
+seguem a mesma assíntota acima de cerca de 200~kHz e cruzam $0$~dB no mesmo ponto, perto de 1~MHz,
+o que indica um único $GBW$ para os dois estágios. O valor de $95$~kHz deve, portanto, vir da
+leitura do joelho da curva de ganho baixo, que é suave e foi lida sem cursor. Uma medida com
+\texttt{.meas} no ponto de $-3$~dB resolveria a dúvida.
 
-% No seguidor de tensão, a bancada apresentou $1{,}90$~V em vazio, $1{,}28$~V com a carga conectada diretamente, $1{,}96$~V na saída do seguidor sem carga e $1{,}96$~V com a carga conectada ao seguidor. A diferença entre as duas últimas condições é muito pequena, enquanto a carga direta reduz sensivelmente a tensão. Esse comportamento é coerente com a função de buffer: a entrada apresenta alta impedância e a saída apresenta baixa impedância.
+\paragraph{\textit{Slew rate}.} O seguidor de tensão não tem resistores, e a simulação da montagem
+é igual à de projeto. As simulações da Seção~4.3 no LM741 foram feitas entre 10~Hz e 1~kHz, abaixo
+do limite de $\approx20$~kHz calculado com o \textit{slew rate} do modelo, e mostram a saída
+acompanhando a senoide. Elas confirmam o regime linear, mas não medem o \textit{slew rate}. Para a
+comparação com a bancada usa-se o valor das simulações de projeto, $\approx0{,}32$~V/$\mu$s.
 
-% No amplificador não inversor, o ganho medido foi $2{,}46$, enquanto a razão entre os resistores medidos fornece aproximadamente $2{,}48$. A diferença residual pode estar associada às características não ideais do LM741 e às condições de aquisição. O ensaio de saturação indicou $+13{,}0$~V no limite positivo e $-14{,}8$~V no limite negativo. A assimetria observada mostra que a saída real não pode ser descrita apenas por um limite simétrico em relação aos trilhos de alimentação.
+\subsection{Simulação da montagem contra medição}
 
-% No somador inversor, as entradas efetivamente aplicadas foram $4{,}1$~V$_{pk}$ e $-1{,}6$~V, enquanto os valores nominalmente especificados eram $4{,}0$~V$_{pk}$ e $-1{,}5$~V. Foram medidos $8{,}8$~V e $0{,}6$~V, além de resíduos de apenas $0{,}12$~mV entre as entradas e $0{,}13$~mV entre o nó inversor e o terra. Esses valores sustentam experimentalmente a aproximação de terra virtual, embora não impliquem igualdade física perfeita entre os potenciais.
+\paragraph{Ganho.} O ganho alto medido em baixa frequência, $104{,}0$, está a $0{,}2\%$ do valor
+calculado com os resistores medidos ($103{,}75$). Esse acordo era esperado, porque em baixa
+frequência o ganho depende só da razão entre os resistores (Equação~\eqref{eq:ganho_ni}). Ele
+confirma a montagem e a leitura do osciloscópio, mas não diz nada sobre o amplificador, que nessa
+condição se comporta como ideal. Comparado ao ganho nominal de 101, o mesmo resultado mostraria um
+erro de $3\%$ que não existe: é a tolerância dos resistores, e não o circuito. No ganho baixo, o
+valor medido de $13{,}70$ está $4{,}1\%$ acima de $13{,}16$. Na Tabela~\ref{tab:freq_g1_equipe}, a
+razão $V_o/V_i$ fica em torno de $13{,}7$ em todas as frequências, enquanto $V_i$ cai junto com
+$V_o$. Um sinal de entrada que acompanha a saída dessa forma é o que se veria com o canal de
+entrada na entrada inversora, onde $V_-=V_o\,R_g'/(R_f'+R_g')$, em vez de na saída do gerador. Nessa
+hipótese, $V_o/V_i$ é a razão do divisor de realimentação, e os $4\%$ restantes ficam por conta da
+exatidão de ganho vertical dos dois canais do osciloscópio, especificada em $\pm3\%$ por canal.
+Para evitar a dúvida, o canal de entrada deveria ficar no terminal do gerador durante toda a
+varredura.
 
-% No ensaio diferencial do amplificador de diferença, a entrada apresentou $204$~mV$_{pp}$ e a saída $440$~mV$_{pp}$, resultando em $A_d\approx2{,}16$, próximo do valor de projeto da equipe, $2{,}14$. No ensaio de modo comum, porém, a leitura de aproximadamente $110$~mV$_{pk}$ na saída, obtida com $100$~mV$_{pk}$ nas duas entradas, levou a $A_{cm}\approx1{,}08$. Esse valor deve ser interpretado com cautela, porque a escala de aproximadamente $500$~mV/div foi grande para uma ondulação que, a partir do descasamento resistivo medido, era esperada na ordem de poucos milivolts. Nessa condição, ruído de fundo, espessura do traço e resolução de aquisição passam a contribuir significativamente para a leitura automática.
+\paragraph{Produto ganho-banda.} Os dois produtos medidos, $0{,}70$ e $0{,}71$~MHz, coincidem
+dentro de $2\%$, apesar de os ganhos diferirem por um fator de oito. Na assíntota do ganho alto,
+$G\cdot f$ também fica entre $0{,}70$ e $0{,}72$~MHz. O modelo de polo dominante vale para a peça
+real. O valor absoluto, porém, está cerca de $30\%$ abaixo dos $1{,}04$~MHz da simulação da
+montagem ($f_{c2}=6{,}83$~kHz contra $10{,}0$~kHz). A tolerância dos resistores não explica a
+diferença, porque o ganho medido coincide com o simulado. A instrumentação também não: o
+osciloscópio tem banda de 60~MHz, e a ponta de prova está ligada à saída do amplificador, um nó de
+baixa impedância. A causa é a própria peça. O \textit{datasheet} do LM741 não especifica banda nem
+produto ganho-banda, e o modelo usa um valor típico de cerca de 1~MHz, enquanto a unidade usada na
+bancada tem $\approx0{,}7$~MHz. Também foi verificado que o corte medido é de banda, e não de
+\textit{slew rate}: com o \textit{slew rate} medido de $0{,}51$~V/$\mu$s e saída de
+$\approx1{,}05$~V de pico, a distorção só começaria em $0{,}51/(2\pi\cdot1{,}05)\approx77$~kHz,
+acima do corte de $50{,}8$~kHz. Foi para garantir essa folga que a amplitude de saída foi mantida
+baixa, e menor ainda no ganho baixo, cujo corte é o mais alto.
 
-% Assim, o valor experimental de $110\text{ mV}_{\text{pk}}$ não deve ser usado como determinação quantitativa confiável do CMRR. A previsão obtida diretamente dos resistores medidos, $|A_{cm}| \approx 4,57 \times 10^{-4}$, indica que para a entrada de $100\text{ mV}_{\text{pk}}$, a saída deveria ser ínfima, na ordem de apenas $0{,}045\text{ mV}_{\text{pk}}$ ($45~\mu\text{V}_{\text{pk}}$). Uma aquisição em escala vertical compatível com microvolts seria necessária para confrontar quantitativamente esses valores com a bancada.
+\paragraph{Offset.} Os offsets medidos, $1{,}63$~mV no LM741 e $-0{,}48$~mV no TL064, diferem dos
+do modelo ($1{,}10$ e $0{,}027$~mV), mas ambos estão dentro do máximo do \textit{datasheet}
+($5$ e $15$~mV). O offset vem do descasamento aleatório entre os transistores do par diferencial, e
+cada unidade tem o seu, com qualquer sinal. O modelo descreve uma unidade típica, e por isso essa
+diferença não indica falha do modelo. Com uma única unidade de cada CI, o ensaio permite afirmar que
+as peças estão dentro da especificação, mas não estimar a dispersão do componente.
 
-% \subsection{Síntese das hipóteses}
+\paragraph{Corrente de polarização no LM741.} A saída desceu quando $R_s$ entrou, o que indica
+corrente entrando no pino não inversor, como previsto na Seção~2 para a corrente de base de um par
+de entrada NPN. O módulo medido, $16{,}2$~nA, é cerca de $3{,}5$ vezes menor que os $57{,}8$~nA do
+modelo e está abaixo do típico de $80$~nA. A corrente de base é inversamente proporcional ao ganho
+de corrente $\beta$ dos transistores de entrada, que varia bastante entre unidades. Uma unidade
+com $\beta$ alto explica o valor, que está dentro da especificação (máximo de $500$~nA).
 
-% Os resultados confirmam as hipóteses principais do modelo nas condições em que a medição apresentou resolução suficiente. O divisor carregado mostrou a redução de tensão prevista pelo equivalente de Thévenin; o seguidor manteve praticamente a mesma tensão na carga mesmo depois de inserido entre o divisor e a carga; o amplificador não inversor apresentou ganho determinado principalmente pela razão entre os resistores; e o somador confirmou a ação do curto virtual no nó de entrada.
+\paragraph{Corrente de polarização no TL064.} O valor medido, $+8{,}0$~nA, é cerca de $20$ vezes
+o máximo do \textit{datasheet} ($400$~pA a $25\,^\circ$C) e $270$ vezes o típico. Na entrada JFET,
+a corrente é apenas a fuga reversa da junção porta-canal, e o modelo a dá como nula. O valor
+medido, portanto, não é a corrente da peça. A causa mais provável é uma fuga no protoboard: uma
+resistência de $15~\text{V}/8~\text{nA}\approx1{,}9$~G$\Omega$ entre o trilho de $+15$~V e o nó de
+$100$~k$\Omega$ bastaria para produzir o degrau, e ela injetaria corrente no nó, elevando a saída,
+que é exatamente o sentido observado. Outras causas possíveis são a deriva do offset entre as duas
+leituras (bastariam $0{,}8$~mV na entrada) e a captação de rede no nó de alta impedância. Mesmo sem
+nenhuma dessas causas, o arranjo não teria resolução para medir o TL064: $30$~pA em
+$R_s\approx100$~k$\Omega$ produzem na saída apenas
+$30~\text{pA}\cdot98{,}77~\text{k}\Omega\cdot103{,}75\approx0{,}3$~mV, da ordem da deriva entre
+leituras. Para medir a corrente real seriam necessários um resistor de teste da ordem de
+G$\Omega$, um capacitor em paralelo com $R_s$ para filtrar a captação e leituras alternadas com e
+sem $R_s$. O resultado do TL064 deve ser lido como um limite superior.
 
-% No amplificador de diferença, o ganho diferencial permaneceu próximo do previsto, enquanto o ensaio de modo comum evidenciou a sensibilidade do circuito ao casamento entre os resistores e à resolução da instrumentação. A simulação da montagem mostrou que o descasamento medido é capaz de produzir uma componente de modo comum finita, mesmo quando a análise com valores nominais prevê cancelamento perfeito.
+\paragraph{\textit{Slew rate} no LM741.} O valor medido, $0{,}51$~V/$\mu$s, está a $3\%$ do típico
+do \textit{datasheet} e $60\%$ acima dos $0{,}32$~V/$\mu$s do modelo. O modelo subestima o
+\textit{slew rate} desta unidade, enquanto o \textit{datasheet} o descreve bem. A coincidência com o
+típico era esperada para uma peça comum, mas, sendo uma única unidade, não permite estimar a
+dispersão do lote. A incerteza da medida é de cerca de $\pm8\%$, porque o intervalo da rampa foi
+tomado como meio período, e as rampas de subida e de descida diferem ($0{,}55$ e $0{,}48$~V/$\mu$s).
+Essa assimetria é característica do estágio de saída do LM741. Medir a rampa com os cursores de
+tempo eliminaria a suposição de triângulo simétrico.
+
+\paragraph{\textit{Slew rate} no TL064.} O valor medido, $0{,}48$~V/$\mu$s, está $86\%$ abaixo do
+típico de $3{,}5$~V/$\mu$s, abaixo do mínimo de $1{,}5$~V/$\mu$s a $25\,^\circ$C, e cerca de sete
+vezes abaixo do modelo. Ele é, além disso, praticamente igual ao do LM741 (razão $0{,}94$). Uma
+peça dentro da especificação não produziria esse valor. A coincidência com o LM741 sugere que, no
+ensaio do seguidor, o sinal ainda passava pelo LM741, ou que a realimentação não foi refeita na
+pinagem de 14 terminais do TL064, que é diferente da pinagem de 8 terminais do LM741. O ensaio
+precisaria ser repetido com a pinagem conferida. Até lá, a bancada não confirma que o TL064 seja
+mais rápido que o LM741, o que as simulações (fator $\approx10$) e o \textit{datasheet} (fator 7)
+preveem.
+
+\subsection{Retomada das hipóteses}
+
+A hipótese de operação linear na região ativa se confirmou nos ensaios de corrente contínua e de
+resposta em frequência: todas as saídas ficaram longe dos trilhos de alimentação, e a folga até o
+limite de \textit{slew rate} foi verificada. O ganho ideal da Equação~\eqref{eq:ganho_ni} vale em
+baixa frequência dentro de $0{,}2\%$, desde que se usem os valores medidos dos resistores. O modelo
+de polo dominante (Equação~\eqref{eq:fc_gbw}) se confirmou na bancada, com o mesmo produto
+ganho-banda nos dois ganhos, embora o valor da peça seja $30\%$ menor que o do modelo. As
+Equações~\eqref{eq:vos} e~\eqref{eq:ib} descreveram o LM741 em sinal e ordem de grandeza. A
+fronteira da Equação~\eqref{eq:fsr} é compatível com o LM741: a saída era senoidal em 1~kHz e
+triangular em $56{,}8$~kHz, acima dos $32{,}7$~kHz previstos, embora a frequência exata de início da
+distorção não tenha sido registrada. A única contradição entre previsão e medida, a do TL064 em
+corrente de polarização e \textit{slew rate}, foi atribuída acima à montagem e não ao modelo.
 
 \section{Conclusão}
 
-% O objetivo do experimento foi dimensionar, simular e verificar experimentalmente quatro configurações de amplificadores operacionais sob especificações individuais e sob a especificação da Equipe 2. Os resultados mostraram concordância satisfatória entre cálculo e simulação de projeto e permitiram observar, em bancada, os efeitos do carregamento, dos valores reais dos resistores, da saturação e do descasamento entre resistores.
+O objetivo era medir as não idealidades de dois amplificadores operacionais, situá-las nas faixas
+do \textit{datasheet} e separar experimentalmente a limitação linear de banda da limitação não
+linear por \textit{slew rate}. Para o LM741, o objetivo foi atingido: offset de $1{,}63$~mV
+(máximo de $5$~mV), corrente de polarização de $16$~nA entrando no pino (máximo de $500$~nA),
+produto ganho-banda de $0{,}70$~MHz igual nos dois ganhos dentro de $2\%$, e \textit{slew rate}
+de $0{,}51$~V/$\mu$s, a $3\%$ do típico. A separação entre os dois regimes também foi mostrada: o
+corte de $50{,}8$~kHz do ganho baixo ficou abaixo do limite de \textit{slew rate} de $77$~kHz para
+a amplitude usada, enquanto no seguidor com $2{,}5$~V de pico a distorção aparece a partir de
+$\approx33$~kHz.
 
-% Como evidências principais, o seguidor manteve $1{,}96$~V na carga, em contraste com $1{,}28$~V quando a carga foi conectada diretamente ao divisor; o amplificador não inversor apresentou ganho medido de $2{,}46$; o somador apresentou extremos de $8{,}8$~V e $0{,}6$~V; e o amplificador de diferença apresentou ganho diferencial de $2{,}16$, próximo do valor especificado de $2{,}14$ para a equipe.
+As simulações dos três integrantes confirmaram $f_c=GBW/G$ com $GBW\approx1$~MHz para ganhos de
+25 a 119, e mostraram que a tolerância dos resistores muda as leituras de saída sem mudar os
+parâmetros extraídos, desde que se use o ganho real. Na bancada, a peça real teve produto
+ganho-banda $30\%$ menor e \textit{slew rate} $60\%$ maior que o modelo.
 
-% A principal limitação quantitativa ocorreu no ensaio de modo comum, cuja leitura de pequena amplitude foi prejudicada pela escala vertical utilizada no osciloscópio. Dessa forma, foi possível verificar qualitativamente a rejeição do modo comum, mas não estabelecer um CMRR experimental confiável a partir da leitura de $110$~mV$_{pk}$. Uma nova aquisição em escala de milivolts, aliada à simulação com os valores reais dos resistores, permitiria uma separação mais precisa entre o efeito do descasamento, as não idealidades do amplificador e as limitações da instrumentação.
+A principal limitação está nos ensaios do TL064. Seu offset está dentro da especificação, mas a
+corrente de polarização ($8$~nA, contra o máximo de $400$~pA) e o \textit{slew rate}
+($0{,}48$~V/$\mu$s, contra o mínimo de $1{,}5$~V/$\mu$s) não correspondem à peça. Por isso, o
+relatório não pode afirmar, com base na bancada, qual é a corrente de polarização do TL064 nem
+quantas vezes ele é mais rápido que o LM741. Além disso, a incerteza instrumental das leituras não
+foi registrada, e foi usada uma única unidade de cada CI, de modo que as diferenças em relação ao
+modelo não podem ser generalizadas para o componente.
 
 \section{Referências}
 
