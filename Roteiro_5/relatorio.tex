@@ -196,6 +196,75 @@ Resistor do Zener ($R_S$) & $728\,\Omega$ & $820\,\Omega$ & $12{,}64\%$ \\
 % com os componentes que aquela pessoa projetou. São elas que mostram se cada projeto cumpre
 % o que foi pedido.
 
+\subsubsection{Guilherme Cardoso Oliveira da Silva Júnior (23/1038626)}
+
+\textbf{Configuração e Simulação dos Circuitos}
+
+Para comprovar que o projeto atende às especificações apresentadas na Seção 3 (referentes à retificação, filtragem e regulação de tensão), os seis circuitos foram desenhados e simulados no LTspice, conforme a Figura~\ref{fig:circs_guilherme}. Em todas as análises, adotou-se a diretiva de regime transitório (\texttt{.tran 0 100m}) para abranger o tempo correspondente a seis períodos da rede elétrica de 60 Hz. Os esquemáticos foram configurados da seguinte forma:
+
+\begin{itemize}
+    \item \textbf{Retificador de meia onda (Fig.~\ref{fig:circs_guilherme}a):} A fonte de entrada foi configurada com uma senoide de 60 Hz e 11,5 V de amplitude (\texttt{SINE(0 11.5 60)}), alimentando a carga $R_L$ de 15 k$\Omega$ através de um único diodo 1N4007. 
+    
+    \item \textbf{Meia onda com filtro (Fig.~\ref{fig:circs_guilherme}b):} Adicionou-se o capacitor eletrolítico de filtro $C_1$ de 6,8 $\mu$F em paralelo com a carga. O objetivo é sustentar a tensão entre os semiciclos de condução e permitir a leitura do \textit{ripple} gerado.
+
+    \item \textbf{Meia onda com filtro 10x maior (Fig.~\ref{fig:circs_guilherme}c):} O capacitor $C_1$ foi substituído por um de 68 $\mu$F. Essa simulação visa observar a atenuação teórica do \textit{ripple} e o impacto no pico de corrente exigido do diodo durante o seu tempo de condução.
+    
+    \item \textbf{Ponte retificadora sem filtro (Fig.~\ref{fig:circs_guilherme}d):} Montou-se a topologia de onda completa com quatro diodos 1N4007. A referência do circuito (terra) foi posicionada no nó inferior da carga, deixando a fonte senoidal flutuante para reproduzir o comportamento correto da diferença de potencial.
+
+    \item \textbf{Ponte com filtro (Fig.~\ref{fig:circs_guilherme}e):} O capacitor de 6,8 $\mu$F foi reintroduzido na saída da ponte retificadora. Esta etapa permite comparar o \textit{ripple} em 120 Hz com o resultado obtido na retificação de meia onda para o mesmo valor de capacitância.
+
+    \item \textbf{Regulação com Zener (Fig.~\ref{fig:circs_guilherme}f):} Acrescentou-se o resistor de limitação $R_S$ de 820 $\Omega$ e o diodo Zener \texttt{BZX84C8V2L} de 8,2 V em paralelo com a carga. A configuração demonstra a estabilização final da tensão contínua e a supressão do \textit{ripple} remanescente.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/cardoso/simulação/item_1_diagrama.png}
+    \vspace{2pt}
+    {\small (a) Retificador de meia onda}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/cardoso/simulação/item_2_diagrama.png}
+    \vspace{2pt}
+    {\small (b) Meia onda com filtro de 6,8 $\mu$F}
+\end{minipage}
+
+\vspace{12pt}
+
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/cardoso/simulação/item_3_diagrama.png}
+    \vspace{2pt}
+    {\small (c) Meia onda com filtro 10x maior (68 $\mu$F)}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/cardoso/simulação/item_4_diagrama.png}
+    \vspace{2pt}
+    {\small (d) Ponte retificadora sem filtro}
+\end{minipage}
+
+\vspace{12pt}
+
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/cardoso/simulação/item_5_diagrama.png}
+    \vspace{2pt}
+    {\small (e) Ponte retificadora com filtro}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/cardoso/simulação/item_6_diagrama.png}
+    \vspace{2pt}
+    {\small (f) Regulação com Zener (Cadeia completa)}
+\end{minipage}
+
+\caption{Esquemáticos projetados para a matrícula 23/1038626 contendo os componentes da série E12 e a diretiva de simulação de regime transitório aplicada para cada etapa da fonte linear.}
+\label{fig:circs_guilherme}
+\end{figure}
+
 \subsection{Montagem em bancada}
 
 % A equipe monta um circuito só. Diga \textbf{de quem} é a especificação que vocês montaram e
