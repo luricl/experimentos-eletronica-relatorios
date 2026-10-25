@@ -320,6 +320,95 @@ Para comprovar que o projeto atende às especificações apresentadas na Seção
 % Uma tabela por integrante, ou uma tabela única com uma coluna por integrante, confrontando
 % o valor analítico e o simulado para cada grandeza pedida no roteiro.
 
+\subsubsection{Guilherme Cardoso Oliveira da Silva Júnior (23/1038626)}
+
+A Tabela~\ref{tab:resultados_cardoso} apresenta os parâmetros projetados analiticamente a partir dos componentes da série E12, confrontando-os com os resultados medidos nas simulações de regime transitório (\texttt{.tran}) no LTspice.
+
+\begin{table}[H]
+    \centering
+    \caption{Resultados simulados dos estágios da fonte de alimentação (Matrícula 23/1038626).}
+    \label{tab:resultados_cardoso}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Analítico (E12)} & \textbf{Simulado} & \textbf{Erro (\%)} \\
+    \midrule    
+    Tensão de Pico na Carga (Meia Onda) & $10{,}80\text{ V}$ & $10{,}92\text{ V}$ & $1{,}11\%$ \\
+    Tensão Média na Carga (Meia Onda) & $3{,}48\text{ V}$ & $3{,}39\text{ V}$ & $-2{,}58\%$ \\
+    Ripple Meia Onda ($C=6{,}8\text{ }\mu\text{F}$) & $1{,}34\text{ V}$ & $1{,}49\text{ V}$ & $11{,}19\%$ \\
+    Tensão de Pico na Carga (Onda Completa) & $10{,}10\text{ V}$ & $10{,}35\text{ V}$ & $2{,}47\%$ \\
+    Tensão Média na Carga (Onda Completa) & $6{,}59\text{ V}$ & $6{,}26\text{ V}$ & $-5{,}00\%$ \\
+    Ripple Onda Completa ($C=6{,}8\text{ }\mu\text{F}$) & $0{,}67\text{ V}$ & $0{,}68\text{ V}$ & $1{,}49\%$ \\
+    Tensão Regulada Média (Zener) & $8{,}20\text{ V}$ & $8{,}18\text{ V}$ & $-0{,}24\%$ \\
+    \bottomrule
+    \multicolumn{4}{l}{\footnotesize O valor analítico do ripple utilizou $I_L \approx 0{,}547\text{ mA}$ (carga real E12 de $15\text{ k}\Omega$).}
+    \end{tabular}
+\end{table}
+
+\paragraph{Análise da Retificação de Meia Onda (Itens 1, 2 e 3):}
+No circuito sem filtro, a tensão de pico atingiu $10{,}92\text{ V}$. A diferença em relação ao pico da fonte ($11{,}5\text{ V}$) é de $0{,}58\text{ V}$, o que comprova analiticamente a queda de tensão direta de um único diodo 1N4007 em condução. O valor médio medido ($3{,}39\text{ V}$) esteve coerente com o cálculo teórico para meia onda ($V_p/\pi \approx 3{,}48\text{ V}$).
+Ao inserir o capacitor de $6{,}8\text{ }\mu\text{F}$, o \textit{ripple} simulado foi de $1{,}49\text{ V}$, valor próximo aos $1{,}34\text{ V}$ previstos pela Equação 1. A simulação revelou que a largura do pulso de recarga do capacitor dura apenas $\Delta t = 1{,}62\text{ ms}$. Em um período de $60\text{ Hz}$ ($16{,}67\text{ ms}$), o diodo conduz por apenas $9{,}7\%$ do tempo. Para compensar essa estreita janela, o pico de corrente no diodo atingiu $13{,}9\text{ mA}$, um valor mais de $25$ vezes superior à corrente contínua exigida pela carga ($0{,}547\text{ mA}$).
+Quando o capacitor foi aumentado em 10 vezes ($68\text{ }\mu\text{F}$), o \textit{ripple} caiu para quase um décimo do valor original ($0{,}165\text{ V}$), atestando a relação inversamente proporcional da Equação 1. Contudo, essa capacitância maior reduziu ainda mais a fração de condução, elevando drasticamente o pico de corrente no diodo para $29{,}3\text{ mA}$.
+
+\paragraph{Análise da Ponte Retificadora (Itens 4 e 5):}
+Na topologia de onda completa sem filtro, o pico na carga mediu $10{,}35\text{ V}$. A atenuação em relação à fonte foi de $1{,}15\text{ V}$, o dobro da observada na meia onda, o que é justificado analiticamente pelo fato de a corrente atravessar sempre dois diodos em série a cada semiciclo. O valor médio medido ($6{,}26\text{ V}$) aproximou-se da teoria ($2V_p/\pi \approx 6{,}59\text{ V}$).
+Ao conectar o filtro de $6{,}8\text{ }\mu\text{F}$, o \textit{ripple} simulado reduziu para $0{,}68\text{ V}$. Esse valor representa essencialmente a metade da oscilação vista na meia onda ($1{,}49\text{ V}$), confirmando que dobrar a frequência de recarga (de $60\text{ Hz}$ para $120\text{ Hz}$) atenua proporcionalmente a descarga, estabelecendo uma tensão mínima na saída do filtro ($V_{min}$) de $9{,}62\text{ V}$.
+
+\paragraph{Análise da Regulação com Zener (Item 6):}
+O estágio regulador introduziu o resistor $R_S$ de $820\,\Omega$ em série. A maior drenagem de corrente alterou o \textit{ripple} na saída do filtro capacitivo para $1{,}43\text{ V}$. Em contrapartida, na carga em paralelo com o diodo Zener, o \textit{ripple} remanescente foi de apenas $0{,}14\text{ V}$. A razão entre eles indica que o Zener atenuou a oscilação em cerca de $10$ vezes ($\approx 20\text{ dB}$).
+Analiticamente, a regulação é mantida pois o Zener nunca entra em corte. No vale do \textit{ripple}, a simulação apontou que ainda circula $I_{Z,min} = 0{,}31\text{ mA}$. No pico, a corrente sobe para $I_{Z,max} = 1{,}88\text{ mA}$. Retirando-se a carga, a corrente máxima convergiria para $I_Z = (V_{max\_filtro} - V_Z)/R_S \approx (10{,}24 - 8{,}2)/820 \approx 2{,}48\text{ mA}$. A potência dissipada máxima ($8{,}2\text{ V} \times 2{,}48\text{ mA} \approx 20{,}3\text{ mW}$) respeita com larga folga os limites de $250\text{ mW}$ (BZX84C) e $500\text{ mW}$ (1N754), atestando a robustez térmica do projeto.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/cardoso/resultados/simulacao_item_1_exp5.png}
+        \vspace{2pt}
+        {\small (a) Tensão: Meia onda sem filtro.}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/cardoso/resultados/simulacao_item_2_exp5.png}
+        \vspace{2pt}
+        {\small (b) Tensão e Corrente: Filtro de $6{,}8\text{ }\mu\text{F}$.}
+    \end{minipage}
+
+    \vspace{12pt}
+
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/cardoso/resultados/simulacao_item_3_exp5.png}
+        \vspace{2pt}
+        {\small (c) Tensão e Corrente: Filtro de $68\text{ }\mu\text{F}$.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/cardoso/resultados/simulacao_item_4_exp5.png}
+        \vspace{2pt}
+        {\small (d) Tensão: Onda completa sem filtro.}
+    \end{minipage}
+    
+    \vspace{12pt}
+
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/cardoso/resultados/simulacao_item_5_exp5.png}
+        \vspace{2pt}
+        {\small (e) Filtro na onda completa ($6{,}8\text{ }\mu\text{F}$).}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/cardoso/resultados/simulacao_item_6_exp5.png}
+        \vspace{2pt}
+        {\small (f) Regulação final com Zener ($8{,}2\text{ V}$).}
+    \end{minipage}
+    \caption{Resultados gráficos das simulações de projeto dos estágios da fonte linear (matrícula 23/1038626).}
+    \label{fig:graficos_cardoso}
+\end{figure}
+
 \subsection{Circuito montado}
 
 % Para cada grandeza, o que o projeto do integrante montado previa, o que a simulação com os
