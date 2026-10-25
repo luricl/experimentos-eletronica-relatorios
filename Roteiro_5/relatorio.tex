@@ -71,6 +71,88 @@
 
 \section{Especificação e projeto}
 
+\begin{espec}
+
+\textbf{Matrícula \mat{23/1038626}.} Considerando os nove dígitos na forma ABCDEFGHI, com o dígito I não nulo,
+
+\begin{equation}
+    A=2,\; B=3,\; C=1,\; D=0,\; E=3,\; F=8,\; G=6,\; H=2,\; I=6
+\end{equation}
+
+A partir desses valores, as especificações individuais exigidas pelo roteiro são:
+
+\begin{itemize}
+    \item \textbf{Fonte:} \\
+    Senoide de 60 Hz com $AB = 23\text{ V}$ de pico a pico. Logo, a amplitude é $V_p = 11{,}5\text{ V}$.
+
+    \vspace{0.3cm}
+    
+    \item \textbf{Regulação (Zener):} \\
+    O diodo Zener da série BZX84C cuja tensão nominal mais se aproxima de $\frac{V_p}{\sqrt{2}} = \frac{11{,}5}{\sqrt{2}} \approx 8{,}13\text{ V}$. Na lista do LTspice, o valor mais próximo é de \textbf{8,2 V}.
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Carga (Corrente):} \\
+    Corrente $I_L = I \times 100\,\mu\text{A} = 6 \times 100\,\mu\text{A} = 600\,\mu\text{A} = 0{,}6\text{ mA}$ na tensão regulada de $8{,}2\text{ V}$.
+\end{itemize}
+
+\end{espec}
+
+Os componentes da série comercial E12 selecionados para atender a cada especificação, bem como os desvios e dimensionamentos, são detalhados a seguir:
+
+\begin{itemize}
+
+    \item \textbf{Carga ($R_L$):} 
+    A resistência de carga necessária para drenar a corrente especificada na tensão regulada é calculada por $R_L = \frac{V_Z}{I_L} = \frac{8{,}2}{0{,}6 \times 10^{-3}} \approx 13{,}67\,\mathrm{k}\Omega$. O valor comercial E12 adotado nas simulações é $R_L = 15\,\mathrm{k}\Omega$. O uso desse resistor na tensão nominal de $8{,}2\text{ V}$ drena efetivamente $I_{L,\text{real}} = \frac{8{,}2}{15\,\mathrm{k}\Omega} \approx 0{,}547\text{ mA}$. Esse $R_L$ é mantido constante em todas as seções de simulação.
+
+    \item \textbf{Capacitor de Filtro ($C_1$):}
+    O dimensionamento do capacitor para um \textit{ripple} máximo ($V_r$) de $1{,}5\text{ V}$ de pico a pico num retificador de meia onda ($f = 60\text{ Hz}$) é determinado pela Equação 1 do roteiro:
+    \[
+    C_1 \approx \frac{I_L}{f \cdot V_r} = \frac{0{,}6 \times 10^{-3}}{60 \times 1{,}5} \approx 6{,}67\,\mu\text{F}
+    \]
+    Para garantir um ripple próximo ao especificado, arredonda-se para o valor E12 imediatamente superior, resultando na escolha de $C_1 = 6{,}8\,\mu\text{F}$. O capacitor dez vezes maior testado na simulação \texttt{item\_3.asc} é de $68\,\mu\text{F}$.
+
+    \item \textbf{Resistor Série do Regulador ($R_S$):}
+    Para calcular $R_S$, utiliza-se a tensão mínima na saída do filtro ($V_{min}$) na onda completa. Projetando o \textit{ripple} com $f = 120\text{ Hz}$:
+    \[
+    V_r \approx \frac{0{,}6 \times 10^{-3}}{120 \times 6{,}8 \times 10^{-6}} \approx 0{,}735\text{ V}
+    \]
+    A tensão de pico na onda completa (considerando a queda de dois diodos de aproximadamente $0{,}7\text{ V}$ cada) é $V_{p,\text{carga}} \approx 11{,}5 - 1{,}4 = 10{,}1\text{ V}$. Logo, $V_{min} \approx 10{,}1 - 0{,}735 = 9{,}365\text{ V}$.
+    O valor de $R_S$ para assegurar que a corrente no Zener não fique inferior a $I_{Z,min} = 1\text{ mA}$ no vale do ripple é dado pela Equação 2:
+    \[
+    R_S = \frac{V_{min} - V_Z}{I_L + I_{Z,min}} = \frac{9{,}365 - 8{,}2}{0{,}6 \times 10^{-3} + 1 \times 10^{-3}} = \frac{1{,}165}{1{,}6 \times 10^{-3}} \approx 728\,\Omega
+    \]
+    Arredondando para o valor E12 mais próximo que mantém a regulação, adotou-se $R_S = 820\,\Omega$. 
+    
+    Verificando a potência máxima no Zener com a carga retirada ($I_L = 0$) e na crista do sinal ($V_{max} \approx 10{,}1\text{ V}$):
+    \[
+    I_{Z,max} = \frac{V_{max} - V_Z}{R_S} = \frac{10{,}1 - 8{,}2}{820} \approx 2{,}32\text{ mA}
+    \]
+    \[
+    P_{Z,max} = V_Z \times I_{Z,max} = 8{,}2 \times 2{,}32\text{ mA} \approx 19{,}0\text{ mW}
+    \]
+    Este valor está extremamente abaixo do limite de $250\text{ mW}$ do BZX84C, tornando o projeto seguro.
+
+\end{itemize}
+
+A tabela abaixo resume os parâmetros teóricos e os adotados:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Teórico} & \textbf{Adotado (E12)} & \textbf{Desvio} \\
+\midrule
+Amplitude da Fonte ($V_p$) & $11{,}50\text{ V}$ & $11{,}50\text{ V}$ & $0{,}00\%$ \\
+Tensão de Regulação ($V_Z$) & $8{,}13\text{ V}$ & $8{,}20\text{ V}$ & $0{,}86\%$ \\
+Corrente da Carga ($I_L$ em $8{,}2\text{ V}$) & $0{,}60\text{ mA}$ & $0{,}547\text{ mA}$ & $-8{,}83\%$ \\
+Resistor de Carga ($R_L$) & $13{,}67\text{ k}\Omega$ & $15\text{ k}\Omega$ & $9{,}73\%$ \\
+Capacitor de Filtro ($C_1$) & $6{,}67\,\mu\text{F}$ & $6{,}8\,\mu\text{F}$ & $1{,}95\%$ \\
+Resistor do Zener ($R_S$) & $728\,\Omega$ & $820\,\Omega$ & $12{,}64\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 % Transcreva os parâmetros que a sua matrícula determina, mostrando a conta a partir dos
 % dígitos.
 
