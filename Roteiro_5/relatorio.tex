@@ -153,6 +153,8 @@ Resistor do Zener ($R_S$) & $728\,\Omega$ & $820\,\Omega$ & $12{,}64\%$ \\
 \end{tabular}
 \end{center}
 
+
+
 % Transcreva os parâmetros que a sua matrícula determina, mostrando a conta a partir dos
 % dígitos.
 
@@ -178,6 +180,242 @@ Resistor do Zener ($R_S$) & $728\,\Omega$ & $820\,\Omega$ & $12{,}64\%$ \\
 
 % Se mais de uma combinação atender à especificação, diga por que escolheu esta, mostrando
 % que as outras ficavam mais distantes.
+
+```latex
+\begin{espec}
+
+\textbf{Matrícula \mat{23/1036775}.} Considerando os nove dígitos
+na forma ABCDEFGHI, obtêm-se:
+
+\begin{equation}
+A=2,\quad B=3,\quad C=1,\quad D=0,\quad E=3,\quad
+F=6,\quad G=7,\quad H=7,\quad I=5.
+\end{equation}
+
+A partir desses valores, as especificações individuais exigidas pelo
+roteiro são:
+
+\begin{itemize}
+    \item \textbf{Fonte:}
+
+    Senoide de frequência $f=60\,\text{Hz}$ e tensão de
+    $AB=23\,\text{V}$ de pico a pico. Portanto, a amplitude é
+
+    \[
+        V_p=\frac{AB}{2}=\frac{23}{2}=11{,}5\,\text{V}.
+    \]
+
+    \item \textbf{Regulação (Zener):}
+
+    A tensão nominal desejada para o diodo Zener é
+    $V_p/\sqrt{2}$:
+
+    \[
+        \frac{V_p}{\sqrt{2}}
+        =\frac{11{,}5}{\sqrt{2}}
+        \approx 8{,}13\,\text{V}.
+    \]
+
+    Entre as tensões disponíveis para a série BZX84C no LTspice,
+    a mais próxima é $V_Z=8{,}2\,\text{V}$.
+
+    \item \textbf{Carga (Corrente):}
+
+    A corrente especificada para a carga é
+
+    \[
+        I_L=I\times100\,\mu\text{A}
+        =5\times100\,\mu\text{A}
+        =500\,\mu\text{A}
+        =0{,}5\,\text{mA}.
+    \]
+\end{itemize}
+
+\end{espec}
+
+Os componentes da série comercial E12 são dimensionados a seguir.
+A resistência de carga calculada é mantida constante em todas as
+seções de simulação.
+
+\begin{itemize}
+
+    \item \textbf{Carga ($R_L$):}
+
+    A resistência necessária para que circule a corrente especificada
+    na tensão nominal do Zener é
+
+    \[
+        R_L=\frac{V_Z}{I_L}
+        =\frac{8{,}2}{0{,}5\times10^{-3}}
+        =16{,}4\,\text{k}\Omega.
+    \]
+
+    O valor comercial E12 mais próximo é
+    $R_L=15\,\text{k}\Omega$, cuja diferença em relação ao valor
+    teórico é
+
+    \[
+        \frac{15-16{,}4}{16{,}4}\times100
+        \approx -8{,}54\%.
+    \]
+
+    Com esse resistor, a corrente efetiva na tensão nominal de
+    $8{,}2\,\text{V}$ será
+
+    \[
+        I_{L,\text{real}}=\frac{8{,}2}{15\,\text{k}\Omega}
+        \approx0{,}547\,\text{mA}.
+    \]
+
+    Esse valor é aproximadamente $9{,}33\%$ superior à corrente
+    especificada de $0{,}5\,\text{mA}$.
+
+    \item \textbf{Capacitor de filtro ($C_1$):}
+
+    Para o retificador de meia onda, o roteiro estabelece um ripple
+    máximo de $V_r=1{,}5\,\text{V}$ de pico a pico. Utilizando
+    a Equação (1), com frequência de repetição dos picos
+    $f=60\,\text{Hz}$, obtém-se
+
+    \[
+        C_1\approx\frac{I_L}{fV_r}
+        =\frac{0{,}5\times10^{-3}}{60\times1{,}5}
+        \approx5{,}56\,\mu\text{F}.
+    \]
+
+    Arredondando para o valor E12 imediatamente superior, adota-se
+    $C_1=5{,}6\,\mu\text{F}$. O desvio em relação ao valor calculado
+    é
+
+    \[
+        \frac{5{,}6-5{,}56}{5{,}56}\times100
+        \approx0{,}80\%.
+    \]
+
+    Na simulação com capacitor dez vezes maior, utiliza-se
+    $C_2=56\,\mu\text{F}$.
+
+    Para o retificador de onda completa, a frequência de repetição
+    dos picos passa a ser $120\,\text{Hz}$. Com o mesmo capacitor,
+    o ripple teórico é
+
+    \[
+        V_{r,\text{onda completa}}
+        \approx\frac{0{,}5\times10^{-3}}
+        {120\times5{,}6\times10^{-6}}
+        \approx0{,}744\,\text{V}.
+    \]
+
+    \item \textbf{Resistor série do regulador ($R_S$):}
+
+    Para dimensionar o resistor série, utiliza-se a tensão mínima
+    na saída do filtro, estimada a partir da tensão de pico após
+    a ponte e do ripple calculado.
+
+    Considerando uma queda aproximada de $0{,}7\,\text{V}$ em cada
+    um dos dois diodos que conduzem simultaneamente, a tensão máxima
+    na saída da ponte é estimada por
+
+    \[
+        V_{\max}\approx V_p-2(0{,}7)
+        =11{,}5-1{,}4
+        =10{,}1\,\text{V}.
+    \]
+
+    Assim, a tensão mínima estimada do filtro é
+
+    \[
+        V_{\min}\approx V_{\max}-V_r
+        =10{,}1-0{,}744
+        =9{,}356\,\text{V}.
+    \]
+
+    De acordo com a Equação (2) do roteiro, deve-se garantir uma
+    corrente mínima no Zener de $I_{Z,\min}=1\,\text{mA}$ no vale
+    do ripple. Portanto,
+
+    \[
+        R_S=\frac{V_{\min}-V_Z}{I_L+I_{Z,\min}}
+        =\frac{9{,}356-8{,}2}
+        {(0{,}5+1{,}0)\times10^{-3}}
+        \approx771\,\Omega.
+    \]
+
+    Conforme solicitado no roteiro, adota-se o valor E12
+    imediatamente inferior, isto é, $R_S=680\,\Omega$. O desvio
+    em relação ao valor calculado é
+
+    \[
+        \frac{680-771}{771}\times100
+        \approx-11{,}80\%.
+    \]
+
+    Por fim, verifica-se a potência máxima estimada no Zener com
+    a carga retirada ($I_L=0$) e a tensão do filtro em seu pico:
+
+    \[
+        I_{Z,\max}\approx\frac{V_{\max}-V_Z}{R_S}
+        =\frac{10{,}1-8{,}2}{680}
+        \approx2{,}79\,\text{mA}.
+    \]
+
+    \[
+        P_{Z,\max}\approx V_Z I_{Z,\max}
+        =8{,}2\times2{,}79\,\text{mA}
+        \approx22{,}9\,\text{mW}.
+    \]
+
+    A potência estimada é inferior ao limite de $250\,\text{mW}
+    do BZX84C. Essa verificação é uma estimativa teórica e deve
+    ser confrontada com os resultados da simulação.
+
+\end{itemize}
+
+A Tabela a seguir resume os parâmetros teóricos e os valores
+adotados no projeto.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Grandeza} &
+\textbf{Teórico} &
+\textbf{Adotado (E12)} &
+\textbf{Desvio} \\
+\midrule
+Amplitude da fonte ($V_p$)
+    & $11{,}50\,\text{V}$
+    & $11{,}50\,\text{V}$
+    & $0{,}00\%$ \\
+
+Tensão nominal do Zener ($V_Z$)
+    & $8{,}13\,\text{V}$
+    & $8{,}20\,\text{V}$
+    & $+0{,}84\%$ \\
+
+Corrente na carga ($I_L$)
+    & $0{,}500\,\text{mA}$
+    & $0{,}547\,\text{mA}$
+    & $+9{,}33\%$ \\
+
+Resistor de carga ($R_L$)
+    & $16{,}4\,\text{k}\Omega$
+    & $15\,\text{k}\Omega$
+    & $-8{,}54\%$ \\
+
+Capacitor de filtro ($C_1$)
+    & $5{,}56\,\mu\text{F}$
+    & $5{,}6\,\mu\text{F}$
+    & $+0{,}80\%$ \\
+
+Resistor série ($R_S$)
+    & $771\,\Omega$
+    & $680\,\Omega$
+    & $-11{,}80\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+```
 
 \section{Metodologia}
 
