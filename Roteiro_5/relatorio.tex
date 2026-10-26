@@ -181,7 +181,6 @@ Resistor do Zener ($R_S$) & $728\,\Omega$ & $820\,\Omega$ & $12{,}64\%$ \\
 % Se mais de uma combinação atender à especificação, diga por que escolheu esta, mostrando
 % que as outras ficavam mais distantes.
 
-```latex
 \begin{espec}
 
 \textbf{Matrícula \mat{23/1036775}.} Considerando os nove dígitos
@@ -365,7 +364,7 @@ seções de simulação.
         \approx22{,}9\,\text{mW}.
     \]
 
-    A potência estimada é inferior ao limite de $250\,\text{mW}
+    A potência estimada é inferior ao limite de $250\,\text{mW}$
     do BZX84C. Essa verificação é uma estimativa teórica e deve
     ser confrontada com os resultados da simulação.
 
@@ -415,8 +414,6 @@ Resistor série ($R_S$)
 \bottomrule
 \end{tabular}
 \end{center}
-```
-
 \section{Metodologia}
 
 % Conte o que você fez e com quais parâmetros, de modo que um colega consiga repetir sem
@@ -502,6 +499,78 @@ Para comprovar que o projeto atende às especificações apresentadas na Seção
 \caption{Esquemáticos projetados para a matrícula 23/1038626 contendo os componentes da série E12 e a diretiva de simulação de regime transitório aplicada para cada etapa da fonte linear.}
 \label{fig:circs_guilherme}
 \end{figure}
+
+\subsubsection{Daniel Campos Silva (23/1036775)}
+
+\textbf{Configuração e Simulação dos Circuitos}
+
+Para avaliar as etapas de retificação, filtragem e regulação de tensão, os seis circuitos foram desenhados e simulados no LTspice, conforme apresentado na Figura~\ref{fig:circs_daniel}. Em todas as análises, adotou-se a diretiva de simulação de regime transitório \texttt{.tran 0 100m}, permitindo observar o comportamento dos circuitos ao longo de seis períodos da rede elétrica de 60 Hz. Os esquemáticos foram configurados da seguinte forma:
+
+\begin{itemize}
+    \item \textbf{Retificador de meia onda (Figura~\ref{fig:circs_daniel}a):} Utilizou-se uma fonte senoidal de 60 Hz e amplitude de 11,5 V, definida por \texttt{SINE(0 11.5 60)}, um diodo 1N4007 e uma resistência de carga de \(15\,\text{k}\Omega\).
+
+    \item \textbf{Retificador de meia onda com filtro (Figura~\ref{fig:circs_daniel}b):} Adicionou-se um capacitor de filtragem de \(5{,}6\,\mu\text{F}\) em paralelo com a carga, com o objetivo de reduzir a ondulação (\textit{ripple}) da tensão de saída.
+
+    \item \textbf{Retificador de meia onda com filtro de maior capacitância (Figura~\ref{fig:circs_daniel}c):} A capacitância foi aumentada para \(56\,\mu\text{F}\), dez vezes o valor utilizado no item anterior, para avaliar o efeito do aumento da capacitância na redução da ondulação da tensão de saída.
+
+    \item \textbf{Ponte retificadora sem filtro (Figura~\ref{fig:circs_daniel}d):} Utilizou-se uma ponte de onda completa composta por quatro diodos 1N4007, sem capacitor de filtragem, para analisar a tensão retificada nos dois semiciclos da fonte senoidal.
+
+    \item \textbf{Ponte retificadora com filtro (Figura~\ref{fig:circs_daniel}e):} Adicionou-se um capacitor de \(5{,}6\,\mu\text{F}\) à saída da ponte retificadora, permitindo avaliar a filtragem da tensão e a ondulação resultante da retificação de onda completa.
+
+    \item \textbf{Fonte com regulação Zener (Figura~\ref{fig:circs_daniel}f):} Acrescentou-se um resistor limitador em série \(R_S\) e um diodo Zener BZX84C de \(8{,}2\,\text{V}\), conectado em paralelo com a carga de \(15\,\text{k}\Omega\). Essa configuração permite analisar a regulação da tensão de saída e verificar a atuação do diodo Zener.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+
+    \begin{minipage}{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/simulacao/retificador_de_meia_onda_circuito.png}
+        \vspace{2pt}
+        {\small (a) Retificador de meia onda}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/simulacao/retificador_de_meia_onda_com_filtro_circuito.png}
+        \vspace{2pt}
+        {\small (b) Meia onda com filtro de \(5{,}6\,\mu\text{F}\)}
+    \end{minipage}
+
+    \vspace{12pt}
+
+    \begin{minipage}{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/simulacao/retificador_de_meia_onda_com_filtro_comparativo_circuito.png}
+        \vspace{2pt}
+        {\small (c) Meia onda com filtro de \(56\,\mu\text{F}\)}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/simulacao/ponte_retificadora_sem_filtro_circuito.png}
+        \vspace{2pt}
+        {\small (d) Ponte retificadora sem filtro}
+    \end{minipage}
+
+    \vspace{12pt}
+
+    \begin{minipage}{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/simulacao/ponte_retificadora_com_filtro_circuito.png}
+        \vspace{2pt}
+        {\small (e) Ponte retificadora com filtro}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/simulacao/regulacao_com_zener_circuito.png}
+        \vspace{2pt}
+        {\small (f) Fonte com regulação Zener}
+    \end{minipage}
+
+    \caption{Circuitos simulados no LTspice para a matrícula 23/1036775, abrangendo as etapas de retificação, filtragem capacitiva e regulação de tensão.}
+    \label{fig:circs_daniel}
+\end{figure}
+
+
 
 \subsection{Montagem em bancada}
 
@@ -1045,7 +1114,7 @@ Meia onda com filtro (Seção 4.4 do roteiro). A adição do capacitor eletrolí
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{imgs/resultados/bancada_meia_onda_com_filtro.jpeg}
-    \caption{Retificador de meia onda com filtro capacitivo de $47\text{ }\mu\text{F}$.}
+    \caption{Retificador de meia onda com filtro capacitivo de 47 microfarads.}
     \label{fig:bancada_meia_filtro}
 \end{figure}
 
