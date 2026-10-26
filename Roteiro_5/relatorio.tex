@@ -720,6 +720,178 @@ Analiticamente, a regulação é mantida pois o Zener nunca entra em corte. No v
 % \end{tabular}
 % \end{center}
 
+Componentes medidos. A Tabela 5 traz o valor nominal de projeto (Equipe 2) e o valor medido na bancada de cada resistor e capacitor antes da montagem. O desvio foi calculado pela razão $(\text{medido} - \text{nominal})/\text{nominal}$. 
+
+\begin{table}[H]
+    \centering
+    \caption{Componentes da montagem: valor nominal, medido e desvio.}
+    \vspace{2pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}llrrr@{}}
+    \toprule
+    \textbf{Componente} & \textbf{Posição no circuito} & \textbf{Nominal} & \textbf{Medido} & \textbf{Desvio} \\
+    \midrule
+    Resistor de carga $R_L$ & Em paralelo à saída & $4{,}70\text{ k}\Omega$ & $4{,}688\text{ k}\Omega$ & $-0{,}25\%$ \\
+    Capacitor de projeto & Em paralelo à carga & $47{,}0\text{ }\mu\text{F}$ & $48{,}80\text{ }\mu\text{F}$ & $+3{,}83\%$ \\
+    Capacitor de comparação & Em paralelo à carga & $4{,}70\text{ }\mu\text{F}$ & $4{,}84\text{ }\mu\text{F}$ & $+2{,}98\%$ \\
+    Resistor $R_S$ & Saída do filtro $\to$ Zener & $390\text{ }\Omega$ & $386{,}5\text{ }\Omega$ & $-0{,}90\%$ \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+Grandezas de projeto recalculadas. A Tabela 6 compara as grandezas de projeto calculadas com os valores nominais (ideais) e com os valores efetivamente medidos dos componentes. O dimensionamento final de $R_S$ assumiu como meta os $6{,}8\text{ V}$ do Zener 1N754, balizado pelo nível mínimo do filtro ($V_{min}$) medido em bancada.
+
+\begin{table}[H]
+    \centering
+    \caption{Grandezas de projeto da montagem com valores nominais e medidos.}
+    \vspace{2pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Com nominais} & \textbf{Com medidos} & \textbf{Unidade} \\
+    \midrule
+    Corrente da carga ($I_L$ em $6{,}8\text{ V}$) & $1{,}44$ & $1{,}45$ & mA \\
+    Ripple meia onda previsto ($C$ de projeto) & $0{,}50$ & $0{,}48$ & V \\
+    Ripple onda completa previsto ($C$ de projeto) & $0{,}25$ & $0{,}24$ & V \\
+    $R_S$ calculado (Eq. 2) & $646{,}6$ & $447{,}5$ & $\Omega$ \\
+    \bottomrule
+    \multicolumn{4}{l}{\footnotesize O $R_S$ com medidos utilizou o $V_{min}$ real de $7{,}87\text{ V}$ colhido na Seção 4.6.}
+    \end{tabular}
+\end{table}
+
+Retificador de meia onda (Seção 4.3 do roteiro). A Figura~\ref{fig:bancada_meia_onda} ilustra as formas de onda da entrada (amarelo, CH1) e da carga (verde, CH2), obtidas com a retificação de um diodo 1N4007 sob uma carga de $4{,}7\text{ k}\Omega$. A Tabela 7 exibe as leituras comparadas ao projeto. A diferença entre os picos confirmou uma queda direta de aproximadamente $0{,}4\text{ V}$ no diodo.
+
+\begin{table}[H]
+    \centering
+    \caption{Retificador de meia onda sem filtro: leituras e desvios.}
+    \vspace{2pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Previsto} & \textbf{Medido} & \textbf{Unidade} \\
+    \midrule
+    Pico do gerador (CH1) & $10{,}0$ & $9{,}6$ & V \\
+    Pico na carga (CH2) & $9{,}3$ & $9{,}2$ & V \\
+    Queda no diodo & $0{,}7$ & $0{,}4$ & V \\
+    Valor médio na carga & $3{,}18$ & $2{,}93$ & V \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{imgs/resultados/bancada_retificador_meia_onda.jpeg}
+    \caption{Retificador de meia onda sem filtro (CH1: Gerador, CH2: Carga).}
+    \label{fig:bancada_meia_onda}
+\end{figure}
+
+Meia onda com filtro (Seção 4.4 do roteiro). A adição do capacitor eletrolítico em paralelo à carga sustentou a tensão entre os semiciclos, gerando a resposta da Figura~\ref{fig:bancada_meia_filtro}. A Tabela 8 documenta que o \textit{ripple} medido foi de $0{,}56\text{ V}$, validando a estimativa da descarga linear. Ao trocar o capacitor de projeto ($47\text{ }\mu\text{F}$) pelo de comparação dez vezes menor ($4{,}7\text{ }\mu\text{F}$), a ondulação subiu expressivamente. A razão entre os ripples medidos foi de $7{,}43$, atestando que a amplitude da ondulação é inversamente proporcional à capacitância.
+
+\begin{table}[H]
+    \centering
+    \caption{Meia onda com capacitores de projeto e de comparação.}
+    \vspace{2pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Previsto} & \textbf{Medido} & \textbf{Unidade} \\
+    \midrule
+    Ripple pico a pico ($C$ de projeto) & $0{,}50$ & $0{,}56$ & V \\
+    Tensão contínua ($C$ de projeto) & $9{,}05$ & $8{,}25$ & V \\
+    Ripple pico a pico ($C$ de comparação) & $4{,}96$ & $4{,}16$ & V \\
+    Razão de ripple (Comparação/Projeto) & $10{,}0$ & $7{,}43$ & - \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{imgs/resultados/bancada_meia_onda_com_filtro.jpeg}
+    \caption{Retificador de meia onda com filtro capacitivo de $47\text{ }\mu\text{F}$.}
+    \label{fig:bancada_meia_filtro}
+\end{figure}
+
+Ponte retificadora sem filtro (Seção 4.5 do roteiro). A topologia foi reconfigurada para onda completa usando quatro diodos. Para prevenir curto-circuito via terra do osciloscópio, o instrumento foi referenciado isoladamente na carga. A Figura~\ref{fig:bancada_ponte} atesta a presença de picos duplicados em $\approx 119\text{ Hz}$. A Tabela 9 detalha a medição. A queda de tensão observada foi consideravelmente maior ($1{,}6\text{ V}$) frente à da meia onda, devido à condução em série de dois diodos a cada semiciclo.
+
+\begin{table}[H]
+    \centering
+    \caption{Ponte retificadora de onda completa sem filtro capacitivo.}
+    \vspace{2pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Previsto} & \textbf{Medido} & \textbf{Unidade} \\
+    \midrule
+    Pico da saída da ponte & $8{,}6$ & $8{,}4$ & V \\
+    Queda total de tensão (Vp - pico saída) & $1{,}4$ & $1{,}6$ & V \\
+    Frequência dos picos & $120$ & $119$ & Hz \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{imgs/resultados/bancada_ponte_retificadora.jpeg}
+    \caption{Onda completa sem filtro, com os picos da carga rebatidos e duplicados.}
+    \label{fig:bancada_ponte}
+\end{figure}
+
+Ponte com filtro (Seção 4.6 do roteiro). A Figura~\ref{fig:bancada_ponte_filtro} evidencia a saída após a reinserção do capacitor de $47\text{ }\mu\text{F}$. A Tabela 10 revela uma queda brusca do \textit{ripple} para $0{,}26\text{ V}$. A razão medida ($0{,}46$) em relação à retificação de meia onda sob a mesma capacitância consolida a teoria: dobrar a frequência de picos divide a variação da ondulação essencialmente à metade. Esta oscilação fixou a tensão mínima ($V_{min}$) na saída do filtro em $7{,}87\text{ V}$.
+
+\begin{table}[H]
+    \centering
+    \caption{Filtro capacitivo aplicado à ponte retificadora.}
+    \vspace{2pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Previsto} & \textbf{Medido} & \textbf{Unidade} \\
+    \midrule
+    Ripple pico a pico ($C$ de projeto) & $0{,}25$ & $0{,}26$ & V \\
+    Tensão contínua média & $8{,}48$ & $8{,}00$ & V \\
+    Tensão mínima da saída do filtro ($V_{min}$) & $8{,}35$ & $7{,}87$ & V \\
+    Razão ripple (Ponte / Meia Onda) & $0{,}50$ & $0{,}46$ & - \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{imgs/resultados/bancada_ponte_com_filtro.jpeg}
+    \caption{Onda completa com filtro de projeto (ripple residual na saída).}
+    \label{fig:bancada_ponte_filtro}
+\end{figure}
+
+Regulação com zener (Seção 4.7 do roteiro). Para suportar a tensão mínima lida na seção anterior ($7{,}87\text{ V}$), adotou-se o resistor limitador E12 imediatamente inferior ao calculado, resultando em $390\text{ }\Omega$ (medido $386{,}5\text{ }\Omega$). O componente Zener utilizado, não obstante possuir uma meta de $6{,}8\text{ V}$ especificada para a regulação do 1N754, firmou a saída em $5{,}6\text{ V}$ contínuos de forma altamente estável na bancada (Figura~\ref{fig:bancada_zener}). A Tabela 11 documenta a supressão quase integral da ondulação (restaram meros $0{,}02\text{ V}$ pico a pico), equivalendo à eliminação de $92{,}3\%$ do ruído original. Com a carga desconectada — pior cenário térmico —, a potência de pico dissipada no semicondutor chegou a aproximadamente $28{,}2\text{ mW}$, operando com amplíssima margem de segurança frente à sua capacidade nominal de dissipação ($500\text{ mW}$).
+
+\begin{table}[H]
+    \centering
+    \caption{Desempenho do estágio de regulação de tensão.}
+    \vspace{2pt}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Adotado / Previsto} & \textbf{Medido} & \textbf{Unidade} \\
+    \midrule
+    $R_S$ calculado / adotado (E12) & $447{,}5$ / $390$ & $386{,}5$ & $\Omega$ \\
+    Ripple antes do regulador & $0{,}25$ & $0{,}26$ & V \\
+    Tensão contínua na carga (com Zener) & $5{,}60$ & $5{,}60$ & V \\
+    Ripple na carga & \textit{a simular} & $0{,}02$ & V \\
+    Fração do ripple eliminada & $-$ & $92{,}3$ & \% \\
+    Tensão contínua sem carga & $5{,}60$ & $5{,}60$ & V \\
+    Corrente de pico no Zener sem carga & $3{,}21$ & $4{,}14$ & mA \\
+    Potência no Zener sem carga & $21{,}86$ & $28{,}15$ & mW \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{imgs/resultados/bancada_regulação_com_zener.jpeg}
+    \caption{Sinal após o estágio de regulação com diodo Zener (ondulação eliminada).}
+    \label{fig:bancada_zener}
+\end{figure}
+
 \section{Discussão}
 
 % Percorra as três comparações na ordem em que aparecem no quadro da Seção~4: a conta contra
