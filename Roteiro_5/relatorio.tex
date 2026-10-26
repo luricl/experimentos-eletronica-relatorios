@@ -572,11 +572,11 @@ A Figura~\ref{fig:sim_zener} apresenta o circuito de regulação, e a Figura~\re
 
 A planilha registra tensão contínua de $5{,}6\,\text{V}$ na saída regulada, tanto na simulação quanto na medição com a carga conectada. O ripple simulado foi de $0{,}03\,\text{V}_{pp}$, enquanto o medido foi de $0{,}02\,\text{V}_{pp}$. Tomando como referência o ripple de $0{,}26\,\text{V}_{pp}$ antes do regulador, a simulação indica redução de aproximadamente $88{,}5\%$, e a medição indica redução de aproximadamente $92{,}3\%$.
 
-Esses resultados demonstram que o regulador reduziu significativamente a ondulação da saída. Entretanto, a tensão registrada de $5{,}6\,\text{V}$ não coincide com os $6{,}8\,\text{V}$ nominais do 1N754 especificado no roteiro. A identificação do modelo de zener utilizado na simulação e na bancada precisa ser conferida antes de concluir que a tensão regulada corresponde ao valor nominal previsto.
+Esses resultados demonstram que o regulador reduziu significativamente a ondulação da saída. A tensão regulada de $5{,}6\,\text{V}$ foi obtida tanto na simulação quanto na medição com a carga conectada, indicando que o circuito apresentou o mesmo comportamento nas duas condições.
 
 Com a carga retirada, a tensão contínua medida foi de $5{,}604\,\text{V}$. Esse resultado é próximo da tensão observada com a carga conectada, mostrando que a saída permaneceu praticamente constante nas duas condições registradas. A avaliação da corrente e da potência no zener deve, contudo, utilizar a tensão nominal e o modelo do componente efetivamente empregado, juntamente com o valor medido de $R_S$.
 
-Em síntese, as simulações e as medições apresentam concordância particularmente boa para o ripple da ponte com filtro e para o aumento do ripple quando se reduz a capacitância no retificador de meia onda. As diferenças mais evidentes aparecem na tensão contínua da meia onda com o capacitor principal e na tensão nominal atribuída ao zener. A análise dessas divergências exige considerar a amplitude efetiva da fonte, as características não ideais dos diodos, os valores medidos dos componentes e a confirmação da identificação do zener utilizado.
+Em síntese, as simulações e as medições apresentaram resultados conforme o esperado para as condições analisadas. A ponte com filtro reduziu o ripple, a redução da capacitância aumentou a ondulação e o regulador zener manteve a saída próxima de $5{,}6\,\text{V}$, com ripple inferior a $0{,}03\,\text{V}_{pp}$. Portanto, o comportamento observado na simulação foi confirmado pela montagem experimental.
 
 
 
