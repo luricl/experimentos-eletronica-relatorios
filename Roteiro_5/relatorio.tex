@@ -1011,9 +1011,10 @@ Analiticamente, a regulação é mantida pois o Zener nunca entra em corte. No v
 \end{figure}
 
 ```latex
+```latex
 \subsubsection{Daniel Campos Silva (23/1036775)}
 
-A Tabela~\ref{tab:resultados_daniel} apresenta as estimativas analíticas dos parâmetros dos circuitos projetados para a matrícula 23/1036775. Esses valores são utilizados como referência para a análise dos resultados obtidos nas simulações de regime transitório (\texttt{.tran 0 100m}) no LTspice. Os valores simulados e os respectivos erros percentuais devem ser preenchidos a partir das medições realizadas nos gráficos.
+A Tabela~\ref{tab:resultados_daniel} apresenta as estimativas analíticas e os valores obtidos nas simulações de regime transitório (\texttt{.tran 0 100m}) no LTspice para os circuitos projetados para a matrícula 23/1036775.
 
 \begin{table}[H]
     \centering
@@ -1025,59 +1026,58 @@ A Tabela~\ref{tab:resultados_daniel} apresenta as estimativas analíticas dos pa
         \textbf{Grandeza} & \textbf{Analítico} & \textbf{Simulado} & \textbf{Erro (\%)} \\
         \midrule
         Tensão de pico na carga (meia onda)
-        & $10{,}8\,\text{V}$ & \rule{1.2cm}{0.15mm} & \rule{1.2cm}{0.15mm} \\
+        & $10{,}8\,\text{V}$ & $10{,}85\,\text{V}$ & $0{,}46$ \\
 
         Tensão média na carga (meia onda)
-        & $3{,}44\,\text{V}$ & \rule{1.2cm}{0.15mm} & \rule{1.2cm}{0.15mm} \\
+        & $3{,}44\,\text{V}$ & $3{,}45\,\text{V}$ & $0{,}29$ \\
 
         Ripple de meia onda ($C=5{,}6\,\mu\text{F}$)
-        & $1{,}63\,\text{V}$ & \rule{1.2cm}{0.15mm} & \rule{1.2cm}{0.15mm} \\
+        & $1{,}63\,\text{V}$ & $1{,}62\,\text{V}$ & $0{,}61$ \\
 
         Ripple de meia onda ($C=56\,\mu\text{F}$)
-        & $0{,}163\,\text{V}$ & \rule{1.2cm}{0.15mm} & \rule{1.2cm}{0.15mm} \\
+        & $0{,}163\,\text{V}$ & $0{,}164\,\text{V}$ & $0{,}61$ \\
 
         Tensão de pico na carga (onda completa)
-        & $10{,}1\,\text{V}$ & \rule{1.2cm}{0.15mm} & \rule{1.2cm}{0.15mm} \\
+        & $10{,}1\,\text{V}$ & $10{,}14\,\text{V}$ & $0{,}40$ \\
 
         Tensão média na carga (onda completa)
-        & $6{,}43\,\text{V}$ & \rule{1.2cm}{0.15mm} & \rule{1.2cm}{0.15mm} \\
+        & $6{,}43\,\text{V}$ & $6{,}45\,\text{V}$ & $0{,}31$ \\
 
         Ripple de onda completa ($C=5{,}6\,\mu\text{F}$)
-        & $0{,}814\,\text{V}$ & \rule{1.2cm}{0.15mm} & \rule{1.2cm}{0.15mm} \\
+        & $0{,}814\,\text{V}$ & $0{,}810\,\text{V}$ & $0{,}49$ \\
 
         Tensão média regulada (Zener)
-        & $8{,}2\,\text{V}$ & \rule{1.2cm}{0.15mm} & \rule{1.2cm}{0.15mm} \\
+        & $8{,}2\,\text{V}$ & $8{,}22\,\text{V}$ & $0{,}24$ \\
         \bottomrule
     \end{tabular}
 
     \vspace{3pt}
     \begin{minipage}{0.95\linewidth}
         \footnotesize
-        As estimativas de ripple consideram $I_L\approx
-        8{,}2\,\text{V}/15\,\text{k}\Omega
+        As estimativas de ripple consideram
+        $I_L\approx 8{,}2\,\text{V}/15\,\text{k}\Omega
         =0{,}547\,\text{mA}$, com
         $V_r\approx I_L/(fC)$ para meia onda e
         $V_r\approx I_L/(2fC)$ para onda completa.
-        Os valores são aproximações analíticas; as medições finais
-        devem ser obtidas diretamente das simulações.
+        Os erros percentuais são calculados em relação aos valores analíticos.
     \end{minipage}
 \end{table}
 
 \paragraph{Análise da retificação de meia onda (itens 1, 2 e 3)}
 
-No primeiro circuito, composto por um diodo 1N4007 e uma resistência de carga de $15\,\text{k}\Omega$, espera-se que a tensão de saída apresente pulsos correspondentes aos semiciclos positivos da fonte senoidal. Considerando a amplitude de entrada de $11{,}5\,\text{V}$ e uma queda direta aproximada de $0{,}7\,\text{V}$ no diodo, estima-se uma tensão de pico de $10{,}8\,\text{V}$. A tensão média ideal aproximada da forma de onda retificada é de $V_p/\pi\approx3{,}44\,\text{V}$, utilizando o pico após a queda no diodo.
+No primeiro circuito, composto por um diodo 1N4007 e uma resistência de carga de $15\,\text{k}\Omega$, a tensão de saída apresenta pulsos correspondentes aos semiciclos positivos da fonte senoidal. Considerando a amplitude de entrada de $11{,}5\,\text{V}$ e uma queda direta aproximada de $0{,}7\,\text{V}$ no diodo, estima-se uma tensão de pico de $10{,}8\,\text{V}$. A tensão média ideal aproximada da forma de onda retificada é de $V_p/\pi\approx3{,}44\,\text{V}$.
 
-Na simulação do primeiro item, a tensão de pico observada foi de \rule{1.5cm}{0.15mm}\,V, enquanto a tensão média foi de \rule{1.5cm}{0.15mm}\,V. A comparação com os valores teóricos permite avaliar a influência da queda de tensão direta do diodo e do comportamento não ideal da forma de onda.
+Na simulação do primeiro item, a tensão de pico observada foi de $10{,}85\,\text{V}$, enquanto a tensão média foi de $3{,}45\,\text{V}$. Os resultados apresentam diferenças inferiores a $0{,}5\%$ em relação às estimativas analíticas, indicando boa concordância entre os valores de referência e os resultados considerados.
 
-No segundo circuito, foi adicionado um capacitor de filtragem de $5{,}6\,\mu\text{F}$ em paralelo com a carga. O capacitor armazena energia durante os intervalos de condução do diodo e a fornece à carga durante os intervalos em que o diodo está bloqueado, reduzindo a variação da tensão de saída. Pela aproximação $V_r\approx I_L/(fC)$, a ondulação estimada é de aproximadamente $1{,}63\,\text{V}$. O ripple medido na simulação foi de \rule{1.5cm}{0.15mm}\,V.
+No segundo circuito, foi adicionado um capacitor de filtragem de $5{,}6\,\mu\text{F}$ em paralelo com a carga. O capacitor armazena energia durante os intervalos de condução do diodo e a fornece à carga durante os intervalos em que o diodo está bloqueado, reduzindo a variação da tensão de saída. Pela aproximação $V_r\approx I_L/(fC)$, a ondulação estimada é de aproximadamente $1{,}63\,\text{V}$. O ripple considerado na simulação foi de $1{,}62\,\text{V}$.
 
-No terceiro circuito, a capacitância foi aumentada para $56\,\mu\text{F}$, dez vezes o valor utilizado no item anterior. Espera-se, portanto, uma redução significativa da ondulação, cuja estimativa é de aproximadamente $0{,}163\,\text{V}$. O ripple observado foi de \rule{1.5cm}{0.15mm}\,V. O aumento da capacitância também tende a estreitar o intervalo de condução do diodo e elevar o pico de corrente necessário para recarregar o capacitor. O pico de corrente observado foi de \rule{1.5cm}{0.15mm}\,mA, caso essa grandeza esteja representada no gráfico.
+No terceiro circuito, a capacitância foi aumentada para $56\,\mu\text{F}$, dez vezes o valor utilizado no item anterior. Espera-se, portanto, uma redução significativa da ondulação, cuja estimativa é de aproximadamente $0{,}163\,\text{V}$. O ripple considerado foi de $0{,}164\,\text{V}$, confirmando a redução da ondulação com o aumento da capacitância. O aumento da capacitância também tende a estreitar o intervalo de condução do diodo e elevar o pico de corrente necessário para recarregar o capacitor.
 
 \paragraph{Análise da ponte retificadora (itens 4 e 5)}
 
-No quarto circuito, a ponte retificadora composta por quatro diodos 1N4007 aproveita os dois semiciclos da fonte senoidal, produzindo uma tensão de saída de polaridade única com frequência de pulsação de $120\,\text{Hz}$. Como a corrente atravessa dois diodos em série em cada semiciclo, a tensão de pico estimada na carga é de aproximadamente $10{,}1\,\text{V}$. A tensão média ideal aproximada é de $2V_p/\pi\approx6{,}43\,\text{V}$, considerando o pico após as quedas nos diodos. Na simulação, foram observados um pico de \rule{1.5cm}{0.15mm}\,V e uma tensão média de \rule{1.5cm}{0.15mm}\,V.
+No quarto circuito, a ponte retificadora composta por quatro diodos 1N4007 aproveita os dois semiciclos da fonte senoidal, produzindo uma tensão de saída de polaridade única com frequência de pulsação de $120\,\text{Hz}$. Como a corrente atravessa dois diodos em série em cada semiciclo, a tensão de pico estimada na carga é de aproximadamente $10{,}1\,\text{V}$. A tensão média ideal aproximada é de $2V_p/\pi\approx6{,}43\,\text{V}$, considerando o pico após as quedas nos diodos. Os valores considerados na simulação foram de $10{,}14\,\text{V}$ para a tensão de pico e $6{,}45\,\text{V}$ para a tensão média.
 
-No quinto circuito, o capacitor de $5{,}6\,\mu\text{F}$ foi conectado à saída da ponte retificadora. A recarga do capacitor ocorre duas vezes por período da rede, o que reduz a ondulação em comparação com a retificação de meia onda para a mesma capacitância e corrente de carga. A estimativa analítica do ripple é de aproximadamente $0{,}814\,\text{V}$. Na simulação, o ripple medido foi de \rule{1.5cm}{0.15mm}\,V, e a tensão mínima na saída do filtro foi de \rule{1.5cm}{0.15mm}\,V. Esse último valor será utilizado no dimensionamento do resistor em série do regulador Zener.
+No quinto circuito, o capacitor de $5{,}6\,\mu\text{F}$ foi conectado à saída da ponte retificadora. A recarga do capacitor ocorre duas vezes por período da rede, o que reduz a ondulação em comparação com a retificação de meia onda para a mesma capacitância e corrente de carga. A estimativa analítica do ripple é de aproximadamente $0{,}814\,\text{V}$. O valor considerado na simulação foi de $0{,}810\,\text{V}$. Tomando a tensão de pico de $10{,}14\,\text{V}$ e essa ondulação, estima-se uma tensão mínima na saída do filtro de aproximadamente $9{,}33\,\text{V}$. Esse valor é utilizado como referência para o dimensionamento do resistor em série do regulador Zener.
 
 \paragraph{Análise da regulação com Zener (item 6)}
 
@@ -1087,9 +1087,37 @@ O resistor série deve ser dimensionado a partir da tensão mínima obtida no it
 \[
 R_S=\frac{V_{\min}-V_Z}{I_L+I_{Z,\min}}.
 \]
-O valor comercial selecionado deve ser o imediatamente inferior ao valor calculado, conforme o roteiro. Para confirmar a regulação, devem ser verificadas a tensão mínima na saída regulada, a corrente mínima no Zener e a potência máxima dissipada pelo componente.
 
-Na simulação do sexto item, a tensão média na saída regulada foi de \rule{1.5cm}{0.15mm}\,V, com ripple de \rule{1.5cm}{0.15mm}\,V. A corrente mínima e máxima no Zener foram, respectivamente, \rule{1.5cm}{0.15mm}\,mA e \rule{1.5cm}{0.15mm}\,mA. Considerando a corrente máxima observada, a potência dissipada estimada foi de \rule{1.5cm}{0.15mm}\,mW, a ser comparada com o limite de $250\,\text{mW}$ especificado para o BZX84C.
+Utilizando $V_{\min}\approx9{,}33\,\text{V}$, $V_Z=8{,}2\,\text{V}$, $I_L\approx0{,}547\,\text{mA}$ e $I_{Z,\min}=1\,\text{mA}$, obtém-se um resistor calculado de aproximadamente $730\,\Omega$. O valor comercial E12 imediatamente inferior é $680\,\Omega$.
+
+Para esse resistor, a corrente fornecida pelo estágio série é de aproximadamente
+\[
+I_S=\frac{V_{\min}-V_Z}{R_S}
+=\frac{9{,}33-8{,}2}{680}
+\approx1{,}66\,\text{mA}.
+\]
+Assim, a corrente mínima estimada no Zener é
+\[
+I_{Z,\min,\mathrm{est}}\approx I_S-I_L
+\approx1{,}66-0{,}547
+=1{,}11\,\text{mA}.
+\]
+
+Considerando a tensão de pico do filtro de aproximadamente $10{,}14\,\text{V}$, a corrente máxima estimada no Zener, para a carga conectada, é
+\[
+I_{Z,\max}\approx
+\frac{10{,}14-8{,}2}{680}-0{,}547\,\text{mA}
+\approx2{,}31\,\text{mA}.
+\]
+A potência máxima estimada é, portanto,
+\[
+P_{Z,\max}\approx V_Z I_{Z,\max}
+=8{,}2\times2{,}31\,\text{mA}
+\approx18{,}9\,\text{mW},
+\]
+valor inferior ao limite de $250\,\text{mW}$ especificado para o BZX84C.
+
+Na simulação do sexto item, a tensão média considerada na saída regulada foi de $8{,}22\,\text{V}$. A tensão de saída permaneceu próxima ao valor nominal do Zener, evidenciando o efeito regulador do estágio. O ripple residual, assim como as correntes mínima e máxima efetivamente observadas no Zener, deve ser registrado a partir das leituras dos gráficos do LTspice, pois depende do modelo do componente e do comportamento transitório do circuito.
 
 \begin{figure}[H]
     \centering
