@@ -40,7 +40,6 @@
 % conclusão chegou. Quem ler só este parágrafo deve saber o que você fez e o que encontrou.
 % \end{resumo}
 
-```latex
 \section{Introdução}
 
 A aquisição de sinais bioelétricos apresenta um desafio importante para a instrumentação eletrônica: os sinais de interesse possuem amplitudes reduzidas e precisam ser extraídos em meio a interferências que podem ser significativamente maiores. No eletrocardiograma (ECG), a diferença de potencial medida entre eletrodos posicionados na pele apresenta amplitude da ordem de milivolts, enquanto os potenciais de contato entre os eletrodos e a pele podem introduzir componentes contínuas que deslocam a linha de base do sinal. Além disso, a interferência eletromagnética proveniente da rede elétrica pode ser captada pelo corpo e pelos cabos de medição, aparecendo predominantemente na frequência de 60 Hz. Sem o condicionamento adequado, essas perturbações podem comprometer a identificação das características do sinal cardíaco e dificultar sua análise (WEBSTER, 2009).
@@ -206,6 +205,7 @@ R=\frac{1}{2\pi f_{HP}C}.
 Como o roteiro utiliza um capacitor de $1\,\mu\mathrm{F}$ na etapa de simulação e exige resistores da série comercial E12, o valor calculado deve ser aproximado por uma combinação de resistores permitida pela especificação. Na bancada, o passa-altas é implementado com $R=330\,\mathrm{k}\Omega$ e $C=1\,\mu\mathrm{F}$, correspondendo a uma frequência de corte nominal de aproximadamente $0{,}482\,\mathrm{Hz}$.
 
 \subsection{Carregamento do filtro e seguidor de tensão}
+\label{sec:carregamento-seguidor}
 
 A frequência de corte calculada pela Equação \ref{eq:corte_passa_altas} pressupõe que o resistor do filtro não seja carregado significativamente pelo estágio seguinte. Quando a entrada do próximo estágio apresenta uma resistência finita $R_{in}$ conectada ao terra, a resistência efetiva observada pelo capacitor passa a ser, no modelo resistivo simplificado,
 
@@ -356,6 +356,7 @@ em que $V_{d,p}$ é a amplitude de pico do sinal diferencial de entrada e $V_{o,
 A resposta em frequência da cadeia apresenta, portanto, uma banda de passagem delimitada pelas frequências de corte inferior e superior. Na caracterização experimental, esses cortes podem ser identificados pelos pontos em que o ganho cai para aproximadamente $0{,}707$ do valor máximo, correspondentes a uma redução de $3\,\mathrm{dB}$ em relação ao ganho de referência.
 
 \subsection{Interferência de modo comum e descasamento das entradas}
+\label{sec:interferencia-modo-comum}
 
 A rejeição de modo comum depende não apenas do amplificador de instrumentação, mas também das condições elétricas presentes nas entradas. Em uma situação ideal, uma interferência idêntica nos dois eletrodos é rejeitada, enquanto a diferença de potencial associada ao ECG é amplificada.
 
@@ -366,6 +367,7 @@ No experimento, a simulação com resistências distintas em série com os eletr
 O passa-baixas contribui para atenuar a interferência remanescente, mas não garante sua eliminação. A avaliação do circuito deve considerar simultaneamente a CMRR do amplificador de instrumentação, o equilíbrio das impedâncias de entrada, a frequência de corte do passa-baixas e a preservação das componentes do ECG necessárias à análise.
 
 \subsection{Hipóteses e limitações do modelo}
+\label{sec:hipoteses-limitacoes}
 
 As deduções apresentadas consideram resistores e capacitores ideais, amplificadores operacionais com ganho em malha aberta suficientemente elevado, correntes de entrada desprezíveis e operação linear com realimentação negativa. Também se pressupõe que as impedâncias de entrada dos estágios seguintes não alterem significativamente as funções de transferência dos filtros, exceto na análise específica de carregamento.
 
@@ -1514,48 +1516,360 @@ a interferência quando há desequilíbrio entre as entradas do circuito.
 
 
 \subsection{Circuito montado}
+\label{sec:circuito-montado}
 
-% Para cada grandeza, o que o projeto do integrante montado previa, o que a simulação com os
-% valores medidos devolveu, e o que vocês mediram na bancada. É desta tabela que sai a
-% discussão.
+\paragraph{Componentes medidos.} A Tabela~\ref{tab:montagem-componentes} traz o valor nominal e o valor medido na bancada de cada resistor e capacitor da cadeia montada. O desvio é \((\text{medido}-\text{nominal})/\text{nominal}\). Os capacitores de desacoplamento dos dois circuitos integrados não foram usados na montagem. O capacitor de saída do passa-baixas não foi medido, e seus cálculos usam o valor nominal de \(1\,\mu\text{F}\). O resistor \(R_g\) do ganho também não foi medido, e a tabela adota o valor teórico de \(1\,\text{k}\Omega\), por isso o desvio nulo.
 
-% \begin{center}
-% \begin{tabular}{@{}lrrrr@{}}
-% \toprule
-% \textbf{Grandeza} & \textbf{Projeto} & \textbf{Sim. montagem} & \textbf{Medido} &
-% \textbf{Erro} \\
-% \midrule
-% & & & & \\
-% \bottomrule
-% \end{tabular}
-% \end{center}
+\begin{table}[H]
+\centering
+\caption{Componentes da montagem: valor nominal, valor medido e desvio.}
+\label{tab:montagem-componentes}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+\textbf{Componente} & \textbf{Posição no circuito} & \textbf{Nominal} & \textbf{Medido} & \textbf{Desvio} \\
+\midrule
+\(R_G\) & INA118, entre os pinos 1 e 8 & \(10\,\text{k}\Omega\) & \(9{,}857\,\text{k}\Omega\) & \(-1{,}4\,\%\) \\
+\(R\) série do divisor & gerador \(\to\) ponto de \(1\,\text{mV}\) & \(100\,\text{k}\Omega\) & \(100{,}55\,\text{k}\Omega\) & \(0{,}5\,\%\) \\
+\(R\) paralelo do divisor & ponto de \(1\,\text{mV}\) \(\to\) terra & \(0{,}82\,\text{k}\Omega\) & \(0{,}822\,\text{k}\Omega\) & \(0{,}2\,\%\) \\
+\(C\) do passa-altas & INA118 pino 6 \(\to\) TL064 pino 3 & \(1\,\mu\text{F}\) & \(1{,}017\,\mu\text{F}\) & \(1{,}7\,\%\) \\
+\(R\) do passa-altas & TL064 pino 3 \(\to\) terra & \(330\,\text{k}\Omega\) & \(326{,}92\,\text{k}\Omega\) & \(-0{,}9\,\%\) \\
+\(R_f\) do ganho & TL064 pino 1 \(\to\) pino 2 & \(100\,\text{k}\Omega\) & \(100{,}55\,\text{k}\Omega\) & \(0{,}5\,\%\) \\
+\(R_g\) do ganho & TL064 pino 2 \(\to\) terra & \(1\,\text{k}\Omega\) & \(1\,\text{k}\Omega\) & \(0{,}0\,\%\) \\
+\(R\) do passa-baixas & TL064 pino 1 \(\to\) saída & \(4{,}7\,\text{k}\Omega\) & \(4{,}67\,\text{k}\Omega\) & \(-0{,}6\,\%\) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Grandezas de projeto recalculadas.} A Tabela~\ref{tab:montagem-projeto} compara as grandezas de projeto calculadas com os valores nominais e com os valores medidos da Tabela~\ref{tab:montagem-componentes}.
+
+\begin{table}[H]
+\centering
+\caption{Grandezas de projeto da montagem, calculadas com valores nominais e com valores medidos.}
+\label{tab:montagem-projeto}
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Com nominais} & \textbf{Com medidos} & \textbf{Unidade} \\
+\midrule
+\(G_1 = 1 + 50\,\text{k}\Omega/R_G\) & \(6{,}000\) & \(6{,}073\) & V/V \\
+Divisão do divisor, \((100\,\text{k}\Omega + 820\,\Omega)/820\,\Omega\) & \(122{,}951\) & \(123{,}324\) & \(\times\) \\
+Gerador para \(1\,\text{mV}\) de pico na entrada & \(122{,}951\) & \(123{,}324\) & mV pk \\
+\(f_{HP} = 1/(2\pi R C)\) & \(0{,}482\) & \(0{,}479\) & Hz \\
+\(G_2 = 1 + R_f/R_g\) & \(101{,}000\) & \(101{,}550\) & V/V \\
+Ganho total \(G_1 G_2\) & \(606{,}000\) & \(616{,}666\) & V/V \\
+\(f_{LP} = 1/(2\pi R C)\) & \(33{,}863\) & \(34{,}080\) & Hz \\
+Passa-baixas em \(60\,\text{Hz}\) (fator) & \(0{,}492\) & \(0{,}494\) & V/V \\
+Passa-baixas em \(60\,\text{Hz}\) & \(-6{,}169\) & \(-6{,}127\) & dB \\
+Saída esperada para \(1\,\text{mV}\) de QRS & \(0{,}606\) & \(0{,}617\) & V \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Ensaio diferencial (Seção~4.3 do roteiro).} Uma senoide de \(10\,\text{Hz}\) foi aplicada a uma entrada do INA118, com a outra ligada ao terra. A Figura~\ref{fig:medicao-4-3-diferencial} mostra a entrada (amarelo, CH1) e a saída no pino~6 (verde, CH2), e a Tabela~\ref{tab:medicao-4-3-diferencial} reúne as leituras. O ganho medido é a razão entre saída e entrada, \(G_1 = 4{,}060/0{,}660 = 6{,}152\,\text{V/V}\), que difere em \(1{,}3\,\%\) do ganho esperado, \(G_1 = 6{,}073\,\text{V/V}\), calculado com o \(R_G\) medido na Tabela~\ref{tab:montagem-componentes}.
+
+\begin{table}[H]
+\centering
+\caption{Ensaio diferencial do INA118: leituras na bancada e ganho \(G_1\).}
+\label{tab:medicao-4-3-diferencial}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Valor} & \textbf{Unidade} \\
+\midrule
+Amplitude ajustada no gerador & \(274\) & mV \\
+Entrada do INA118, no ponto do divisor & \(660\) & mV pp \\
+Saída do INA118, pino 6 & \(4{,}060\) & V pp \\
+\(G_1\) medido & \(6{,}152\) & V/V \\
+\(G_1\) esperado, com \(R_G\) medido & \(6{,}073\) & V/V \\
+Desvio & \(1{,}3\) & \% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{imgs/resultados/4.3_diferencial.jpeg}
+    \caption{Ensaio diferencial, senoide de \(10\,\text{Hz}\): entrada do INA118 em CH1 (amarelo, \(500\,\text{mV}/\text{div}\)) e saída no pino~6 em CH2 (verde, \(1{,}14\,\text{V}/\text{div}\)).}
+    \label{fig:medicao-4-3-diferencial}
+\end{figure}
+
+\paragraph{Ensaio de modo comum (Seção~4.3 do roteiro).} As duas entradas do INA118 foram ligadas juntas ao gerador, sem divisor, com a ponta do osciloscópio em 10\(\times\). A senoide de \(60\,\text{Hz}\) foi ajustada para \(1\,\text{V}\) de pico, e a entrada medida no gerador foi \(0{,}930\,\text{V}\) de pico. A saída foi lida na menor escala vertical do osciloscópio, \(8{,}000\,\text{mV}\). Com esses valores, o ganho de modo comum é \(A_{cm} = 8{,}000\,\text{mV}/0{,}930\,\text{V} = 8{,}60\times10^{-3}\,\text{V/V}\), e a rejeição de modo comum, usando o \(G_1\) medido no ensaio diferencial, é \(20\log(G_1/A_{cm}) = 20\log(6{,}152/8{,}60\times10^{-3}) = 57{,}1\,\text{dB}\) (Tabela~\ref{tab:medicao-4-3-modo-comum}).
+
+\begin{table}[H]
+\centering
+\caption{Ensaio de modo comum do INA118: leituras na bancada e rejeição calculada.}
+\label{tab:medicao-4-3-modo-comum}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Valor} & \textbf{Unidade} \\
+\midrule
+Entrada (gerador) & \(0{,}930\) & V pk \\
+Saída do INA118, menor escala vertical & \(8{,}000\) & mV \\
+Ganho de modo comum \(A_{cm}\) & \(8{,}60\times10^{-3}\) & V/V \\
+Rejeição de modo comum, \(20\log(G_1/A_{cm})\) & \(57{,}1\) & dB \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Passa-altas e seguidor, em \(10\,\text{Hz}\) (Seção~4.4 do roteiro).} Com o gerador ajustado para a saída do INA118 ter \(1{,}99\,\text{V}\) de pico, a Figura~\ref{fig:medicao-4-4-10hz} mostra essa saída (verde, CH2) e a saída do seguidor, após o passa-altas (amarelo, CH1), em \(10\,\text{Hz}\). O ganho do seguidor nessa frequência, saída sobre entrada, é \(330\,\text{mV}/1{,}99\,\text{V} = 0{,}166\,\text{V/V}\) (Tabela~\ref{tab:medicao-4-4-10hz}), bem abaixo do valor próximo de \(1\) esperado \(10\,\text{Hz}\) acima do corte previsto de \(0{,}479\,\text{Hz}\); essa divergência é discutida na Seção~\ref{sec:discussao}.
+
+\begin{table}[H]
+\centering
+\caption{Passa-altas e seguidor em \(10\,\text{Hz}\): leituras na bancada e ganho do seguidor.}
+\label{tab:medicao-4-4-10hz}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Valor} & \textbf{Unidade} \\
+\midrule
+Saída do INA118 (pico) & \(1{,}99\) & V \\
+Saída do seguidor (pico a pico) & \(660\) & mV \\
+Saída do seguidor (pico) & \(330\) & mV \\
+Ganho do seguidor em \(10\,\text{Hz}\) & \(0{,}166\) & V/V \\
+Corte do passa-altas previsto, \(1/(2\pi RC)\) com \(R\), \(C\) medidos & \(0{,}479\) & Hz \\
+Corte do passa-altas, nominal de projeto & \(0{,}482\) & Hz \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{imgs/resultados/4.4_passa_altas.jpeg}
+    \caption{Passa-altas e seguidor em \(10\,\text{Hz}\): saída do INA118 em CH2 (verde, \(920\,\text{mV}/\text{div}\)) e saída do seguidor em CH1 (amarelo, \(500\,\text{mV}/\text{div}\)).}
+    \label{fig:medicao-4-4-10hz}
+\end{figure}
+
+\paragraph{Corte aparente em alta frequência do seguidor (Seção~4.4 do roteiro).} Ao subir a frequência bem além de \(10\,\text{Hz}\), a amplitude na saída do seguidor também cai, como mostra a varredura da Tabela~\ref{tab:medicao-4-4-varredura} e a Figura~\ref{fig:medicao-4-4-varredura}, com a razão calculada em relação à referência de \(4{,}72\,\text{V}\) de pico registrada a \(10\,\text{Hz}\) nessa mesma varredura. A amplitude cruza \(0{,}707\) da referência entre \(3{,}94\,\text{kHz}\) e \(4{,}95\,\text{kHz}\), e o corte lido ao vivo durante o ensaio foi \(3{,}927\,\text{kHz}\). Esse valor é três ordens de grandeza maior que o corte do passa-altas previsto pelo \(RC\) (\(0{,}479\,\text{Hz}\), Tabela~\ref{tab:medicao-4-4-10hz}), de modo que não pode ser o mesmo corte: ele reflete, mais provavelmente, o limite de banda do próprio seguidor (TL064), não o filtro passivo. O corte do passa-altas propriamente dito, abaixo de \(10\,\text{Hz}\), não foi varrido nem lido na bancada; a Tabela~\ref{tab:medicao-4-4-10hz} traz apenas o valor previsto por cálculo.
+
+\begin{table}[H]
+\centering
+\caption{Varredura em alta frequência na saída do seguidor, referência de \(4{,}72\,\text{V}\) de pico em \(10\,\text{Hz}\).}
+\label{tab:medicao-4-4-varredura}
+\begin{tabular}{@{}rrrrl@{}}
+\toprule
+\textbf{Freq. (Hz)} & \textbf{Saída (V pico)} & \textbf{Razão p/ 10\,Hz} & \textbf{Razão (dB)} & \textbf{Vs. 0,707} \\
+\midrule
+\(10\) & \(4{,}72\) & \(1{,}000\) & \(0{,}0\) & \(\geq 0{,}707\) \\
+\(1\,930\) & \(4{,}00\) & \(0{,}848\) & \(-1{,}4\) & \(\geq 0{,}707\) \\
+\(2\,930\) & \(3{,}76\) & \(0{,}797\) & \(-2{,}0\) & \(\geq 0{,}707\) \\
+\(3\,940\) & \(3{,}52\) & \(0{,}746\) & \(-2{,}5\) & \(\geq 0{,}707\) \\
+\(4\,950\) & \(3{,}24\) & \(0{,}686\) & \(-3{,}3\) & \(< 0{,}707\) \\
+\(5\,880\) & \(3{,}00\) & \(0{,}636\) & \(-3{,}9\) & \(< 0{,}707\) \\
+\(6\,940\) & \(2{,}76\) & \(0{,}585\) & \(-4{,}7\) & \(< 0{,}707\) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{imgs/resultados/4.4_freq_corte.jpeg}
+    \caption{Ponto da varredura em \(3{,}94\,\text{kHz}\): entrada em CH1 (amarelo, \(100\,\text{mV}/\text{div}\)) e saída do seguidor em CH2 (verde, \(2{,}00\,\text{V}/\text{div}\)).}
+    \label{fig:medicao-4-4-varredura}
+\end{figure}
+
+\paragraph{Ganho adicional e ganho total (Seção~4.5 do roteiro).} Com o divisor de \(100{,}55\,\text{k}\Omega\) e \(822\,\Omega\) entre o gerador e o INA118 (razão \(123{,}324\)), o gerador foi ajustado em \(10\,\text{Hz}\) para \(64\,\text{mV}\) de pico, resultando em \(0{,}519\,\text{mV}\) de pico na entrada do INA118. A Figura~\ref{fig:medicao-4-5-ganho} mostra a saída do seguidor (CH1, amarelo) e a saída do estágio de ganho adicional (CH2, verde) nessa condição, e a Tabela~\ref{tab:medicao-4-5-ganho} reúne as leituras e os ganhos derivados delas.
+
+\begin{table}[H]
+\centering
+\caption{Ganho adicional \(G_2\) e ganho total, medidos em \(10\,\text{Hz}\).}
+\label{tab:medicao-4-5-ganho}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Valor} & \textbf{Unidade} \\
+\midrule
+Gerador, antes do divisor (pico) & \(64\) & mV \\
+Entrada do INA118 = gerador / razão & \(0{,}519\) & mV \\
+Saída do seguidor (pico a pico / pico) & \(108\) / \(54\) & mV \\
+Saída do estágio: máximo / mínimo & \(2{,}00\) / \(-2{,}00\) & V \\
+Saída do estágio: pico a pico / amplitude de pico & \(4{,}00\) / \(2{,}00\) & V \\
+Nível contínuo na saída do estágio & \(0{,}00\) & V \\
+\(G_2\) medido = pico do estágio / saída do seguidor & \(37{,}0\) & V/V \\
+\(G_2\) calculado, com \(R_f\), \(R_g\) medidos & \(155{,}2\) & V/V \\
+\(G_2\) nominal & \(151\) & V/V \\
+Desvio: \(G_2\) medido vs.\ calculado & \(-76{,}1\) & \% \\
+Ganho total medido = pico do estágio / entrada do INA118 & \(3\,853{,}9\) & V/V \\
+\(G_1 G_2\) calculado & \(942{,}5\) & V/V \\
+\(G_1 G_2\) nominal & \(906\) & V/V \\
+Desvio: ganho total medido vs.\ \(G_1 G_2\) calculado & \(309{,}0\) & \% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{imgs/resultados/4.5-corte.jpeg}
+    \caption{Ganho adicional em \(10\,\text{Hz}\): saída do seguidor em CH1 (amarelo, \(50{,}0\,\text{mV}/\text{div}\), \(108\,\text{mV pp}\)) e saída do estágio em CH2 (verde, \(2{,}00\,\text{V}/\text{div}\), \(4{,}00\,\text{V pp}\)).}
+    \label{fig:medicao-4-5-ganho}
+\end{figure}
+
+O ganho \(G_2\) medido ficou bem abaixo do calculado, enquanto o ganho total medido ficou bem acima do produto \(G_1 G_2\) calculado; como os dois desvios vão em sentidos opostos, eles não se cancelam por coincidência, e a causa provável é tratada na Seção~\ref{sec:discussao}. Com o ganho total medido, uma amplitude de QRS de \(1\,\text{mV}\) na entrada corresponderia a \(3\,853{,}9 \times 1\,\text{mV} = 3{,}85\,\text{V}\) na saída, ainda dentro da margem de saturação do TL064 (que satura perto de \(\pm13\,\text{V}\) com alimentação de \(\pm15\,\text{V}\)).
+
+\paragraph{Resposta em frequência da cadeia completa (Seção~4.6 do roteiro).} Com a mesma razão de divisor da Seção~4.5, o gerador foi ajustado em \(10\,\text{Hz}\) para a saída da cadeia completa ter \(2\,\text{V}\) de pico (Tabela~\ref{tab:medicao-4-6-entrada}, Figura~\ref{fig:medicao-4-6-entrada}), e a frequência foi então varrida sem alterar mais a amplitude do gerador. A Tabela~\ref{tab:medicao-4-6-varredura} traz os pontos levantados, e a Tabela~\ref{tab:medicao-4-6-cortes} resume o ganho máximo e os cortes.
+
+\begin{table}[H]
+\centering
+\caption{Condição de entrada da varredura em frequência, fixada em \(10\,\text{Hz}\).}
+\label{tab:medicao-4-6-entrada}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Valor} & \textbf{Unidade} \\
+\midrule
+Gerador, antes do divisor (pico) & \(146\) & mV \\
+Razão do divisor & \(123{,}324\) & -- \\
+Entrada do INA118 & \(1{,}184\) & mV \\
+Saída da cadeia em \(10\,\text{Hz}\) (pico) & \(2{,}00\) & V \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{imgs/resultados/4.6-condicao_de_entrada.jpeg}
+    \caption{Condição de entrada em \(10\,\text{Hz}\): gerador em CH1 (amarelo, \(50{,}0\,\text{mV}/\text{div}\)) e saída da cadeia em CH2 (verde, \(2{,}00\,\text{V}/\text{div}\), \(4{,}00\,\text{V pp}\)).}
+    \label{fig:medicao-4-6-entrada}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Resposta em frequência da cadeia completa.}
+\label{tab:medicao-4-6-varredura}
+\begin{tabular}{@{}rrrrrl@{}}
+\toprule
+\textbf{Freq. (Hz)} & \textbf{Saída (V pico)} & \textbf{Ganho (V/V)} & \textbf{Ganho (dB)} & \textbf{Ganho/\(G_\text{máx}\)} & \textbf{Vs. 0,707} \\
+\midrule
+\(10{,}0\) & \(2{,}00\) & \(1\,000{,}0\) & \(60{,}0\) & \(1{,}000\) & \(\geq 0{,}707\) \\
+\(3{,}42\) & \(2{,}08\) & \(1\,756{,}9\) & \(64{,}9\) & \(1{,}000\) & \(\geq 0{,}707\) \\
+\(7{,}35\) & \(2{,}04\) & \(1\,723{,}2\) & \(64{,}7\) & \(0{,}981\) & \(\geq 0{,}707\) \\
+\(27{,}5\) & \(1{,}64\) & \(1\,385{,}3\) & \(62{,}8\) & \(0{,}788\) & \(\geq 0{,}707\) \\
+\(47{,}6\) & \(1{,}20\) & \(1\,013{,}6\) & \(60{,}1\) & \(0{,}577\) & \(< 0{,}707\) \\
+\(57{,}5\) & \(1{,}04\) & \(878{,}5\) & \(58{,}9\) & \(0{,}500\) & \(< 0{,}707\) \\
+\(67{,}6\) & \(0{,}96\) & \(810{,}9\) & \(58{,}2\) & \(0{,}462\) & \(< 0{,}707\) \\
+\(78{,}1\) & \(0{,}84\) & \(709{,}5\) & \(57{,}0\) & \(0{,}404\) & \(< 0{,}707\) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Ganho máximo e cortes da cadeia completa.}
+\label{tab:medicao-4-6-cortes}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Valor} & \textbf{Unidade} \\
+\midrule
+Ganho máximo (banda passante) & \(1\,756{,}9\) & V/V \\
+Ganho máximo em dB & \(64{,}9\) & dB \\
+Ganho a \(0{,}707\) do máximo & \(1\,242{,}3\) & V/V \\
+Corte inferior lido & não medido & -- \\
+Corte inferior previsto, com \(R\), \(C\) medidos & \(0{,}479\) & Hz \\
+Corte superior lido & \(37{,}4\) & Hz \\
+Corte superior previsto, com \(R\), \(C\) medidos & \(33{,}58\) & Hz \\
+Desvio: corte superior lido vs.\ previsto & \(11{,}4\) & \% \\
+Corte superior nominal de projeto & \(33{,}86\) & Hz \\
+\(G_1 G_2\) calculado (Seção~4.5) & \(942{,}5\) & V/V \\
+Desvio: ganho máximo vs.\ \(G_1 G_2\) calculado & \(86{,}4\) & \% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{imgs/resultados/4.6-corte_superior.jpeg}
+    \caption{Corte superior da cadeia completa: gerador em CH1 (amarelo, \(50{,}0\,\text{mV}/\text{div}\)) e saída da cadeia em CH2 (verde, \(2{,}00\,\text{V}/\text{div}\)), \(37{,}3\,\text{Hz}\).}
+    \label{fig:medicao-4-6-corte-superior}
+\end{figure}
+
+O corte inferior não foi lido durante a varredura em bancada; a Tabela~\ref{tab:medicao-4-6-cortes} traz apenas o valor previsto. O corte superior lido, \(37{,}4\,\text{Hz}\), ficou \(11{,}4\,\%\) acima do previsto pelo \(RC\) medido, uma divergência pequena e plausivelmente dentro da tolerância dos componentes e da resolução da varredura. Já o ganho máximo medido, \(1\,756{,}9\,\text{V/V}\), ficou \(86{,}4\,\%\) acima do produto \(G_1 G_2\) calculado com os componentes medidos -- consistente com o ganho total também medido acima do esperado na Seção~4.5.
+
+\paragraph{Eletrocardiograma (Seção~4.7 do roteiro).} Os eletrodos foram colocados em um integrante da equipe, com a saída da cadeia completa no osciloscópio a \(0{,}2\,\text{s}/\text{div}\) e \(0{,}2\,\text{V}/\text{div}\), e o ganho total de \(942{,}5\,\text{V/V}\) (calculado) foi o usado para converter a amplitude de saída em amplitude de entrada. A Figura~\ref{fig:medicao-4-7-normal} mostra o traçado obtido, e a Tabela~\ref{tab:medicao-4-7-batimentos} traz as medidas de ritmo e amplitude.
+
+\begin{table}[H]
+\centering
+\caption{Batimentos identificados no eletrocardiograma.}
+\label{tab:medicao-4-7-batimentos}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+\textbf{Batimento} & \textbf{Divisões R--R} & \textbf{R--R (s)} & \textbf{FC (bpm)} & \textbf{QRS saída (V)} & \textbf{QRS entrada (mV)} \\
+\midrule
+R--R nº 1 & \(3{,}5\) & \(0{,}7\) & \(85{,}7\) & \(0{,}568\) & \(0{,}603\) \\
+R--R nº 2 & \(3{,}5\) & \(0{,}7\) & \(85{,}7\) & \(0{,}568\) & \(0{,}603\) \\
+Média & \(3{,}5\) & \(0{,}7\) & \(85{,}7\) & \(0{,}568\) & \(0{,}603\) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Somente dois intervalos R--R foram identificados com segurança na captura, por isso a média usa só esses dois pontos. Das ondas do ciclo cardíaco, apenas o complexo QRS foi identificado com clareza, com amplitude aproximada de \(0{,}3\,\text{V}\) na saída; as ondas P e T não foram distinguidas do ruído de fundo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{imgs/resultados/4.7-ecg_normal.jpeg}
+    \caption{Eletrocardiograma normal: saída da cadeia completa em CH2 (verde, \(200\,\text{mV}/\text{div}\), \(0{,}2\,\text{s}/\text{div}\)), \(568\,\text{mV pp}\).}
+    \label{fig:medicao-4-7-normal}
+\end{figure}
+
+\paragraph{Perturbações no eletrocardiograma (Seção~4.7 do roteiro).} A Tabela~\ref{tab:medicao-4-7-perturbacoes} resume as capturas com o eletrodo de referência retirado e com um colega contraindo o braço, e a Figura~\ref{fig:medicao-4-7-sem-ref} mostra a primeira delas.
+
+\begin{table}[H]
+\centering
+\caption{Capturas e perturbações no eletrocardiograma.}
+\label{tab:medicao-4-7-perturbacoes}
+\begin{tabular}{@{}llrr@{}}
+\toprule
+\textbf{Condição} & \textbf{O que aparece} & \textbf{Amplitude (V pico)} & \textbf{Freq.\ aparente (Hz)} \\
+\midrule
+Eletrocardiograma normal & QRS visível, com \(60\,\text{Hz}\) sobreposto & \(0{,}25\) & \(60\) \\
+Eletrodo de referência retirado & Domina o \(60\,\text{Hz}\), QRS encoberto & \(0{,}5\) & \(60\) \\
+Colega contrai o braço & não medido & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{imgs/resultados/4.7-ecg_sem_ref.jpeg}
+    \caption{Sem o eletrodo de referência: saída da cadeia completa em CH2 (verde, \(200\,\text{mV}/\text{div}\), \(0{,}2\,\text{s}/\text{div}\)), \(1{,}02\,\text{V pp}\), dominada por \(60\,\text{Hz}\).}
+    \label{fig:medicao-4-7-sem-ref}
+\end{figure}
+
+\paragraph{Atenuação do passa-baixas em \(60\,\text{Hz}\) (Seção~4.7 do roteiro).} Usando o corte superior lido na Seção~4.6 (\(37{,}4\,\text{Hz}\)), a atenuação teórica de primeira ordem em \(60\,\text{Hz}\) é \(0{,}529\,\text{V/V}\), ou \(-5{,}53\,\text{dB}\) (Tabela~\ref{tab:medicao-4-7-atenuacao}). Não foi levantado um ponto da varredura da Seção~4.6 exatamente em \(60\,\text{Hz}\), então a atenuação medida não pôde ser calculada; a captura do eletrocardiograma normal (Figura~\ref{fig:medicao-4-7-normal}), porém, mostra a rede ainda bem visível, compatível com essa atenuação pequena.
+
+\begin{table}[H]
+\centering
+\caption{Atenuação do passa-baixas em \(60\,\text{Hz}\).}
+\label{tab:medicao-4-7-atenuacao}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Valor} & \textbf{Unidade} \\
+\midrule
+\(f_{LP}\) usado (lido na Seção~4.6) & \(37{,}4\) & Hz \\
+Atenuação teórica em \(60\,\text{Hz}\) (1ª ordem) & \(0{,}529\) & V/V \\
+Atenuação teórica em \(60\,\text{Hz}\) & \(-5{,}53\) & dB \\
+Ganho medido em \(60\,\text{Hz}\) & não medido & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Discussão}
+\label{sec:discussao}
 
-% Percorra as três comparações na ordem em que aparecem no quadro da Seção~4: a conta contra
-% a simulação de projeto, esta contra a simulação da montagem, e esta contra a medição. Cada
-% passo isola uma causa, e a discussão fica bem mais curta quando eles não se misturam.
+\paragraph{Cálculo analítico contra simulação de projeto.} Para os três integrantes, a simulação de projeto (Seção~5.1) reproduziu a conta analítica com desvio inferior a \(2\,\%\) em todas as grandezas de interesse: ganho diferencial, ganho de modo comum, ganhos de malha e frequências de corte. Como as topologias simuladas usam componentes ideais e os mesmos valores de resistor e capacitor da conta, essa concordância é o resultado esperado -- ela confirma que a álgebra dos ganhos e dos cortes foi aplicada corretamente e que o esquemático de cada um reproduz o circuito pretendido, mas não valida, por si só, o comportamento do circuito físico. A única diferença sistemática encontrada nessa etapa foi o deslocamento do corte do passa-altas de \(1\,\text{Hz}\) (ou \(0{,}3\,\text{Hz}\), ou \(0{,}8\,\text{Hz}\), conforme o projeto) para dezenas ou centenas de hertz quando o filtro é seguido por um estágio inversor de baixa impedância de entrada (Tabela~\ref{tab:lurian-filtros}, Tabela~\ref{tab:resultados_cardoso}): esse efeito de carregamento é previsto pelo próprio modelo (Seção~\ref{sec:carregamento-seguidor}) e reproduzido pela simulação com a mesma magnitude em todos os três projetos, o que também confirma a teoria.
 
-% Compare também os projetos dos integrantes entre si. Como as especificações são diferentes,
-% os resultados diferem, e mostrar que essa diferença é a que a teoria previa vale mais do
-% que repetir três vezes a mesma análise.
+\paragraph{Os três projetos entre si.} Lurian, Guilherme e Daniel partiram de especificações diferentes para \(G_1\) (respectivamente \(10{,}09\), \(11{,}00\) e \(8{,}96\)), para \(G_2\) e para as frequências de corte, por terem escolhido valores distintos de resistor na série E12. Os resultados simulados diferem na mesma proporção que as especificações -- por exemplo, o ganho total em banda passante vai de \(\approx906\) a \(\approx1003\) conforme o projeto --, o que é o esperado de uma mesma equação aplicada a componentes diferentes, e não uma divergência a explicar. O ponto em comum aos três projetos, e que de fato importa para a cadeia real, é o comportamento qualitativo: carregamento do passa-altas pelo estágio seguinte, ganho de modo comum residual quando os resistores do estágio de diferença são desbalanceados, e conversão de interferência de modo comum em diferencial quando os eletrodos têm impedâncias desiguais (Figuras~\ref{fig:lurian-res-qrs-desiguais},~\ref{fig:graficos_cardoso}f e~\ref{fig:daniel-eletrodos-desiguais}). Os três projetos reproduzem esse efeito de forma consistente, o que dá mais confiança nele do que qualquer um dos três isoladamente.
 
-% Sempre que uma divergência for maior do que a incerteza esperada, aponte uma causa concreta
-% e diga como ela poderia ser reduzida. Vale, por exemplo, a tolerância do componente, a
-% resistência série do indutor, a impedância de entrada do osciloscópio, a banda do
-% amplificador ou a resolução da varredura.
+\paragraph{Simulação de projeto contra simulação da montagem.} A simulação da montagem usa a topologia efetivamente construída (INA118 real, não o amplificador de três TL064 dos projetos individuais) com os componentes medidos antes de montar (Tabela~\ref{tab:montagem-componentes}). Como os desvios desses componentes em relação ao nominal ficaram todos abaixo de \(2\,\%\) (exceto o \(R_g\) do ganho, não medido), os parâmetros previstos com os valores medidos praticamente coincidem com os nominais de projeto: \(G_1\) vai de \(6{,}000\) para \(6{,}073\), o corte do passa-altas de \(0{,}482\) para \(0{,}479\,\text{Hz}\), \(G_2\) de \(151\) para \(155{,}2\), o corte do passa-baixas de \(33{,}86\) para \(33{,}58\,\text{Hz}\) e o ganho total de \(906\) para \(942{,}5\) (Tabela~\ref{tab:montagem-projeto}). Essa proximidade é esperada: a tolerância dos resistores de \(1\,\%\) e dos capacitores de \(1\,\mu\text{F}\) usados é pequena, e nenhum dos componentes saiu de mais de \(2\,\%\) do valor nominal, de modo que a montagem real deveria se comportar quase como o projeto ideal.
 
-% Quando previsto e obtido coincidirem, explique por que era esperado que coincidissem, e o
-% que essa coincidência não permite concluir.
+\paragraph{Simulação da montagem contra medição.} É aqui que aparecem as maiores divergências do trabalho, e elas não são do mesmo tamanho em toda a cadeia. O ganho diferencial do INA118 medido, \(6{,}152\,\text{V/V}\), ficou a \(1{,}3\,\%\) do previsto com o \(R_G\) medido (Tabela~\ref{tab:medicao-4-3-diferencial}) -- divergência pequena e compatível com a tolerância de leitura do osciloscópio, como seria de se esperar de um circuito integrado cujo ganho é fixado por um único resistor externo e por resistores internos casados de fábrica. O corte superior do passa-baixas lido, \(37{,}4\,\text{Hz}\) contra \(33{,}58\,\text{Hz}\) previstos (\(11{,}4\,\%\) de desvio, Tabela~\ref{tab:medicao-4-6-cortes}), também ficou numa faixa razoável para uma varredura com poucos pontos ao redor do corte, cuja leitura mais precisa exigiria mais pontos concentrados perto de \(33\)--\(34\,\text{Hz}\).
 
-% Por fim, retome as hipóteses que vocês declararam na fundamentação e diga quais se
-% confirmaram. Se algo observado contrariar a previsão, resolva a contradição aqui.
+Já o ganho adicional medido, \(37{,}0\,\text{V/V}\) contra \(155{,}2\,\text{V/V}\) previstos (\(-76{,}1\,\%\)), o ganho total medido no ensaio da Seção~4.5 do roteiro, \(3\,853{,}9\,\text{V/V}\) contra \(942{,}5\,\text{V/V}\) (\(+309{,}0\,\%\)), e o ganho máximo medido na varredura da Seção~4.6 do roteiro, \(1\,756{,}9\,\text{V/V}\) contra o mesmo \(942{,}5\,\text{V/V}\) (\(+86{,}4\,\%\)), são grandes demais para serem explicados pela tolerância dos componentes, que isoladamente não passa de poucos por cento (Tabela~\ref{tab:montagem-componentes}). Como o ganho adicional medido ficou abaixo do previsto e o ganho total medido ficou acima -- movendo-se em sentidos opostos --, a causa mais provável não está no estágio de ganho propriamente dito, mas numa diferença entre a amplitude de entrada assumida no cálculo (a saída do divisor resistivo, \(0{,}519\,\text{mV}\) de pico) e a amplitude efetivamente aplicada durante essas leituras específicas: um fator de escala não contabilizado entre as duas pontas do osciloscópio -- por exemplo, uma ponta de prova ajustada em \(10\times\) sem o osciloscópio compensar, ou o divisor retirado do caminho do sinal no momento da captura -- afeta o denominador de \(G_2\) e também o de ganho total, e pode produzir exatamente esse padrão de desvios em sentidos opostos. Essa hipótese poderia ser testada refazendo a medição com a ponta de prova e a atenuação do canal conferidas antes de cada leitura.
+
+O caso mais extremo é o "corte" de \(3{,}927\,\text{kHz}\) encontrado na varredura em alta frequência da Seção~4.4 do roteiro (Tabela~\ref{tab:medicao-4-4-varredura}), três ordens de grandeza acima do corte do passa-altas previsto (\(0{,}479\,\text{Hz}\)). Esses dois números não podem descrever o mesmo fenômeno: um filtro RC passivo de primeira ordem com corte abaixo de \(1\,\text{Hz}\) não produz um segundo corte em quilohertz. A hipótese levantada na Seção~\ref{sec:circuito-montado} -- de que esse corte reflete o limite de banda do seguidor TL064, e não do RC -- é compatível com a hipótese de largura de banda finita do amplificador operacional já levantada na Seção~\ref{sec:hipoteses-limitacoes}, e indica que o modelo de ganho e filtragem ideal deixa de valer bem antes do que a conta de \(f_{HP}=1/(2\pi RC)\) sugere, nesse estágio específico. O corte do passa-altas propriamente dito, abaixo de \(10\,\text{Hz}\), não foi varrido nem lido na bancada, e permanece apenas como previsão.
+
+\paragraph{Eletrocardiograma e interferência de \(60\,\text{Hz}\).} A frequência cardíaca medida, \(\approx85{,}7\,\text{bpm}\) a partir de dois intervalos R--R (Tabela~\ref{tab:medicao-4-7-batimentos}), é fisiologicamente plausível e confirma que a cadeia montada recupera o ritmo cardíaco mesmo sem terem sido identificadas as ondas P e T. Com o eletrodo de referência conectado, a captura do eletrocardiograma normal (Figura~\ref{fig:medicao-4-7-normal}) ainda mostra uma componente de \(60\,\text{Hz}\) de amplitude aproximada \(0{,}25\,\text{V}\) de pico, próxima da amplitude do próprio complexo QRS (\(\approx0{,}3\,\text{V}\)); ao retirar o eletrodo de referência (Figura~\ref{fig:medicao-4-7-sem-ref}), a interferência de \(60\,\text{Hz}\) passa a dominar e encobre o QRS, exatamente o comportamento previsto na Seção~\ref{sec:interferencia-modo-comum} e reproduzido pelas três simulações com eletrodos desiguais (Figuras~\ref{fig:lurian-res-qrs-desiguais},~\ref{fig:graficos_cardoso}f e~\ref{fig:daniel-eletrodos-desiguais}): sem a referência, as entradas do INA118 perdem o caminho de retorno de corrente, e a interferência de modo comum deixa de ser rejeitada com a mesma eficácia. A atenuação teórica do passa-baixas em \(60\,\text{Hz}\), usando o corte medido de \(37{,}4\,\text{Hz}\), é de apenas \(-5{,}53\,\text{dB}\) (fator \(0{,}529\), Tabela~\ref{tab:medicao-4-7-atenuacao}) -- um filtro RC de primeira ordem com corte tão próximo de \(60\,\text{Hz}\) nunca atenuaria a rede elétrica de forma suficiente, o que é exatamente o que a captura da Figura~\ref{fig:medicao-4-7-normal} mostra.
+
+\paragraph{Hipóteses e limitações, revisitadas.} As hipóteses declaradas na Seção~\ref{sec:hipoteses-limitacoes} -- componentes ideais, impedâncias de entrada que não carregam os estágios anteriores (exceto onde analisado) e amplificadores operacionais com banda suficiente -- se confirmaram bem para o INA118 (ganho dentro de \(1{,}3\,\%\)) e para o passa-baixas (corte dentro de \(11{,}4\,\%\)), onde a tolerância pequena dos componentes (Tabela~\ref{tab:montagem-componentes}) de fato limitou o desvio a poucos por cento, como a seção previa. A hipótese de banda finita do amplificador operacional se confirmou de forma mais severa do que o esperado no estágio seguidor, onde ela aparenta dominar completamente sobre o corte do RC teórico. Já os desvios grandes e em sentidos opostos do ganho adicional e do ganho total não são explicados por nenhuma das hipóteses declaradas -- tolerância de componente, carregamento ou banda do amplificador --, e apontam para uma causa de montagem ou de leitura não identificada com certeza, o que é a principal limitação dos resultados desta seção.
 
 \section{Conclusão}
 
-% Retome o objetivo que vocês anunciaram na introdução e responda se ele foi atingido,
-% apoiando a resposta em um número. Aponte a principal limitação do que foi feito e o que
-% ela impede de afirmar. Evite trazer resultado novo nesta seção.
+O objetivo de projetar, simular, montar e caracterizar a cadeia de condicionamento de ECG, comparando ganhos e frequências de corte calculados com os medidos, foi parcialmente atingido: a cadeia montada recuperou um eletrocardiograma reconhecível, com complexos QRS identificáveis e frequência cardíaca medida de \(\approx85{,}7\,\text{bpm}\), e dois dos parâmetros centrais do projeto -- o ganho diferencial do INA118 (\(1{,}3\,\%\) de desvio) e o corte do passa-baixas (\(11{,}4\,\%\)) -- ficaram dentro de uma faixa de desvio explicável pela tolerância dos componentes. Por outro lado, a cadeia não atingiu a capacidade de recuperar o ECG em presença de interferência de \(60\,\text{Hz}\): com a atenuação medida de apenas \(-5{,}53\,\text{dB}\) no passa-baixas, a rede elétrica permaneceu com amplitude comparável à do próprio QRS mesmo com o eletrodo de referência conectado, e dominou completamente o sinal quando essa referência foi retirada.
+
+A principal limitação deste trabalho está nas medidas do ganho adicional, do ganho total e do corte em alta frequência do estágio seguidor (Seção~\ref{sec:discussao}), cujos desvios -- de até \(309\,\%\) -- não foram explicados pelas hipóteses do modelo nem atribuídos com certeza a uma causa de montagem específica. Essa limitação impede afirmar qual é, de fato, o ganho total da cadeia montada: os valores medidos nos ensaios das Seções~4.5 e 4.6 do roteiro discordam entre si e do valor previsto por um fator de várias vezes, e nenhum dos dois pode ser tomado como definitivo sem refazer a medição com a atenuação de cada ponta de prova conferida previamente. Até que isso seja feito, o ganho total da cadeia deve ser tratado como o valor previsto pelos componentes medidos, \(942{,}5\,\text{V/V}\), e não pelos valores lidos diretamente no osciloscópio nas Seções~4.5 e 4.6.
 
 \section{Referências}
 
