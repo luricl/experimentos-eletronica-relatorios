@@ -414,6 +414,92 @@ Resistor série ($R_S$)
 \bottomrule
 \end{tabular}
 \end{center}
+\begin{espec}
+
+\textbf{Matrícula \mat{22/2005395}.} Considerando os nove dígitos na forma ABCDEFGHI, com o dígito I não nulo,
+
+\begin{equation}
+    A=2,\; B=2,\; C=2,\; D=0,\; E=0,\; F=5,\; G=3,\; H=9,\; I=5
+\end{equation}
+
+A partir desses valores, as especificações individuais exigidas pelo roteiro são:
+
+\begin{itemize}
+    \item \textbf{Fonte:} \\
+    Senoide de 60 Hz com $AB = 22\text{ V}$ de pico a pico. Logo, a amplitude é $V_p = 11\text{ V}$.
+
+    \vspace{0.3cm}
+
+    \item \textbf{Regulação (Zener):} \\
+    O diodo Zener da série BZX84C cuja tensão nominal mais se aproxima de $\frac{V_p}{\sqrt{2}} = \frac{11}{\sqrt{2}} \approx 7{,}78\text{ V}$. Entre os valores disponíveis, o mais próximo é de \textbf{7,5 V} (distância de 0,28 V, contra 0,42 V para 8,2 V).
+
+    \vspace{0.3cm}
+
+    \item \textbf{Carga (Corrente):} \\
+    Corrente $I_L = I \times 100\,\mu\text{A} = 5 \times 100\,\mu\text{A} = 500\,\mu\text{A} = 0{,}5\text{ mA}$ na tensão regulada de $7{,}5\text{ V}$.
+\end{itemize}
+
+\end{espec}
+
+Os componentes da série comercial E12 selecionados para atender a cada especificação, bem como os desvios e dimensionamentos, são detalhados a seguir:
+
+\begin{itemize}
+
+    \item \textbf{Carga ($R_L$):}
+    A resistência de carga necessária para drenar a corrente especificada na tensão regulada é $R_L = \frac{V_Z}{I_L} = \frac{7{,}5}{0{,}5 \times 10^{-3}} = 15\,\mathrm{k}\Omega$, que coincide com o valor comercial E12. Com esse resistor, a corrente real na tensão nominal de $7{,}5\text{ V}$ é $I_{L,\text{real}} = \frac{7{,}5}{15\,\mathrm{k}\Omega} = 0{,}500\text{ mA}$. Esse $R_L$ é mantido constante em todas as seções de simulação.
+
+    \item \textbf{Capacitor de Filtro ($C_1$):}
+    Para um \textit{ripple} máximo ($V_r$) de $1{,}5\text{ V}$ de pico a pico num retificador de meia onda ($f = 60\text{ Hz}$), a Equação 1 do roteiro fornece
+    \[
+    C_1 \approx \frac{I_L}{f \cdot V_r} = \frac{0{,}5 \times 10^{-3}}{60 \times 1{,}5} \approx 5{,}56\,\mu\text{F}
+    \]
+    Arredondando para o valor E12 imediatamente superior, adota-se $C_1 = 5{,}6\,\mu\text{F}$, com desvio de $+0{,}80\%$ em relação ao valor calculado. O capacitor dez vezes maior, utilizado na simulação do item 3, é de $56\,\mu\text{F}$.
+
+    Para a onda completa, a frequência de repetição dos picos passa a ser $120\text{ Hz}$. Com o mesmo capacitor, o ripple teórico é
+    \[
+    V_{r,\text{onda completa}} \approx \frac{0{,}5 \times 10^{-3}}{120 \times 5{,}6 \times 10^{-6}} \approx 0{,}744\text{ V}
+    \]
+
+    \item \textbf{Resistor Série do Regulador ($R_S$):}
+    Utiliza-se a tensão mínima na saída do filtro. Considerando a queda de aproximadamente $0{,}7\text{ V}$ em cada um dos dois diodos que conduzem na ponte, a tensão máxima na saída é $V_{max} \approx 11 - 2(0{,}7) = 9{,}6\text{ V}$, e a tensão mínima do filtro é
+    \[
+    V_{min} \approx V_{max} - V_r = 9{,}6 - 0{,}744 = 8{,}856\text{ V}
+    \]
+    Pela Equação 2 do roteiro, com $I_{Z,min} = 1\text{ mA}$ no vale do ripple,
+    \[
+    R_S = \frac{V_{min} - V_Z}{I_L + I_{Z,min}} = \frac{8{,}856 - 7{,}5}{0{,}5 \times 10^{-3} + 1{,}0 \times 10^{-3}} = \frac{1{,}356}{1{,}5 \times 10^{-3}} \approx 904\,\Omega
+    \]
+    Conforme o procedimento adotado nas demais seções, escolhe-se o valor E12 imediatamente inferior, $R_S = 820\,\Omega$, com desvio de $-9{,}29\%$. Essa escolha garante folga para a corrente no Zener: no vale do ripple, $I_Z = \frac{1{,}356}{820} - 0{,}5 \approx 1{,}15\text{ mA} \geq 1\text{ mA}$.
+
+    Verificando a potência máxima no Zener com a carga retirada ($I_L = 0$) e na crista do sinal ($V_{max} = 9{,}6\text{ V}$):
+    \[
+    I_{Z,max} = \frac{V_{max} - V_Z}{R_S} = \frac{9{,}6 - 7{,}5}{820} \approx 2{,}56\text{ mA}
+    \]
+    \[
+    P_{Z,max} = V_Z \times I_{Z,max} = 7{,}5 \times 2{,}56\text{ mA} \approx 19{,}2\text{ mW}
+    \]
+    Esse valor está muito abaixo do limite de $250\text{ mW}$ do BZX84C, tornando o projeto seguro.
+
+\end{itemize}
+
+A tabela abaixo resume os parâmetros teóricos e os adotados:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Teórico} & \textbf{Adotado (E12)} & \textbf{Desvio} \\
+\midrule
+Amplitude da Fonte ($V_p$) & $11{,}00\text{ V}$ & $11{,}00\text{ V}$ & $0{,}00\%$ \\
+Tensão de Regulação ($V_Z$) & $7{,}78\text{ V}$ & $7{,}50\text{ V}$ & $-3{,}57\%$ \\
+Corrente da Carga ($I_L$) & $0{,}500\text{ mA}$ & $0{,}500\text{ mA}$ & $0{,}00\%$ \\
+Resistor de Carga ($R_L$) & $15\text{ k}\Omega$ & $15\text{ k}\Omega$ & $0{,}00\%$ \\
+Capacitor de Filtro ($C_1$) & $5{,}56\,\mu\text{F}$ & $5{,}6\,\mu\text{F}$ & $+0{,}80\%$ \\
+Resistor do Zener ($R_S$) & $904\,\Omega$ & $820\,\Omega$ & $-9{,}29\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 \section{Metodologia}
 
 % Conte o que você fez e com quais parâmetros, de modo que um colega consiga repetir sem
@@ -571,6 +657,75 @@ Para avaliar as etapas de retificação, filtragem e regulação de tensão, os 
 \end{figure}
 
 
+
+\subsubsection{Lurian Correia Lima (22/2005395)}
+
+\textbf{Configuração e Simulação dos Circuitos}
+
+Para verificar se o projeto atende às especificações da Seção 3, os seis circuitos foram desenhados e simulados no LTspice, conforme a Figura~\ref{fig:circs_lurian}. Em todas as análises, adotou-se a diretiva de regime transitório \texttt{.tran 0 100m 0 20u}, abrangendo seis períodos da rede elétrica de 60 Hz. Os esquemáticos foram configurados da seguinte forma:
+
+\begin{itemize}
+    \item \textbf{Retificador de meia onda (Figura~\ref{fig:circs_lurian}a):} Fonte senoidal de 60 Hz com amplitude de 11 V (\texttt{SINE(0 11 60)}), um diodo 1N4007 e a carga $R_L$ de 15 k$\Omega$.
+
+    \item \textbf{Meia onda com filtro (Figura~\ref{fig:circs_lurian}b):} Capacitor $C_1$ de 5,6 $\mu$F em paralelo com a carga, valor obtido no projeto. Permite medir o \textit{ripple} resultante da retificação de meia onda.
+
+    \item \textbf{Meia onda com filtro 10x maior (Figura~\ref{fig:circs_lurian}c):} O capacitor foi substituído por um de 56 $\mu$F, para observar a redução teórica do \textit{ripple} e o efeito sobre o pico de corrente no diodo durante a condução.
+
+    \item \textbf{Ponte retificadora sem filtro (Figura~\ref{fig:circs_lurian}d):} Ponte de onda completa com quatro diodos 1N4007 e a carga $R_L$, sem capacitor de filtro. A referência (terra) foi posicionada no nó inferior da carga, com a fonte senoidal flutuante.
+
+    \item \textbf{Ponte retificadora com filtro (Figura~\ref{fig:circs_lurian}e):} Capacitor de 5,6 $\mu$F na saída da ponte. Permite comparar o \textit{ripple} em 120 Hz com o obtido na meia onda para o mesmo capacitor.
+
+    \item \textbf{Ponte com filtro e regulação Zener (Figura~\ref{fig:circs_lurian}f):} Acrescentou-se o resistor $R_S$ de 820 $\Omega$ e o diodo Zener \texttt{BZX84C7V5LY} de 7,5 V em paralelo com a carga de 15 k$\Omega$. Esta é a cadeia completa, que deve estabilizar a tensão contínua e suprimir o \textit{ripple} remanescente.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.1-meia_onda_sem_filtro.png}
+    \vspace{2pt}
+    {\small (a) Retificador de meia onda}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.2-meia_onda_com_filtro.png}
+    \vspace{2pt}
+    {\small (b) Meia onda com filtro de 5,6 $\mu$F}
+\end{minipage}
+
+\vspace{12pt}
+
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.2-10x_meia_onda_com_filtro.png}
+    \vspace{2pt}
+    {\small (c) Meia onda com filtro de 56 $\mu$F}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.3-ponte_retificadora_sem_filtro.png}
+    \vspace{2pt}
+    {\small (d) Ponte retificadora sem filtro}
+\end{minipage}
+
+\vspace{12pt}
+
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.5-ponte_retificadora_com_filtro.png}
+    \vspace{2pt}
+    {\small (e) Ponte retificadora com filtro}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.6-ponte_filtro_regulacao_zener.png}
+    \vspace{2pt}
+    {\small (f) Regulação com Zener (Cadeia completa)}
+\end{minipage}
+
+\caption{Esquemáticos projetados para a matrícula 22/2005395 contendo os componentes da série E12 e a diretiva de simulação de regime transitório aplicada a cada etapa da fonte linear.}
+\label{fig:circs_lurian}
+\end{figure}
 
 \subsection{Montagem em bancada}
 
