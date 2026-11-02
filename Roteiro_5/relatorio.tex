@@ -1325,6 +1325,93 @@ Na simulação do sexto item, a tensão média considerada na saída regulada fo
 
 
 
+\subsubsection{Lurian Correia Lima (22/2005395)}
+
+A Tabela~\ref{tab:resultados_lurian} confronta os valores analíticos, calculados com os componentes da série E12 adotados, com os valores obtidos nas simulações de regime transitório (\texttt{.tran 0 100m 0 20u}) no LTspice.
+
+\begin{table}[H]
+    \centering
+    \caption{Resultados analíticos e simulados dos estágios da fonte de alimentação (matrícula 22/2005395).}
+    \label{tab:resultados_lurian}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Analítico (E12)} & \textbf{Simulado} & \textbf{Erro (\%)} \\
+    \midrule
+    Tensão de pico na carga (meia onda) & $10{,}3\text{ V}$ & $\approx 10{,}5\text{ V}$ & $+1{,}9$ \\
+    Ripple de meia onda ($C=5{,}6\text{ }\mu\text{F}$) & $1{,}49\text{ V}$ & $\approx 1{,}65\text{ V}$ & $+10{,}7$ \\
+    Ripple de meia onda ($C=56\text{ }\mu\text{F}$) & $0{,}149\text{ V}$ & $\approx 0{,}17\text{ V}$ & $+14$ \\
+    Tensão de pico na carga (onda completa) & $9{,}6\text{ V}$ & $\approx 9{,}85\text{ V}$ & $+2{,}6$ \\
+    Ripple de onda completa ($C=5{,}6\text{ }\mu\text{F}$) & $0{,}744\text{ V}$ & $\approx 0{,}75\text{ V}$ & $+0{,}8$ \\
+    Vale da saída do filtro com Zener (item 6) & $8{,}86\text{ V}$ & $\approx 8{,}05\text{ V}$ & $-9{,}1$ \\
+    Ripple da saída do filtro com Zener (item 6) & $0{,}744\text{ V}$ & $\approx 1{,}7\text{ V}$ & $+128$ \\
+    \bottomrule
+    \multicolumn{4}{l}{\footnotesize Valores simulados lidos diretamente dos gráficos, com resolução de cerca de $0{,}1\text{ V}$; os erros são indicativos.}
+    \end{tabular}
+\end{table}
+
+\paragraph{Análise da retificação de meia onda (itens 1, 2 e 3):}
+No primeiro circuito, a tensão de pico na carga é de aproximadamente $10{,}5\text{ V}$, cerca de $0{,}5\text{ V}$ abaixo da amplitude de $11\text{ V}$ da fonte. Essa diferença corresponde à condução de um único diodo 1N4007, e fica abaixo da queda de $0{,}7\text{ V}$ adotada no cálculo. Na saída, a tensão permanece em zero durante todo o semiciclo negativo, como esperado para a meia onda.
+
+Com o capacitor de $5{,}6\text{ }\mu\text{F}$ (item 2), o \textit{ripple} lido é de cerca de $1{,}65\text{ V}$, pouco acima dos $1{,}49\text{ V}$ previstos pela Equação 1. Ao aumentar a capacitância para $56\text{ }\mu\text{F}$ (item 3), o \textit{ripple} cai para cerca de $0{,}17\text{ V}$, quase um décimo do valor anterior.
+
+\paragraph{Análise da ponte retificadora (itens 4 e 5):}
+Na ponte sem filtro (item 4), o pico na carga é de aproximadamente $9{,}85\text{ V}$, uma queda de cerca de $1{,}15\text{ V}$ em relação à fonte, compatível com a condução de dois diodos em série a cada semiciclo. A frequência da ondulação dobra para $120\text{ Hz}$, como se observa no gráfico.
+
+Com o capacitor de $5{,}6\text{ }\mu\text{F}$ na saída da ponte (item 5), o \textit{ripple} é de aproximadamente $0{,}75\text{ V}$, praticamente igual ao valor previsto de $0{,}744\text{ V}$ e cerca de metade do obtido na meia onda com o mesmo capacitor.
+
+\paragraph{Análise da regulação com Zener (item 6):}
+O gráfico do item 6 mostra a tensão no nó de saída do filtro, antes do resistor $R_S$. Nele, o pico é de aproximadamente $9{,}75\text{ V}$ e o vale desce a cerca de $8{,}05\text{ V}$, abaixo dos $8{,}86\text{ V}$ previstos no dimensionamento. O \textit{ripple} resultante, de cerca de $1{,}7\text{ V}$, é mais que o dobro do calculado para a onda completa com o mesmo capacitor. A tensão regulada no Zener e a corrente no diodo não aparecem no gráfico exportado, e por isso não são apresentadas aqui.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.1-meia_onda_sem_filtro_res.png}
+        \vspace{2pt}
+        {\small (a) Tensão: meia onda sem filtro.}
+    \end{minipage}\hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.2-meia_onda_com_filtro_res.png}
+        \vspace{2pt}
+        {\small (b) Meia onda com filtro de $5{,}6\text{ }\mu\text{F}$.}
+    \end{minipage}
+
+    \vspace{12pt}
+
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.2-10x_meia_onda_com_filtro_res.png}
+        \vspace{2pt}
+        {\small (c) Meia onda com filtro de $56\text{ }\mu\text{F}$.}
+    \end{minipage}\hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.3-ponte_retificadora_sem_filtro_res.png}
+        \vspace{2pt}
+        {\small (d) Ponte retificadora sem filtro.}
+    \end{minipage}
+
+    \vspace{12pt}
+
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.5-ponte_retificadora_com_filtro_res.png}
+        \vspace{2pt}
+        {\small (e) Ponte retificadora com filtro de $5{,}6\text{ }\mu\text{F}$.}
+    \end{minipage}\hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.6-ponte_filtro_regulacao_zener_res.png}
+        \vspace{2pt}
+        {\small (f) Saída do filtro com regulação Zener (item 6).}
+    \end{minipage}
+
+    \caption{Resultados gráficos das simulações de projeto dos estágios da fonte linear (matrícula 22/2005395).}
+    \label{fig:graficos_lurian}
+\end{figure}
+
 \subsection{Circuito montado}
 
 % Para cada grandeza, o que o projeto do integrante montado previa, o que a simulação com os
