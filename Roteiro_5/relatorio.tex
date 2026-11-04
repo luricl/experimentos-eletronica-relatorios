@@ -33,9 +33,7 @@
 \capa
 
 \begin{resumo}
-% Escreva este parágrafo por último, com 100 a 150 palavras. Diga o que você projetou, sob
-% qual especificação, o que simulou ou mediu, o principal resultado numérico e a que
-% conclusão chegou. Quem ler só este parágrafo deve saber o que você fez e o que encontrou.
+Este trabalho dimensionou e avaliou fontes com retificação de meia onda e onda completa, filtragem capacitiva e regulação por diodo Zener. As simulações no LTspice seguiram as especificações das matrículas dos três integrantes, com fontes de 22 ou 23 V de pico a pico, correntes de carga de 0,5 ou 0,6 mA e tensões Zener de 7,5 ou 8,2 V. Na bancada, a equipe 2 utilizou uma fonte de 20 V de pico a pico, carga de 4,7 k$\Omega$ e capacitores de 47 $\mu$F e 4,7 $\mu$F. O ripple medido foi de 0,56 V em meia onda e 0,26 V em onda completa. Na regulação, utilizou-se um Zener de 5,6 V em lugar do previsto de 6,8 V; a saída apresentou 5,60 V contínuos e ripple de 0,02 V, com atenuação de 92,3\%. Os resultados confirmam a redução da ondulação proporcionada pela retificação em onda completa e pela regulação Zener.
 \end{resumo}
 
 \section{Introdução}
@@ -44,7 +42,26 @@ Grande parte dos circuitos eletrônicos opera com tensão contínua, mas a energ
 
 Uma fonte linear organiza essa conversão em quatro estágios. O transformador reduz a amplitude da rede; o retificador conduz a corrente em um único sentido; o filtro capacitivo sustenta a tensão entre os picos; e o regulador fixa o valor final e atenua a oscilação que sobra, chamada de \textit{ripple}. Neste roteiro, o transformador é substituído por um gerador de funções. Essa troca tem uma consequência prática: como o terra do gerador coincide com o do osciloscópio, a entrada e a saída de uma ponte de diodos não podem ser medidas ao mesmo tempo, limitação que aparece nas medições de bancada.
 
-Este relatório investiga, por simulação no LTspice, os quatro estágios sob a especificação da matrícula 22/2005395: senoide de 11 V de amplitude (22 V de pico a pico), corrente de carga de 500 µA e zener de 7,5 V. O interesse é verificar se as expressões aproximadas da fundamentação preveem o que o simulador mostra. Cada uma delas depende de hipóteses, e são essas hipóteses que determinam o quanto a previsão se afasta do resultado. Algumas restrições do roteiro também pedem justificativa: o ripple máximo de 1,5 V fixa o tamanho mínimo do capacitor, e os componentes são escolhidos na série E12 porque são os valores comerciais que de fato se encontram, de modo que o projeto pode ser montado.
+Este relatório investiga, por meio de simulações no LTspice e de
+medições experimentais em bancada, o funcionamento dos quatro
+estágios de uma fonte linear: retificação de meia onda, retificação
+de onda completa, filtragem capacitiva e regulação com diodo zener.
+Na etapa individual de simulação, são consideradas as especificações
+dos três integrantes, determinadas por suas respectivas matrículas:
+23/1038626, com fonte de 23 V de pico a pico, corrente de carga de
+600 $\mu\text{A}$ e zener de 8,2 V; 23/1036775, com fonte de 23 V
+de pico a pico, corrente de 500 $\mu\text{A}$ e zener de 8,2 V; e
+22/2005395, com fonte de 22 V de pico a pico, corrente de
+500 $\mu\text{A}$ e zener de 7,5 V. Na etapa experimental, por
+sua vez, são analisadas as cinco montagens previstas para a equipe 2,
+sob alimentação senoidal de 20 V de pico a pico e 60 Hz, carga
+nominal de 4,7 k$\Omega$ e regulação especificada originalmente em
+6,8 V. O objetivo é confrontar os resultados analíticos, as
+simulações individuais e as medições de bancada, identificando
+as hipóteses responsáveis pelas diferenças observadas. Também são
+consideradas as restrições de projeto do roteiro, como o ripple
+máximo de 1,5 V e a seleção de componentes da série E12, que
+aproximam o dimensionamento das condições reais de montagem.
 
 O restante do texto está organizado em sete seções. A Seção 2 deduz as expressões de retificação, filtragem e regulação. A Seção 3 transforma os dígitos da matrícula em valores de componentes. A Seção 4 descreve as simulações, e a Seção 5 apresenta os resultados. A Seção 6 os confronta com as previsões, e a Seção 7 conclui.
 
@@ -1627,7 +1644,7 @@ Regulação com zener (Seção 4.7 do roteiro). Para suportar a tensão mínima 
     $R_S$ calculado / adotado (E12) & $447{,}5$ / $390$ & $386{,}5$ & $\Omega$ \\
     Ripple antes do regulador & $0{,}25$ & $0{,}26$ & V \\
     Tensão contínua na carga (com Zener) & $5{,}60$ & $5{,}60$ & V \\
-    Ripple na carga & \textit{a simular} & $0{,}02$ & V \\
+    Ripple na carga & $-$ & $0{,}02$ & V \\
     Fração do ripple eliminada & $-$ & $92{,}3$ & \% \\
     Tensão contínua sem carga & $5{,}60$ & $5{,}60$ & V \\
     Corrente de pico no Zener sem carga & $3{,}21$ & $4{,}14$ & mA \\
@@ -1644,31 +1661,92 @@ Regulação com zener (Seção 4.7 do roteiro). Para suportar a tensão mínima 
 \end{figure}
 
 \section{Discussão}
+\label{sec:discussao}
 
-% Percorra as três comparações na ordem em que aparecem no quadro da Seção~4: a conta contra
-% a simulação de projeto, esta contra a simulação da montagem, e esta contra a medição. Cada
-% passo isola uma causa, e a discussão fica bem mais curta quando eles não se misturam.
+\paragraph{Cálculo analítico contra simulação de projeto.}\mbox{}\\
 
-% Compare também os projetos dos integrantes entre si. Como as especificações são diferentes,
-% os resultados diferem, e mostrar que essa diferença é a que a teoria previa vale mais do
-% que repetir três vezes a mesma análise.
+A primeira comparação consiste em verificar se os resultados obtidos a partir das expressões analíticas da fundamentação teórica são reproduzidos pelas simulações individuais no LTspice. De maneira geral, observou-se boa concordância entre os valores calculados e simulados, embora algumas diferenças tenham sido mais expressivas, principalmente nas estimativas de \textit{ripple}.
 
-% Sempre que uma divergência for maior do que a incerteza esperada, aponte uma causa concreta
-% e diga como ela poderia ser reduzida. Vale, por exemplo, a tolerância do componente, a
-% resistência série do indutor, a impedância de entrada do osciloscópio, a banda do
-% amplificador ou a resolução da varredura.
+Para o projeto de Guilherme, apresentado na Tabela~\ref{tab:resultados_cardoso}, os erros nas tensões de pico dos retificadores foram de $1{,}11\%$ para meia onda e $2{,}47\%$ para onda completa. As tensões médias apresentaram diferenças de $-2{,}58\%$ e $-5{,}00\%$, respectivamente. Nos circuitos com filtragem, o \textit{ripple} da ponte apresentou diferença de apenas $1{,}49\%$, enquanto o da meia onda apresentou desvio de $11{,}19\%$. Apesar dessa diferença, ambos permaneceram dentro da tolerância de $15\%$ estabelecida pelo roteiro para os resultados determinados pelo projeto. A tensão regulada pelo Zener também apresentou boa concordância, passando de $8{,}20\,\text{V}$ calculados para $8{,}18\,\text{V}$ simulados.
 
-% Quando previsto e obtido coincidirem, explique por que era esperado que coincidissem, e o
-% que essa coincidência não permite concluir.
+No projeto de Daniel, conforme a Tabela~\ref{tab:resultados_daniel}, a concordância foi ainda maior. Os desvios apresentados ficaram abaixo de $0{,}61\%$ nas grandezas comparadas, incluindo as tensões de pico, os valores médios, os diferentes níveis de \textit{ripple} e a tensão regulada. Essa proximidade é esperada porque as expressões analíticas e o simulador representam as mesmas topologias e utilizam os mesmos valores nominais de componentes. As pequenas diferenças decorrem principalmente das aproximações empregadas nos cálculos analíticos, enquanto a simulação considera o comportamento dos modelos dos componentes.
 
-% Por fim, retome as hipóteses que vocês declararam na fundamentação e diga quais se
-% confirmaram. Se algo observado contrariar a previsão, resolva a contradição aqui.
+Para Lurian, os resultados da Tabela~\ref{tab:resultados_lurian} também apresentaram boa concordância nas etapas de retificação e filtragem. Os desvios das tensões de pico foram de $1{,}9\%$ na meia onda e $2{,}6\%$ na ponte. Para o \textit{ripple}, foram observados desvios de $10{,}7\%$ com o capacitor de $5{,}6\,\mu\text{F}$ e de $14\%$ com o capacitor de $56\,\mu\text{F}$ na retificação de meia onda. Na ponte, a diferença foi de apenas $0{,}8\%$. Entretanto, no circuito com regulação Zener, o \textit{ripple} observado na saída do filtro foi de aproximadamente $1{,}7\,\text{V}$, enquanto a estimativa analítica era de $0{,}744\,\text{V}$, correspondendo a um desvio de aproximadamente $128\%$. Essa divergência está relacionada ao fato de que a inclusão do estágio regulador aumenta a corrente drenada da saída do filtro, pois, além da carga, existe a corrente fornecida ao ramo do Zener. Assim, a utilização apenas da corrente de carga na aproximação $V_r \approx I_L/(fC)$ subestima a ondulação nessa condição. Além disso, os valores simulados dessa etapa foram lidos diretamente dos gráficos, com resolução aproximada de $0{,}1\,\text{V}$, o que reduz a precisão da comparação.
+
+A comparação entre os três projetos também evidencia que as diferenças observadas são coerentes com suas respectivas especificações. Guilherme e Daniel utilizaram uma fonte com amplitude de $11{,}5\,\text{V}$ e Zener nominal de $8{,}2\,\text{V}$, enquanto Lurian utilizou amplitude de $11\,\text{V}$ e Zener de $7{,}5\,\text{V}$. Além disso, foram adotadas capacitâncias de projeto diferentes, conforme as correntes e os valores comerciais selecionados. Portanto, não se esperava que os três circuitos apresentassem resultados numéricos idênticos, mas sim que cada um reproduzisse o comportamento previsto para sua própria especificação. Essa tendência foi confirmada nas simulações, com exceção da divergência identificada na estimativa do \textit{ripple} do estágio regulador de Lurian.
+
+\paragraph{Simulação de projeto contra simulação da montagem.}\mbox{}\\
+
+A segunda comparação permite analisar as diferenças entre os projetos individuais, definidos pelas matrículas, e o circuito preparado para reproduzir a montagem da equipe 2. É importante observar que essa comparação envolve não apenas a substituição dos valores nominais pelos valores medidos, mas também alterações nas condições de alimentação, carga e regulação.
+
+Nas simulações individuais, foram utilizadas fontes com amplitudes de $11\,\text{V}$ ou $11{,}5\,\text{V}$ e cargas de $15\,\text{k}\Omega$. Na simulação da montagem, por outro lado, foram adotadas as condições da equipe 2: fonte de $20\,\text{V}_{pp}$, correspondente a um pico nominal de $10\,\text{V}$, e resistor de carga medido de $4{,}688\,\text{k}\Omega$. Também foram empregados os capacitores medidos de $48{,}8\,\mu\text{F}$ e $4{,}84\,\mu\text{F}$, além do resistor série de $386{,}5\,\Omega$. Essas alterações explicam por que os valores absolutos das tensões, correntes e ondulações da simulação da montagem não devem ser diretamente equiparados aos resultados dos projetos individuais.
+
+A influência específica das tolerâncias dos componentes, entretanto, foi pequena. O resistor de carga apresentou desvio de apenas $-0{,}25\%$ em relação ao valor nominal de $4{,}7\,\text{k}\Omega$. O capacitor principal apresentou desvio de $+3{,}83\%$, o capacitor de comparação apresentou $+2{,}98\%$ e o resistor série apresentou $-0{,}90\%$. Como esses valores foram utilizados na reconstrução dos circuitos no LTspice, era esperado que as diferenças em relação aos componentes nominais produzissem alterações relativamente pequenas nos resultados dos estágios passivos.
+
+Essa expectativa é coerente com a relação aproximada entre o \textit{ripple} e a capacitância. Como a ondulação é inversamente proporcional a $C$, a diferença de aproximadamente $3{,}83\%$ na capacitância principal produz uma alteração também pequena na previsão de ondulação, desde que as demais condições permaneçam constantes. Da mesma forma, a pequena diferença no resistor de carga não representa, isoladamente, uma mudança significativa no comportamento global da montagem.
+
+No dimensionamento do regulador, foi obtido $R_S=447{,}5\,\Omega$ utilizando a tensão mínima do filtro de $7{,}874\,\text{V}$, a tensão Zener original de $6{,}8\,\text{V}$, a corrente de carga de aproximadamente $1{,}4\,\text{mA}$ e a corrente mínima de Zener de $1\,\text{mA}$. O valor comercial imediatamente inferior adotado foi de $390\,\Omega$, cuja resistência medida foi de $386{,}5\,\Omega$. Portanto, a diferença entre os valores nominal e medido desse resistor também é pequena, não sendo suficiente para explicar, por si só, alterações expressivas no comportamento do regulador.
+
+\paragraph{Simulação da montagem contra medição experimental.}\mbox{}\\
+
+A terceira comparação confronta os resultados obtidos na simulação com os valores medidos diretamente na bancada. Nessa etapa, as diferenças observadas estão relacionadas às características reais dos componentes, às condições efetivas da fonte e às limitações dos instrumentos de medição.
+
+No retificador de meia onda sem filtro, a simulação apresentou tensão de pico de $9{,}3\,\text{V}$ na carga, enquanto a bancada registrou $9{,}2\,\text{V}$. A proximidade entre esses valores indica que o modelo reproduziu satisfatoriamente o pico de saída. Entretanto, a tensão de entrada medida foi de $9{,}6\,\text{V}$, inferior aos $10\,\text{V}$ utilizados na simulação, correspondendo a uma diferença de aproximadamente $4\%$. Além disso, a queda de tensão no diodo foi de $0{,}4\,\text{V}$ na medição, em contraste com os $0{,}7\,\text{V}$ considerados no modelo de queda constante. A tensão média medida, de $2{,}928\,\text{V}$, também foi inferior aos $3{,}18\,\text{V}$ simulados, diferença que pode ser explicada principalmente pela menor amplitude efetiva da fonte e pelas características reais de condução do diodo. Uma medição mais precisa poderia ser obtida mediante a estabilização prévia da amplitude do gerador e a utilização de uma leitura de tensão com maior resolução.
+
+Com a adição do capacitor principal de filtragem, o \textit{ripple} simulado foi de $0{,}60\,\text{V}_{pp}$, enquanto o medido foi de $0{,}56\,\text{V}_{pp}$, diferença de aproximadamente $6{,}7\%$. A tensão contínua, entretanto, apresentou diferença mais expressiva: $9{,}1\,\text{V}$ na simulação contra $8{,}254\,\text{V}$ na bancada. Essa divergência é compatível com a diferença na amplitude da fonte, que apresentou $9{,}6\,\text{V}$ de pico na medição, e com as características reais de condução do diodo e descarga do capacitor. Portanto, embora a ondulação tenha apresentado boa concordância, a proximidade entre os valores de \textit{ripple} não implica necessariamente igualdade entre as tensões médias.
+
+Na montagem com o capacitor de comparação, de aproximadamente dez vezes menor que o capacitor principal, o \textit{ripple} simulado foi de $4{,}27\,\text{V}_{pp}$, enquanto o valor medido foi de $4{,}16\,\text{V}_{pp}$. As tensões contínuas correspondentes foram de $7{,}12\,\text{V}$ e $7{,}038\,\text{V}$. As diferenças inferiores a $3\%$ demonstram boa concordância entre a simulação e a medição. Esse resultado confirma a hipótese de que a redução da capacitância aumenta a ondulação da tensão de saída, pois o capacitor armazena menos energia e sofre maior descarga durante os intervalos em que o diodo permanece bloqueado.
+
+Na ponte retificadora sem filtro, a tensão de pico simulada foi de $8{,}7\,\text{V}$, enquanto a medida foi de $8{,}4\,\text{V}$. A frequência dos picos também apresentou boa concordância, com $120\,\text{Hz}$ na simulação e $119\,\text{Hz}$ na bancada. A diferença entre os picos de saída é compatível com a presença de dois diodos em série no caminho de condução da ponte. Entretanto, não é possível isolar com precisão a contribuição de cada queda de tensão experimental, uma vez que, devido à referência comum entre o gerador e o osciloscópio, a medição da ponte foi realizada apenas na saída. Essa limitação foi prevista na metodologia do roteiro e deve ser considerada na interpretação dos resultados.
+
+Na ponte retificadora com filtro, a concordância foi particularmente elevada. O \textit{ripple} apresentou o mesmo valor de $0{,}26\,\text{V}_{pp}$ tanto na simulação quanto na bancada, enquanto as tensões contínuas foram de $8{,}0\,\text{V}$ e $8{,}004\,\text{V}$, respectivamente. A razão entre os \textit{ripples} da ponte e da meia onda foi de aproximadamente $0{,}43$ na simulação e $0{,}46$ na medição, ambas próximas da razão teórica de $0{,}5$. Essa concordância era esperada, pois a ponte retificadora utiliza os dois semiciclos da fonte e, consequentemente, dobra a frequência de recarga do capacitor de $60\,\text{Hz}$ para $120\,\text{Hz}$. O resultado confirma a redução da ondulação prevista pela fundamentação teórica.
+
+\paragraph{Desempenho do regulador Zener e adaptação experimental.}\mbox{}\\
+
+Na montagem da equipe 2, o roteiro especificava originalmente a utilização de um diodo Zener 1N754 de tensão nominal de $6{,}8\,\text{V}$. Entretanto, durante a realização do ensaio, por orientação do professor, foi utilizado um Zener de $5{,}6\,\text{V}$, com o objetivo de tornar mais evidente a análise da ondulação residual na saída do regulador. Essa alteração também foi considerada na simulação da montagem, permitindo confrontar as duas condições efetivamente adotadas.
+
+É importante destacar que o resistor série de $390\,\Omega$ foi dimensionado originalmente para a condição de $6{,}8\,\text{V}$ e mantido durante o ensaio com o componente de $5{,}6\,\text{V}$. Assim, o dimensionamento original não representa uma condição de projeto recalculada para a tensão Zener efetivamente utilizada. Considerando a resistência de carga medida de $4{,}688\,\text{k}\Omega$, a corrente de carga correspondente a $5{,}6\,\text{V}$ é de aproximadamente $1{,}19\,\text{mA}$. Se o dimensionamento fosse refeito para essa tensão, mantendo-se $V_{\min}=7{,}874\,\text{V}$ e $I_{Z,\min}=1\,\text{mA}$, obter-se-ia
+
+\[
+R_S =
+\frac{7{,}874-5{,}6}
+{1{,}19\times10^{-3}+1\times10^{-3}}
+\approx 1{,}04\,\text{k}\Omega.
+\]
+
+O valor comercial E12 imediatamente inferior seria de aproximadamente $1\,\text{k}\Omega$. Portanto, a utilização do resistor medido de $386{,}5\,\Omega$ na condição com Zener de $5{,}6\,\text{V}$ resultou em uma corrente disponível superior à mínima exigida para a regulação, alterando o ponto de operação do componente e sua dissipação.
+
+Quanto ao comportamento observado, a simulação da montagem apresentou tensão contínua de $5{,}6\,\text{V}$ e \textit{ripple} de $0{,}03\,\text{V}_{pp}$. Na bancada, foram medidos os mesmos $5{,}6\,\text{V}$ de tensão contínua e apenas $0{,}02\,\text{V}_{pp}$ de ondulação. Considerando o \textit{ripple} de $0{,}26\,\text{V}_{pp}$ antes do regulador, a simulação indicou uma redução de aproximadamente $88{,}5\%$, enquanto a medição experimental indicou redução de aproximadamente $92{,}3\%$. Essa proximidade demonstra que o regulador atenuou significativamente a ondulação proveniente do filtro capacitivo, mantendo a tensão de saída próxima à tensão nominal do componente efetivamente utilizado.
+
+A corrente de pico no Zener sem carga foi registrada como $4{,}14\,\text{mA}$. Entretanto, a potência de $28{,}15\,\text{mW}$ apresentada na tabela de resultados corresponde ao produto dessa corrente pela tensão original de $6{,}8\,\text{V}$. Para a tensão efetivamente observada de $5{,}6\,\text{V}$, a potência correspondente seria aproximadamente
+
+\[
+P_Z \approx 5{,}6 \times 4{,}14\,\text{mA}
+\approx 23{,}2\,\text{mW}.
+\]
+
+Assim, a potência deve ser interpretada com base na tensão e na corrente do componente efetivamente utilizado, e seu confronto com o limite admissível depende da identificação exata do modelo de Zener empregado. Não é adequado utilizar diretamente o limite de potência do 1N754 sem confirmar que esse é o componente instalado na condição experimental de $5{,}6\,\text{V}$.
+
+\paragraph{Retomada das hipóteses da fundamentação teórica.}\mbox{}\\
+
+As hipóteses estabelecidas na fundamentação foram confirmadas em diferentes graus. O modelo de queda direta constante de aproximadamente $0{,}7\,\text{V}$ apresentou boa concordância com os resultados simulados, mas não representou exatamente o comportamento experimental, no qual a queda medida no retificador de meia onda foi de $0{,}4\,\text{V}$. Isso evidencia que a tensão direta do diodo depende das condições reais de condução e não deve ser considerada rigorosamente constante.
+
+A hipótese de descarga aproximadamente linear do capacitor também foi confirmada qualitativamente. O aumento da capacitância reduziu o \textit{ripple}, enquanto a redução da capacitância produziu o efeito inverso. Além disso, a duplicação da frequência dos picos na ponte retificadora resultou em uma ondulação próxima da metade daquela observada na retificação de meia onda. As pequenas diferenças entre os valores previstos e obtidos decorrem das aproximações da expressão analítica, que considera corrente de carga aproximadamente constante e intervalos de recarga reduzidos.
+
+Por fim, a hipótese de que o diodo Zener mantém a tensão de saída aproximadamente constante enquanto conduz na região de ruptura foi confirmada experimentalmente para a condição adaptada de $5{,}6\,\text{V}$. Entretanto, a substituição do componente original de $6{,}8\,\text{V}$ e a manutenção do resistor calculado para essa especificação impedem considerar o ensaio como uma validação direta do dimensionamento original. Dessa forma, as hipóteses de retificação e filtragem foram verificadas com boa concordância, enquanto a análise quantitativa do regulador deve ser restrita às condições efetivamente adotadas na bancada.
 
 \section{Conclusão}
+\label{sec:conclusao}
 
-% Retome o objetivo que vocês anunciaram na introdução e responda se ele foi atingido,
-% apoiando a resposta em um número. Aponte a principal limitação do que foi feito e o que
-% ela impede de afirmar. Evite trazer resultado novo nesta seção.
+O objetivo de analisar, dimensionar, simular e montar circuitos retificadores com filtragem capacitiva e regulação por diodo Zener foi atingido. As etapas realizadas permitiram verificar o comportamento dos retificadores de meia onda e de onda completa, avaliar a influência da capacitância sobre a ondulação da tensão de saída e observar a atuação do regulador Zener na estabilização da tensão contínua.
+
+De modo geral, os resultados analíticos apresentaram boa concordância com as simulações individuais, e as simulações da montagem reproduziram satisfatoriamente os resultados experimentais. Destaca-se a ponte retificadora com filtro, na qual o \textit{ripple} simulado e medido foi de $0{,}26\,\text{V}_{pp}$, enquanto as tensões contínuas correspondentes foram de $8{,}0\,\text{V}$ e $8{,}004\,\text{V}$. Também foi verificado que a redução da capacitância provoca aumento significativo da ondulação, conforme previsto teoricamente.
+
+Na etapa de regulação, a ondulação foi reduzida de $0{,}26\,\text{V}_{pp}$ antes do regulador para $0{,}02\,\text{V}_{pp}$ após sua inserção, correspondendo a uma atenuação experimental de aproximadamente $92{,}3\%$. Esse resultado demonstra a capacidade do estágio Zener de reduzir a ondulação residual e estabilizar a tensão de saída nas condições ensaiadas.
+
+A principal limitação experimental foi a substituição, por orientação do professor, do Zener de $6{,}8\,\text{V}$ especificado originalmente por um componente de $5{,}6\,\text{V}$, mantendo-se o resistor série dimensionado para a condição inicial. Embora essa adaptação tenha permitido observar claramente a redução da ondulação, ela impede afirmar que o dimensionamento original do regulador para $6{,}8\,\text{V}$ foi integralmente validado em bancada, especialmente no que diz respeito às correntes e à potência dissipada pelo Zener.
+
+Portanto, conclui-se que os objetivos relacionados à retificação, à filtragem capacitiva e à observação experimental da regulação de tensão foram alcançados. As comparações realizadas também evidenciaram a importância de considerar as características reais dos componentes, as condições de alimentação e as limitações dos instrumentos ao confrontar resultados analíticos, simulados e experimentais.
 
 \section{Referências}
 
