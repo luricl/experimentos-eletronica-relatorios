@@ -40,36 +40,78 @@
 
 \section{Introdução}
 
-% Comece pelo problema, e não pelo circuito. Que necessidade de engenharia deu origem a esta
-% topologia, onde você a encontraria em um equipamento real e o que aconteceria sem ela. Duas
-% ou três referências ajudam aqui.
+Grande parte dos circuitos eletrônicos opera com tensão contínua, mas a energia disponível nas tomadas é alternada, de 127 V ou 220 V em 60 Hz. A fonte de alimentação faz a ponte entre esses dois regimes. Um amplificador ou um microcontrolador precisa de uma tensão que não inverta de polaridade e que varie pouco quando a carga muda, e uma senoide, por si, não atende a nenhuma dessas condições.
 
-% Depois estreite o foco: que aspecto você vai investigar, sob quais condições, e por que
-% vale a pena verificá-lo. Se o roteiro impõe alguma restrição de projeto que parece
-% arbitrária, aproveite para explicar a razão dela.
+Uma fonte linear organiza essa conversão em quatro estágios. O transformador reduz a amplitude da rede; o retificador conduz a corrente em um único sentido; o filtro capacitivo sustenta a tensão entre os picos; e o regulador fixa o valor final e atenua a oscilação que sobra, chamada de \textit{ripple}. Neste roteiro, o transformador é substituído por um gerador de funções. Essa troca tem uma consequência prática: como o terra do gerador coincide com o do osciloscópio, a entrada e a saída de uma ponte de diodos não podem ser medidas ao mesmo tempo, limitação que aparece nas medições de bancada.
 
-% No último parágrafo, diga qual é o objetivo deste relatório e como o texto está
-% organizado, seção a seção.
+Este relatório investiga, por simulação no LTspice, os quatro estágios sob a especificação da matrícula 22/2005395: senoide de 11 V de amplitude (22 V de pico a pico), corrente de carga de 500 µA e zener de 7,5 V. O interesse é verificar se as expressões aproximadas da fundamentação preveem o que o simulador mostra. Cada uma delas depende de hipóteses, e são essas hipóteses que determinam o quanto a previsão se afasta do resultado. Algumas restrições do roteiro também pedem justificativa: o ripple máximo de 1,5 V fixa o tamanho mínimo do capacitor, e os componentes são escolhidos na série E12 porque são os valores comerciais que de fato se encontram, de modo que o projeto pode ser montado.
+
+O restante do texto está organizado em sete seções. A Seção 2 deduz as expressões de retificação, filtragem e regulação. A Seção 3 transforma os dígitos da matrícula em valores de componentes. A Seção 4 descreve as simulações, e a Seção 5 apresenta os resultados. A Seção 6 os confronta com as previsões, e a Seção 7 conclui.
 
 \section{Fundamentação teórica}
 
-% Deduza as expressões que você vai usar mais adiante, partindo das leis de circuito.
-% Numere as equações que forem retomadas no restante do texto.
+\paragraph{Modelo adotado.} O diodo é tratado pelo modelo de queda constante: conduz com tensão direta $V_\gamma \approx 0{,}7\text{ V}$ e comporta-se como circuito aberto na polarização reversa (SEDRA; SMITH, 2007). A fonte é uma senoide ideal, $v_i(t) = V_p\,\mathrm{sen}(2\pi f t)$, com $V_p = AB/2$ e $f = 60\text{ Hz}$. Os capacitores são ideais e a carga $R_L$ é constante. Essas são simplificações, e a Seção 6 retoma as que não se sustentam na simulação.
 
-% \begin{equation}
-% H(j\omega) = \frac{1}{1+j\omega RC}
-% \label{eq:exemplo}
-% \end{equation}
+\paragraph{Regimes de funcionamento.} O circuito alterna entre dois regimes. O diodo retificador conduz enquanto a fonte supera a saída em $V_\gamma$ e permanece em corte no restante do período. O capacitor, por sua vez, carrega-se pela fonte durante a condução e descarrega-se pela carga durante o corte. No zener, a regulação ocorre apenas no regime de ruptura reversa, descrito adiante.
 
-% Toda grandeza que aparecer nos resultados precisa ter sido apresentada aqui. Explique o que
-% cada termo significa fisicamente, não apenas o que a letra representa. Registre as hipóteses
-% que você está assumindo, como linearidade ou idealidade dos componentes: se alguma delas
-% não se sustentar no experimento, você vai retomá-la na discussão.
+\paragraph{Retificação de meia onda.} O diodo conduz no semiciclo positivo, e a tensão na carga acompanha a fonte com a queda $V_\gamma$:
+\[
+v_o =
+\begin{cases}
+v_i - V_\gamma, & v_i > V_\gamma \\
+0, & \text{no restante do período}
+\end{cases}
+\]
+O pico na carga é $V_p - V_\gamma$, e o valor médio é $V_{med} \approx (V_p - V_\gamma)/\pi$, que se reduz a $V_p/\pi$ quando $V_\gamma$ é desprezado. Há um pulso por período da rede, de modo que a frequência de repetição dos picos é $f = 60\text{ Hz}$.
 
-% Se o circuito tiver regimes de funcionamento distintos, apresente cada um e diga o que os
-% separa.
+\paragraph{Retificação de onda completa.} Na ponte de quatro diodos, $D_1$ e $D_2$ conduzem no semiciclo positivo, e $D_3$ e $D_4$ no negativo, de modo que a corrente na carga mantém sempre o mesmo sentido. Como dois diodos estão em série em cada semiciclo, o pico na carga é $V_p - 2V_\gamma$, e o valor médio é $2(V_p - 2V_\gamma)/\pi$, aproximado por $2V_p/\pi$ quando as quedas são desprezadas. Os pulsos se repetem a $120\text{ Hz}$. A referência da carga não coincide com nenhum terminal da fonte, de modo que a fonte fica flutuante em relação a ela.
+
+\paragraph{Filtro capacitivo.} Com o capacitor $C$ em paralelo com a carga, a tensão de saída sobe até próximo do pico e depois decai enquanto o diodo está em corte. Se a corrente $I_L$ é aproximadamente constante durante a descarga, que dura quase um período $T$ da frequência de repetição dos picos, a carga retirada do capacitor é $\Delta Q = I_L T$ e a queda de tensão é $\Delta V = \Delta Q / C = I_L T / C$. A oscilação pico a pico, $V_r$, é então
+\begin{equation}
+V_r \approx \frac{I_L}{f\,C},
+\label{eq:ripple}
+\end{equation}
+com $f = 60\text{ Hz}$ para meia onda e $f = 120\text{ Hz}$ para onda completa. Dobrar a frequência dos picos reduz o ripple à metade para o mesmo capacitor. A expressão supõe $R_L C$ grande em relação ao período e $V_r$ pequeno em relação a $V_p$. A tensão mínima na saída do filtro é $V_{min} = V_{max} - V_r$, em que $V_{max}$ é o pico na carga.
+
+Durante a recarga, o diodo conduz apenas na fração do período em que $v_i$ supera a tensão do capacitor. A carga $I_L T$ precisa ser entregue nesse intervalo $\Delta t \ll T$, de modo que a corrente de pico no diodo é muito maior que $I_L$. Esse é o segundo regime do circuito, e ele determina a corrente que o diodo deve suportar.
+
+\paragraph{Regulação com zener.} O zener polarizado reversamente mantém a tensão $V_Z$ entre seus terminais enquanto a corrente reversa for igual ou superior a $I_{Z,min}$, tomada neste roteiro como $1\text{ mA}$. Abaixo desse valor, o componente sai da região de ruptura e a tensão deixa de ser fixa. O resistor $R_S$ fica entre a saída do filtro e a carga, e a corrente que o atravessa se divide entre a carga e o zener:
+\[
+I_S = \frac{v_{filtro} - V_Z}{R_S} = I_L + I_Z.
+\]
+A regulação se perde quando a saída do filtro cai ao ponto de a corrente disponível em $R_S$ não cobrir $I_L + I_{Z,min}$, o que ocorre primeiro no vale do ripple. Impondo que nesse vale ainda circule $I_{Z,min}$, obtém-se
+\begin{equation}
+R_S = \frac{V_{min} - V_Z}{I_L + I_{Z,min}},
+\label{eq:rs}
+\end{equation}
+arredondado para o valor E12 imediatamente inferior. Um resistor menor deixa passar mais corrente, de modo que o zener continua acima de $I_{Z,min}$.
+
+Com o zener regulando, a oscilação na carga é atenuada. A razão entre o ripple na saída do filtro e o ripple remanescente na carga mede essa atenuação. Para a escolha do componente, o roteiro indica a tensão nominal da série BZX84C mais próxima de $V_p/\sqrt{2}$, que é o valor eficaz da senoide.
+
+No pico da saída do filtro, com a carga retirada, toda a corrente $I_S$ passa pelo zener. Assim, $I_{Z,max} = (V_{max} - V_Z)/R_S$ e $P_{Z,max} = V_Z\, I_{Z,max}$, valor que deve ficar abaixo do limite de dissipação do componente, de 250 mW para o BZX84C, conforme o roteiro.
 
 \section{Especificação e projeto}
+
+\begin{especbancada}
+
+Na montagem em bancada, a fonte é a mesma para todas as equipes, e a carga é o que varia entre elas, definida pelo número da equipe. Para a equipe 2, as especificações exigidas pelo roteiro são:
+
+\begin{itemize}
+    \item \textbf{Fonte:} senoide de 60 Hz com $20\text{ V}$ de pico a pico, com o gerador configurado para carga de alta impedância, sob pena de entregar metade da tensão indicada no painel. Logo, a amplitude é $V_p = 10\text{ V}$.
+
+    \vspace{0.3cm}
+
+    \item \textbf{Regulação (Zener):} diodo 1N754, de tensão nominal $6{,}8\text{ V}$.
+
+    \vspace{0.3cm}
+
+    \item \textbf{Carga:} resistor $R_L = 4{,}7\text{ k}\Omega$, que drena na tensão regulada a corrente $I_L = \frac{6{,}8}{4{,}7\times10^{3}} \approx 1{,}4\text{ mA}$.
+\end{itemize}
+
+\end{especbancada}
+
+Os diodos retificadores são 1N4007, e os capacitores são eletrolíticos, com o terminal negativo ligado ao terra. Pela Equação 1, com $I_L = 1{,}4\text{ mA}$, $f = 60\text{ Hz}$ e ripple máximo de $1{,}5\text{ V}$, o capacitor de meia onda deve ser de $C = \frac{I_L}{f\,V_r} = \frac{1{,}4\times10^{-3}}{60 \times 1{,}5} \approx 15{,}6\,\mu\text{F}$. Como o roteiro manda adotar o primeiro valor comercial acima do calculado, o capacitor da equipe é de $47\,\mu\text{F}$. O resistor $R_S$ não é calculado nesta seção: ele depende do $V_{min}$ lido na própria bancada, pela Equação 2, conforme o item 4.7 do roteiro.
+
 
 \begin{espec}
 
@@ -414,6 +456,92 @@ Resistor série ($R_S$)
 \bottomrule
 \end{tabular}
 \end{center}
+\begin{espec}
+
+\textbf{Matrícula \mat{22/2005395}.} Considerando os nove dígitos na forma ABCDEFGHI, com o dígito I não nulo,
+
+\begin{equation}
+    A=2,\; B=2,\; C=2,\; D=0,\; E=0,\; F=5,\; G=3,\; H=9,\; I=5
+\end{equation}
+
+A partir desses valores, as especificações individuais exigidas pelo roteiro são:
+
+\begin{itemize}
+    \item \textbf{Fonte:} \\
+    Senoide de 60 Hz com $AB = 22\text{ V}$ de pico a pico. Logo, a amplitude é $V_p = 11\text{ V}$.
+
+    \vspace{0.3cm}
+
+    \item \textbf{Regulação (Zener):} \\
+    O diodo Zener da série BZX84C cuja tensão nominal mais se aproxima de $\frac{V_p}{\sqrt{2}} = \frac{11}{\sqrt{2}} \approx 7{,}78\text{ V}$. Entre os valores disponíveis, o mais próximo é de \textbf{7,5 V} (distância de 0,28 V, contra 0,42 V para 8,2 V).
+
+    \vspace{0.3cm}
+
+    \item \textbf{Carga (Corrente):} \\
+    Corrente $I_L = I \times 100\,\mu\text{A} = 5 \times 100\,\mu\text{A} = 500\,\mu\text{A} = 0{,}5\text{ mA}$ na tensão regulada de $7{,}5\text{ V}$.
+\end{itemize}
+
+\end{espec}
+
+Os componentes da série comercial E12 selecionados para atender a cada especificação, bem como os desvios e dimensionamentos, são detalhados a seguir:
+
+\begin{itemize}
+
+    \item \textbf{Carga ($R_L$):}
+    A resistência de carga necessária para drenar a corrente especificada na tensão regulada é $R_L = \frac{V_Z}{I_L} = \frac{7{,}5}{0{,}5 \times 10^{-3}} = 15\,\mathrm{k}\Omega$, que coincide com o valor comercial E12. Com esse resistor, a corrente real na tensão nominal de $7{,}5\text{ V}$ é $I_{L,\text{real}} = \frac{7{,}5}{15\,\mathrm{k}\Omega} = 0{,}500\text{ mA}$. Esse $R_L$ é mantido constante em todas as seções de simulação.
+
+    \item \textbf{Capacitor de Filtro ($C_1$):}
+    Para um \textit{ripple} máximo ($V_r$) de $1{,}5\text{ V}$ de pico a pico num retificador de meia onda ($f = 60\text{ Hz}$), a Equação 1 do roteiro fornece
+    \[
+    C_1 \approx \frac{I_L}{f \cdot V_r} = \frac{0{,}5 \times 10^{-3}}{60 \times 1{,}5} \approx 5{,}56\,\mu\text{F}
+    \]
+    Arredondando para o valor E12 imediatamente superior, adota-se $C_1 = 5{,}6\,\mu\text{F}$, com desvio de $+0{,}80\%$ em relação ao valor calculado. O capacitor dez vezes maior, utilizado na simulação do item 3, é de $56\,\mu\text{F}$.
+
+    Para a onda completa, a frequência de repetição dos picos passa a ser $120\text{ Hz}$. Com o mesmo capacitor, o ripple teórico é
+    \[
+    V_{r,\text{onda completa}} \approx \frac{0{,}5 \times 10^{-3}}{120 \times 5{,}6 \times 10^{-6}} \approx 0{,}744\text{ V}
+    \]
+
+    \item \textbf{Resistor Série do Regulador ($R_S$):}
+    Utiliza-se a tensão mínima na saída do filtro. Considerando a queda de aproximadamente $0{,}7\text{ V}$ em cada um dos dois diodos que conduzem na ponte, a tensão máxima na saída é $V_{max} \approx 11 - 2(0{,}7) = 9{,}6\text{ V}$, e a tensão mínima do filtro é
+    \[
+    V_{min} \approx V_{max} - V_r = 9{,}6 - 0{,}744 = 8{,}856\text{ V}
+    \]
+    Pela Equação 2 do roteiro, com $I_{Z,min} = 1\text{ mA}$ no vale do ripple,
+    \[
+    R_S = \frac{V_{min} - V_Z}{I_L + I_{Z,min}} = \frac{8{,}856 - 7{,}5}{0{,}5 \times 10^{-3} + 1{,}0 \times 10^{-3}} = \frac{1{,}356}{1{,}5 \times 10^{-3}} \approx 904\,\Omega
+    \]
+    Conforme o procedimento adotado nas demais seções, escolhe-se o valor E12 imediatamente inferior, $R_S = 820\,\Omega$, com desvio de $-9{,}29\%$. Essa escolha garante folga para a corrente no Zener: no vale do ripple, $I_Z = \frac{1{,}356}{820} - 0{,}5 \approx 1{,}15\text{ mA} \geq 1\text{ mA}$.
+
+    Verificando a potência máxima no Zener com a carga retirada ($I_L = 0$) e na crista do sinal ($V_{max} = 9{,}6\text{ V}$):
+    \[
+    I_{Z,max} = \frac{V_{max} - V_Z}{R_S} = \frac{9{,}6 - 7{,}5}{820} \approx 2{,}56\text{ mA}
+    \]
+    \[
+    P_{Z,max} = V_Z \times I_{Z,max} = 7{,}5 \times 2{,}56\text{ mA} \approx 19{,}2\text{ mW}
+    \]
+    Esse valor está muito abaixo do limite de $250\text{ mW}$ do BZX84C, tornando o projeto seguro.
+
+\end{itemize}
+
+A tabela abaixo resume os parâmetros teóricos e os adotados:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Teórico} & \textbf{Adotado (E12)} & \textbf{Desvio} \\
+\midrule
+Amplitude da Fonte ($V_p$) & $11{,}00\text{ V}$ & $11{,}00\text{ V}$ & $0{,}00\%$ \\
+Tensão de Regulação ($V_Z$) & $7{,}78\text{ V}$ & $7{,}50\text{ V}$ & $-3{,}57\%$ \\
+Corrente da Carga ($I_L$) & $0{,}500\text{ mA}$ & $0{,}500\text{ mA}$ & $0{,}00\%$ \\
+Resistor de Carga ($R_L$) & $15\text{ k}\Omega$ & $15\text{ k}\Omega$ & $0{,}00\%$ \\
+Capacitor de Filtro ($C_1$) & $5{,}56\,\mu\text{F}$ & $5{,}6\,\mu\text{F}$ & $+0{,}80\%$ \\
+Resistor do Zener ($R_S$) & $904\,\Omega$ & $820\,\Omega$ & $-9{,}29\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 \section{Metodologia}
 
 % Conte o que você fez e com quais parâmetros, de modo que um colega consiga repetir sem
@@ -571,6 +699,75 @@ Para avaliar as etapas de retificação, filtragem e regulação de tensão, os 
 \end{figure}
 
 
+
+\subsubsection{Lurian Correia Lima (22/2005395)}
+
+\textbf{Configuração e Simulação dos Circuitos}
+
+Para verificar se o projeto atende às especificações da Seção 3, os seis circuitos foram desenhados e simulados no LTspice, conforme a Figura~\ref{fig:circs_lurian}. Em todas as análises, adotou-se a diretiva de regime transitório \texttt{.tran 0 100m 0 20u}, abrangendo seis períodos da rede elétrica de 60 Hz. Os esquemáticos foram configurados da seguinte forma:
+
+\begin{itemize}
+    \item \textbf{Retificador de meia onda (Figura~\ref{fig:circs_lurian}a):} Fonte senoidal de 60 Hz com amplitude de 11 V (\texttt{SINE(0 11 60)}), um diodo 1N4007 e a carga $R_L$ de 15 k$\Omega$.
+
+    \item \textbf{Meia onda com filtro (Figura~\ref{fig:circs_lurian}b):} Capacitor $C_1$ de 5,6 $\mu$F em paralelo com a carga, valor obtido no projeto. Permite medir o \textit{ripple} resultante da retificação de meia onda.
+
+    \item \textbf{Meia onda com filtro 10x maior (Figura~\ref{fig:circs_lurian}c):} O capacitor foi substituído por um de 56 $\mu$F, para observar a redução teórica do \textit{ripple} e o efeito sobre o pico de corrente no diodo durante a condução.
+
+    \item \textbf{Ponte retificadora sem filtro (Figura~\ref{fig:circs_lurian}d):} Ponte de onda completa com quatro diodos 1N4007 e a carga $R_L$, sem capacitor de filtro. A referência (terra) foi posicionada no nó inferior da carga, com a fonte senoidal flutuante.
+
+    \item \textbf{Ponte retificadora com filtro (Figura~\ref{fig:circs_lurian}e):} Capacitor de 5,6 $\mu$F na saída da ponte. Permite comparar o \textit{ripple} em 120 Hz com o obtido na meia onda para o mesmo capacitor.
+
+    \item \textbf{Ponte com filtro e regulação Zener (Figura~\ref{fig:circs_lurian}f):} Acrescentou-se o resistor $R_S$ de 820 $\Omega$ e o diodo Zener \texttt{BZX84C7V5LY} de 7,5 V em paralelo com a carga de 15 k$\Omega$. Esta é a cadeia completa, que deve estabilizar a tensão contínua e suprimir o \textit{ripple} remanescente.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.1-meia_onda_sem_filtro.png}
+    \vspace{2pt}
+    {\small (a) Retificador de meia onda}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.2-meia_onda_com_filtro.png}
+    \vspace{2pt}
+    {\small (b) Meia onda com filtro de 5,6 $\mu$F}
+\end{minipage}
+
+\vspace{12pt}
+
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.2-10x_meia_onda_com_filtro.png}
+    \vspace{2pt}
+    {\small (c) Meia onda com filtro de 56 $\mu$F}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.3-ponte_retificadora_sem_filtro.png}
+    \vspace{2pt}
+    {\small (d) Ponte retificadora sem filtro}
+\end{minipage}
+
+\vspace{12pt}
+
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.5-ponte_retificadora_com_filtro.png}
+    \vspace{2pt}
+    {\small (e) Ponte retificadora com filtro}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/simulacao/3.6-ponte_filtro_regulacao_zener.png}
+    \vspace{2pt}
+    {\small (f) Regulação com Zener (Cadeia completa)}
+\end{minipage}
+
+\caption{Esquemáticos projetados para a matrícula 22/2005395 contendo os componentes da série E12 e a diretiva de simulação de regime transitório aplicada a cada etapa da fonte linear.}
+\label{fig:circs_lurian}
+\end{figure}
 
 \subsection{Montagem em bancada}
 
@@ -1169,6 +1366,93 @@ Na simulação do sexto item, a tensão média considerada na saída regulada fo
 \end{figure}
 
 
+
+\subsubsection{Lurian Correia Lima (22/2005395)}
+
+A Tabela~\ref{tab:resultados_lurian} confronta os valores analíticos, calculados com os componentes da série E12 adotados, com os valores obtidos nas simulações de regime transitório (\texttt{.tran 0 100m 0 20u}) no LTspice.
+
+\begin{table}[H]
+    \centering
+    \caption{Resultados analíticos e simulados dos estágios da fonte de alimentação (matrícula 22/2005395).}
+    \label{tab:resultados_lurian}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Analítico (E12)} & \textbf{Simulado} & \textbf{Erro (\%)} \\
+    \midrule
+    Tensão de pico na carga (meia onda) & $10{,}3\text{ V}$ & $\approx 10{,}5\text{ V}$ & $+1{,}9$ \\
+    Ripple de meia onda ($C=5{,}6\text{ }\mu\text{F}$) & $1{,}49\text{ V}$ & $\approx 1{,}65\text{ V}$ & $+10{,}7$ \\
+    Ripple de meia onda ($C=56\text{ }\mu\text{F}$) & $0{,}149\text{ V}$ & $\approx 0{,}17\text{ V}$ & $+14$ \\
+    Tensão de pico na carga (onda completa) & $9{,}6\text{ V}$ & $\approx 9{,}85\text{ V}$ & $+2{,}6$ \\
+    Ripple de onda completa ($C=5{,}6\text{ }\mu\text{F}$) & $0{,}744\text{ V}$ & $\approx 0{,}75\text{ V}$ & $+0{,}8$ \\
+    Vale da saída do filtro com Zener (item 6) & $8{,}86\text{ V}$ & $\approx 8{,}05\text{ V}$ & $-9{,}1$ \\
+    Ripple da saída do filtro com Zener (item 6) & $0{,}744\text{ V}$ & $\approx 1{,}7\text{ V}$ & $+128$ \\
+    \bottomrule
+    \multicolumn{4}{l}{\footnotesize Valores simulados lidos diretamente dos gráficos, com resolução de cerca de $0{,}1\text{ V}$; os erros são indicativos.}
+    \end{tabular}
+\end{table}
+
+\paragraph{Análise da retificação de meia onda (itens 1, 2 e 3):}
+No primeiro circuito, a tensão de pico na carga é de aproximadamente $10{,}5\text{ V}$, cerca de $0{,}5\text{ V}$ abaixo da amplitude de $11\text{ V}$ da fonte. Essa diferença corresponde à condução de um único diodo 1N4007, e fica abaixo da queda de $0{,}7\text{ V}$ adotada no cálculo. Na saída, a tensão permanece em zero durante todo o semiciclo negativo, como esperado para a meia onda.
+
+Com o capacitor de $5{,}6\text{ }\mu\text{F}$ (item 2), o \textit{ripple} lido é de cerca de $1{,}65\text{ V}$, pouco acima dos $1{,}49\text{ V}$ previstos pela Equação 1. Ao aumentar a capacitância para $56\text{ }\mu\text{F}$ (item 3), o \textit{ripple} cai para cerca de $0{,}17\text{ V}$, quase um décimo do valor anterior.
+
+\paragraph{Análise da ponte retificadora (itens 4 e 5):}
+Na ponte sem filtro (item 4), o pico na carga é de aproximadamente $9{,}85\text{ V}$, uma queda de cerca de $1{,}15\text{ V}$ em relação à fonte, compatível com a condução de dois diodos em série a cada semiciclo. A frequência da ondulação dobra para $120\text{ Hz}$, como se observa no gráfico.
+
+Com o capacitor de $5{,}6\text{ }\mu\text{F}$ na saída da ponte (item 5), o \textit{ripple} é de aproximadamente $0{,}75\text{ V}$, praticamente igual ao valor previsto de $0{,}744\text{ V}$ e cerca de metade do obtido na meia onda com o mesmo capacitor.
+
+\paragraph{Análise da regulação com Zener (item 6):}
+O gráfico do item 6 mostra a tensão no nó de saída do filtro, antes do resistor $R_S$. Nele, o pico é de aproximadamente $9{,}75\text{ V}$ e o vale desce a cerca de $8{,}05\text{ V}$, abaixo dos $8{,}86\text{ V}$ previstos no dimensionamento. O \textit{ripple} resultante, de cerca de $1{,}7\text{ V}$, é mais que o dobro do calculado para a onda completa com o mesmo capacitor. A tensão regulada no Zener e a corrente no diodo não aparecem no gráfico exportado, e por isso não são apresentadas aqui.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.1-meia_onda_sem_filtro_res.png}
+        \vspace{2pt}
+        {\small (a) Tensão: meia onda sem filtro.}
+    \end{minipage}\hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.2-meia_onda_com_filtro_res.png}
+        \vspace{2pt}
+        {\small (b) Meia onda com filtro de $5{,}6\text{ }\mu\text{F}$.}
+    \end{minipage}
+
+    \vspace{12pt}
+
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.2-10x_meia_onda_com_filtro_res.png}
+        \vspace{2pt}
+        {\small (c) Meia onda com filtro de $56\text{ }\mu\text{F}$.}
+    \end{minipage}\hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.3-ponte_retificadora_sem_filtro_res.png}
+        \vspace{2pt}
+        {\small (d) Ponte retificadora sem filtro.}
+    \end{minipage}
+
+    \vspace{12pt}
+
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.5-ponte_retificadora_com_filtro_res.png}
+        \vspace{2pt}
+        {\small (e) Ponte retificadora com filtro de $5{,}6\text{ }\mu\text{F}$.}
+    \end{minipage}\hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/resultados/3.6-ponte_filtro_regulacao_zener_res.png}
+        \vspace{2pt}
+        {\small (f) Saída do filtro com regulação Zener (item 6).}
+    \end{minipage}
+
+    \caption{Resultados gráficos das simulações de projeto dos estágios da fonte linear (matrícula 22/2005395).}
+    \label{fig:graficos_lurian}
+\end{figure}
 
 \subsection{Circuito montado}
 
