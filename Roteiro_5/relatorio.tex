@@ -1420,7 +1420,9 @@ Na ponte sem filtro (item 4), o pico na carga é de aproximadamente $9{,}85\text
 Com o capacitor de $5{,}6\text{ }\mu\text{F}$ na saída da ponte (item 5), o \textit{ripple} é de aproximadamente $0{,}75\text{ V}$, praticamente igual ao valor previsto de $0{,}744\text{ V}$ e cerca de metade do obtido na meia onda com o mesmo capacitor.
 
 \paragraph{Análise da regulação com Zener (item 6):}
-O gráfico do item 6 mostra a tensão no nó de saída do filtro, antes do resistor $R_S$. Nele, o pico é de aproximadamente $9{,}75\text{ V}$ e o vale desce a cerca de $8{,}05\text{ V}$, abaixo dos $8{,}86\text{ V}$ previstos no dimensionamento. O \textit{ripple} resultante, de cerca de $1{,}7\text{ V}$, é mais que o dobro do calculado para a onda completa com o mesmo capacitor. A tensão regulada no Zener e a corrente no diodo não aparecem no gráfico exportado, e por isso não são apresentadas aqui.
+O gráfico do item 6 mostra, em azul, a tensão na carga após o resistor $R_S$ e o diodo Zener. Nele, a tensão sobe de zero até cerca de $7{,}5\text{ V}$ em aproximadamente $2{,}5\text{ ms}$, e a partir daí permanece praticamente constante, em torno de $7{,}47\text{ V}$, durante toda a simulação de $100\text{ ms}$. A variação visível é de cerca de $0{,}03\text{ V}$, no limite de leitura do gráfico. O valor coincide com a tensão nominal do Zener BZX84C7V5 ($7{,}5\text{ V}$) empregado na simulação. As curvas verde e vermelha são as duas tensões dos terminais da fonte, defasadas de $180^\circ$; a diferença entre elas, de cerca de $11\text{ V}$ de pico, é a tensão de entrada da ponte.
+
+O gráfico não mostra a saída do filtro antes de $R_S$, de modo que a atenuação do \textit{ripple} não pode ser calculada a partir dele. Os valores a seguir são calculados com os dados analíticos da tabela, não lidos no gráfico. Com $R_S = 820\,\Omega$ e carga de $15\,\text{k}\Omega$ (corrente de $0{,}5\,\text{mA}$), a corrente no Zener no vale do filtro de $8{,}86\,\text{V}$ seria $\frac{8{,}86 - 7{,}5}{820} - 0{,}5\,\text{mA} \approx 1{,}16\,\text{mA}$, acima do mínimo de $1\,\text{mA}$. Sem carga e no pico de $9{,}6\,\text{V}$, a corrente máxima seria $\frac{9{,}6 - 7{,}5}{820} \approx 2{,}56\,\text{mA}$, com potência de cerca de $19\,\text{mW}$, abaixo do limite de $250\,\text{mW}$ do BZX84C.
 
 \begin{figure}[H]
     \centering
@@ -1464,7 +1466,7 @@ O gráfico do item 6 mostra a tensão no nó de saída do filtro, antes do resis
         \centering
         \includegraphics[width=\linewidth]{imgs/luri/resultados/3.6-ponte_filtro_regulacao_zener_res.png}
         \vspace{2pt}
-        {\small (f) Saída do filtro com regulação Zener (item 6).}
+        {\small (f) Tensão na carga com regulação Zener (item 6).}
     \end{minipage}
 
     \caption{Resultados gráficos das simulações de projeto dos estágios da fonte linear (matrícula 22/2005395).}
