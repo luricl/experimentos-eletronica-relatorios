@@ -71,6 +71,97 @@
 
 \section{Especificação e projeto}
 
+\begin{espec}
+
+\textbf{Matrícula \mat{23/1038626}.} Considerando os nove dígitos na forma ABCDEFGHI:
+
+\begin{equation}
+    A=2,\; B=3,\; C=1,\; D=0,\; E=3,\; F=8,\; G=6,\; H=2,\; I=6
+\end{equation}
+
+A partir desses valores, as especificações individuais exigidas pelo roteiro são:
+
+\begin{itemize}
+    \item \textbf{Comparador:} \hfill\break
+    $R_1 = I\text{ k}\Omega = 6\text{ k}\Omega$ e $R_2 = AB\text{ k}\Omega = 23\text{ k}\Omega$.
+
+\vspace{0.3cm}
+
+    \item \textbf{Integrador:} \hfill\break
+    $R_3 = 33\text{ k}\Omega$ e $C_1 = 1\text{ }\mu\text{F}$.
+    
+    \vspace{0.3cm}
+    
+    \item \textbf{Conformador:} \hfill\break
+    Entrada com a amplitude da onda quadrada, senoide de amplitude $A = (0{,}45 + H/40) V_{\text{T}}$ e quebras em $\theta_{1} = 30^\circ$, $\theta_2 = 50^\circ$ e $\theta_3 = 75^\circ$. (Para $H=2$, a amplitude projetada é $A = 0{,}50 V_{\text{T}}$).
+\end{itemize}
+
+\end{espec}
+
+Os componentes da série comercial E12 selecionados para atender a cada especificação, bem como o desenvolvimento analítico para o seu dimensionamento, são detalhados a seguir:
+
+\begin{itemize}
+
+    \item \textbf{Comparador com Histerese ($R_1$ e $R_2$):} \hfill\break
+    A especificação determina $R_1 = 6\,\mathrm{k}\Omega$ e $R_2 = 23\,\mathrm{k}\Omega$. Como o roteiro permite a utilização de dois resistores em série para compor os valores exatos, adotou-se para a série E12: $R_1 = 3{,}3\,\mathrm{k}\Omega + 2{,}7\,\mathrm{k}\Omega = 6\,\mathrm{k}\Omega$ e $R_2 = 22\,\mathrm{k}\Omega + 1\,\mathrm{k}\Omega = 23\,\mathrm{k}\Omega$. O dimensionamento atende integralmente ao valor teórico sem desvios, resultando na amplitude teórica para a onda triangular de $V_{tri} = \frac{R_1}{R_2}V_{sat} = \frac{6}{23}V_{sat} \approx 0{,}261 V_{sat}$ (Eq. 2).
+
+    \item \textbf{Gerador de Ondas (Integrador e Amplificador):} \hfill\break
+    O filtro integrador utiliza de forma direta os componentes padrões $R_3 = 33\,\mathrm{k}\Omega$ e $C_1 = 1\,\mu\mathrm{F}$. Inserindo os resistores exatos do comparador na Equação 3, a frequência de oscilação teórica estabelece-se em:
+    \[ f = \frac{R_2}{4 R_1 R_3 C_1} = \frac{23\text{ k}}{4 \times 6\text{ k} \times 33\text{ k} \times 1\mu} \approx 29{,}04\text{ Hz} \]
+    Para o estágio do amplificador não inversor do conformador, a fim de recuperar a amplitude da onda quadrada, o ganho teórico deve ser $G = \frac{R_2}{R_1} = \frac{23}{6} \approx 3{,}833$. Sendo a topologia não inversora dada por $G = 1 + \frac{R_f}{R_g}$, a razão necessária é $\frac{R_f}{R_g} = \frac{17}{6} \approx 2{,}833$. Utilizando resistores da série E12, definiu-se $R_g = 12\,\mathrm{k}\Omega$ e $R_f = 33\,\mathrm{k}\Omega + 1\,\mathrm{k}\Omega = 34\,\mathrm{k}\Omega$. Com isso, o ganho real é $1 + \frac{34}{12} = \frac{46}{12} = 3{,}833$, zerando completamente o desvio em relação ao ganho teórico pretendido.
+
+    \item \textbf{Divisor e Conformador a Diodos ($R_4$ a $R_7$ e Malhas de Inclinação):} \hfill\break
+    Projetando o circuito para uma tensão de saturação típica $V_T = V_{sat} \approx 14\text{ V}$ (alimentação $\pm15\text{ V}$), a amplitude da senoide a ser aproximada é:
+    \[ A = \left(0{,}45 + \frac{2}{40}\right)14 = 0{,}50 \times 14 = 7\text{ V} \]
+    Os limiares teóricos de condução (Eq. 5), correspondentes aos ângulos de quebra, são calculados por $V_k = A \text{ sen}(\theta_k)$:
+    \begin{align*}
+        V_1 &= 7 \text{ sen}(30^\circ) = 3{,}500\text{ V} \\
+        V_2 &= 7 \text{ sen}(50^\circ) \approx 5{,}362\text{ V} \\
+        V_3 &= 7 \text{ sen}(75^\circ) \approx 6{,}761\text{ V}
+    \end{align*}
+    
+    Dimensionamento do divisor (Eq. 6): Arbitrando $R_T = 22\,\mathrm{k}\Omega$ (valor dentro da faixa de 15 a 30 $\mathrm{k}\Omega$), calculam-se os resistores para $V_{CC} = 15\text{ V}$:
+    \begin{align*}
+        R_7 &= R_T \frac{V_1 - 0{,}7}{V_{CC}} = 22\text{k} \frac{3{,}5 - 0{,}7}{15} \approx 4{,}106\,\mathrm{k}\Omega \\
+        R_6 &= R_T \frac{V_2 - 0{,}7}{V_{CC}} - R_7 = 22\text{k} \frac{5{,}362 - 0{,}7}{15} - 4{,}106\text{k} \approx 2{,}731\,\mathrm{k}\Omega \\
+        R_5 &= R_T \frac{V_3 - 0{,}7}{V_{CC}} - R_7 - R_6 = 22\text{k} \frac{6{,}761 - 0{,}7}{15} - 6{,}837\text{k} \approx 2{,}052\,\mathrm{k}\Omega \\
+        R_4 &= R_T - R_5 - R_6 - R_7 = 22\text{k} - 8{,}889\text{k} \approx 13{,}111\,\mathrm{k}\Omega
+    \end{align*}
+    Mapeando para a série E12, adotaram-se as associações exatas fornecidas: $R_7 = 3{,}9\,\mathrm{k}\Omega + 150\,\Omega = 4{,}05\,\mathrm{k}\Omega$; $R_6 = 2{,}7\,\mathrm{k}\Omega$; $R_5 = 1{,}8\,\mathrm{k}\Omega + 220\,\Omega = 2{,}02\,\mathrm{k}\Omega$; e $R_4 = 12\,\mathrm{k}\Omega + 1{,}2\,\mathrm{k}\Omega = 13{,}2\,\mathrm{k}\Omega$. O somatório realiza um $R_{T,\text{real}} = 21{,}97\,\mathrm{k}\Omega$.
+
+    Dimensionamento das malhas de inclinação (Eq. 7): O resistor de entrada isola o divisor, definido em $10\times$ o valor de $R_T$. Fixou-se $R_{in} = 220\,\mathrm{k}\Omega$. Os valores da onda triangular nos ângulos de quebra são dados por $V_\theta = V_T \frac{\theta}{90^\circ}$:
+    \[ V_{\theta_2} = 14 \frac{50^\circ}{90^\circ} \approx 7{,}777\text{ V} \quad \text{e} \quad V_{\theta_3} = 14 \frac{75^\circ}{90^\circ} \approx 11{,}666\text{ V} \]
+    Aplicando a equação para o primeiro diodo de inclinação (referenciado como $R_2$ no roteiro, e $R_{c2}$ aqui para evitar ambiguidade):
+    \[ R_{c2} = R_{in} \left( \frac{V_{\theta_2} - V_1}{V_{\theta_2} - V_2} - 1 \right) = 220\text{k} \left( \frac{7{,}777 - 3{,}500}{7{,}777 - 5{,}362} - 1 \right) \approx 169{,}61\,\mathrm{k}\Omega \]
+    Adotou-se a associação $R_{c2} = 150\,\mathrm{k}\Omega + 18\,\mathrm{k}\Omega = 168\,\mathrm{k}\Omega$.
+    
+    Para o segundo diodo ($R_{c3}$), calcula-se primeiro o nível intermediário ideal $V^*$:
+    \[ V^* = V_{\theta_3} - \frac{R_{in}(V_{\theta_3} - V_1)}{R_{in} + R_{c2}} = 11{,}666 - \frac{220\text{k}(11{,}666 - 3{,}500)}{220\text{k} + 168\text{k}} \approx 7{,}036\text{ V} \]
+    Por fim, a resistência teórica do último segmento é:
+    \[ R_{c3} = R_{in} \left( \frac{V^* - V_2}{V^* - V_3} - 1 \right) = 220\text{k} \left( \frac{7{,}036 - 5{,}362}{7{,}036 - 6{,}761} - 1 \right) \approx 1{,}120\,\mathrm{M}\Omega \]
+    Na série E12, adotou-se a associação $R_{c3} = 1\,\mathrm{M}\Omega + 47\,\mathrm{k}\Omega = 1{,}047\,\mathrm{M}\Omega$.
+
+\end{itemize}
+
+A tabela abaixo resume os parâmetros teóricos de projeto e os efetivamente adotados:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Teórico} & \textbf{Adotado (E12 associada)} & \textbf{Desvio} \\
+\midrule
+Resistor do Comparador ($R_1$) & $6{,}00\text{ k}\Omega$ & $6{,}00\text{ k}\Omega$ & $0{,}00\%$ \\
+Resistor do Comparador ($R_2$) & $23{,}00\text{ k}\Omega$ & $23{,}00\text{ k}\Omega$ & $0{,}00\%$ \\
+Frequência Astável ($f$) & $29{,}04\text{ Hz}$ & $29{,}04\text{ Hz}$ & $0{,}00\%$ \\
+Ganho do Amplificador ($G$) & $3{,}833\text{ V/V}$ & $3{,}833\text{ V/V}$ & $0{,}00\%$ \\
+Resistência de Entrada ($R_{in}$ Conformador) & $219{,}70\text{ k}\Omega$ & $220{,}00\text{ k}\Omega$ & $0{,}13\%$ \\
+Resistência de Inclinação ($R_{c2}$ Conformador) & $169{,}61\text{ k}\Omega$ & $168{,}00\text{ k}\Omega$ & $-0{,}95\%$ \\
+Resistência de Inclinação ($R_{c3}$ Conformador) & $1{,}120\text{ M}\Omega$ & $1{,}047\text{ M}\Omega$ & $-6{,}51\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
 % Transcreva os parâmetros que a sua matrícula determina, mostrando a conta a partir dos
 % dígitos.
 
