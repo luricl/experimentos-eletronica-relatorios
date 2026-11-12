@@ -200,6 +200,48 @@ Resistência de Inclinação ($R_{c3}$ Conformador) & $1{,}120\text{ M}\Omega$ &
 
 \subsection{Simulação de projeto, uma por integrante}
 
+\subsubsection{Guilherme Cardoso Oliveira da Silva Júnior (23/1038626)}
+
+\textbf{Configuração e Simulação dos Circuitos}
+
+Para comprovar que o projeto atende às especificações apresentadas na Seção 3 (referentes ao comparador com histerese, integrador e conformador de onda), os três circuitos foram desenhados e simulados no LTspice, conforme a Figura~\ref{fig:circs_guilherme}. Em todas as análises, adotou-se a diretiva de regime transitório de 300 ms (\texttt{.tran 0 300m}). Os esquemáticos foram configurados da seguinte forma:
+
+\begin{itemize}
+    \item \textbf{Comparador com histerese (Fig.~\ref{fig:circs_guilherme}a):} O amplificador LM741 foi configurado com os resistores da malha de realimentação positiva $R_1$ e $R_2$ calculados a partir da matrícula ($6\text{ k}\Omega$ e $23\text{ k}\Omega$, implementados por associações em série). A entrada foi excitada por uma senoide de 10 Hz com amplitude de 10 V para provocar a comutação e revelar os limiares práticos de saturação e transição. 
+    
+    \item \textbf{Gerador de ondas (Fig.~\ref{fig:circs_guilherme}b):} Ao circuito anterior, adicionou-se um segundo estágio (integrador), que recebe a onda quadrada e a devolve em formato triangular. Esse integrador utiliza a especificação geral da turma de $R_3 = 33\text{ k}\Omega$ e $C_1 = 1\text{ }\mu\text{F}$. O pino não inversor de ambos os amplificadores operacionais foi devidamente aterrado, e o circuito partiu do repouso sem sinal de entrada externo (diretiva \texttt{startup}).
+
+    \item \textbf{Cadeia completa e conformador a diodos (Fig.~\ref{fig:circs_guilherme}c):} Inseriu-se um terceiro estágio amplificador não inversor para igualar a amplitude do sinal triangular aos $\approx 14\text{ V}$ da onda quadrada (utilizando as associações para $R_f = 34\text{ k}\Omega$ e $R_g = 12\text{ k}\Omega$). Na saída, instalou-se o divisor resistivo e as malhas com seis diodos 1N4148. Para a avaliação do THD, a diretiva \texttt{.four 29.04 V(v\_sen)} foi introduzida no arquivo.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/cardoso/esquematicos/item_1_esquematico.png}
+    \vspace{2pt}
+    {\small (a) Comparador com histerese excito por sinal senoidal externo.}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/cardoso/esquematicos/item_2_esquemático.png}
+    \vspace{2pt}
+    {\small (b) Gerador astável de onda quadrada e triangular em malha fechada.}
+\end{minipage}
+
+\vspace{12pt}
+
+\begin{minipage}{0.96\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/cardoso/esquematicos/item_3_esquemático.png}
+    \vspace{2pt}
+    {\small (c) Cadeia completa do oscilador acoplada ao estágio conformador a diodos simétrico.}
+\end{minipage}
+
+\caption{Esquemáticos projetados no LTspice para a matrícula 23/1038626, detalhando as associações da série E12 e a integração sucessiva dos estágios.}
+\label{fig:circs_guilherme}
+\end{figure}
+
 % Cada integrante recebeu uma especificação diferente da própria matrícula, e portanto chegou
 % a um dimensionamento diferente. Traga aqui \textbf{uma simulação por integrante}, cada uma
 % com os componentes que aquela pessoa projetou. São elas que mostram se cada projeto cumpre
