@@ -302,6 +302,88 @@ Para comprovar que o projeto atende às especificações apresentadas na Seção
 % Uma tabela por integrante, ou uma tabela única com uma coluna por integrante, confrontando
 % o valor analítico e o simulado para cada grandeza pedida no roteiro.
 
+\section{Resultados}
+
+% Apresente o que vocês obtiveram, em tabela sempre que houver mais de dois números. Use o
+% número de algarismos significativos que a medição sustenta, e não todos os que o programa
+% imprime. Para cada leitura de bancada, informe o instrumento e a incerteza.
+
+% Guarde a interpretação para a seção seguinte: aqui vocês mostram o que encontraram.
+
+\subsection{Projeto de cada integrante}
+
+% Uma tabela por integrante, ou uma tabela única com uma coluna por integrante, confrontando
+% o valor analítico e o simulado para cada grandeza pedida no roteiro.
+
+\subsubsection{Guilherme Cardoso Oliveira da Silva Júnior (23/1038626)}
+
+A Tabela~\ref{tab:resultados_cardoso} apresenta os parâmetros projetados analiticamente a partir dos componentes da série E12, confrontando-os com os resultados medidos nas simulações de regime transitório (\texttt{.tran}) no LTspice, extraídos via diretivas \texttt{.meas}.
+
+\begin{table}[H]
+    \centering
+    \caption{Resultados simulados dos estágios do oscilador astável e conformador (Matrícula 23/1038626).}
+    \label{tab:resultados_cardoso}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Analítico} & \textbf{Simulado} & \textbf{Erro (\%)} \\
+    \midrule    
+    Tensão de Saturação (Item 1, $V_{sat}$) & $14{,}00\text{ V}$ & $14{,}00\text{ V}$ & $0{,}00\%$ \\
+    Limiar de Comutação ($+V_L$) & $3{,}65\text{ V}$ & $3{,}65\text{ V}$ & $0{,}00\%$ \\
+    Frequência do Astável ($f$) & $29{,}04\text{ Hz}$ & $29{,}06\text{ Hz}$ & $0{,}07\%$ \\
+    Amplitude da Onda Triangular ($V_{tri}$) & $3{,}65\text{ V}$ & $3{,}62\text{ V}$ & $-0{,}82\%$ \\
+    Pico da Saída do Amplificador ($V_T$) & $14{,}00\text{ V}$ & $13{,}90\text{ V}$ & $-0{,}71\%$ \\
+    Amplitude da Pseudossenoide ($A$) & $7{,}00\text{ V}$ & $6{,}50\text{ V}$ & $-7{,}14\%$ \\
+    Distorção Harmônica Total (THD) & $\le 10\%$ & $6{,}54\%$ & -- \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\paragraph{Análise do Comparador com Histerese (Item 1):}
+Alimentado por tensões simétricas de $\pm15\text{ V}$, o amplificador LM741 operou na saturação, entregando cravados $\pm14{,}00\text{ V}$ na saída. A simulação confirmou perfeitamente o cálculo teórico dos limiares de histerese (Eq. 1): comutando sempre que o sinal de excitação senoidal cruzava $\pm 3{,}65\text{ V}$, o que comprova que o divisor resistivo na malha de realimentação positiva ($R_1 = 6\text{ k}\Omega$ e $R_2 = 23\text{ k}\Omega$) fixa adequadamente as tensões de instabilidade.
+
+\paragraph{Análise do Gerador de Ondas (Item 2):}
+Fechando a malha com o estágio integrador, a dinâmica de oscilação ocorreu livremente a partir da partida (\texttt{startup}). A simulação mediu uma frequência de $29{,}06\text{ Hz}$, desvio irrelevante (inferior a $0{,}1\%$) em relação à previsão analítica (Eq. 3). A amplitude de pico da onda triangular alcançou $3{,}62\text{ V}$, também alinhada à expectativa teórica limitadora imposta pelos limiares do próprio comparador (Eq. 2). A onda quadrada gerada cravou aproximadamente $\pm13{,}96\text{ V}$, limitando levemente o $V_{sat}$ devido às quedas de tensão internas dos estágios acoplados.
+
+\paragraph{Análise do Conformador e THD (Item 3):}
+Na cadeia completa, o amplificador não inversor resgatou a tensão do sinal triangular, elevando o pico de saída ($V_T$) para $13{,}90\text{ V}$, virtualmente próximo aos $14\text{ V}$ desejados. 
+Após atravessar as três malhas do conformador não linear simétrico, o sinal atingiu um pico pseudossenoidal ($V_{sen}$) de $6{,}50\text{ V}$. O erro de cerca de $-7\%$ frente à amplitude alvo ($7\text{ V}$) justifica-se pelas aproximações compulsórias dos valores resistivos impostas pela série comercial E12 nos nós de inclinação (principalmente em $R_3$). O LTspice realizou a análise de Fourier do sinal gerado (diretiva \texttt{.four}) e acusou uma Distorção Harmônica Total (THD) de apenas $6{,}54\%$. Essa distorção é considerada um excelente resultado de suavização, dado que a topologia implementa apenas três quebras resistivas e alcançou uma qualidade espectral que atende tipicamente aos padrões gerais de geradores de laboratório didático.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/cardoso/resultados/simulacao_item_1_exp6.png}
+        \vspace{2pt}
+        {\small (a) Tensão: Comparador com histerese no domínio do tempo.}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/cardoso/resultados/simulacao_item_2_exp6.png}
+        \vspace{2pt}
+        {\small (b) Tensão: Gerador Astável (Onda Quadrada e Triangular).}
+    \end{minipage}
+
+    \vspace{12pt}
+
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/cardoso/resultados/simulacao_item_3_tempo.png}
+        \vspace{2pt}
+        {\small (c) Tensão: Triângulo de entrada e Pseudossenoide final.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/cardoso/resultados/simulacao_item_3_xy.png}
+        \vspace{2pt}
+        {\small (d) Curva XY: Função de transferência do conformador e quebras de ganho.}
+    \end{minipage}
+    \caption{Resultados gráficos das simulações dos estágios do Roteiro 6.}
+    \label{fig:graficos_cardoso}
+\end{figure}
+
 \subsection{Circuito montado}
 
 % Para cada grandeza, o que o projeto do integrante montado previa, o que a simulação com os
