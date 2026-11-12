@@ -254,6 +254,56 @@ Para comprovar que o projeto atende às especificações apresentadas na Seção
 % usaram, e não os valores nominais impressos no corpo da peça, porque a diferença entre os
 % dois explica boa parte do que vocês vão observar.
 
+A montagem experimental foi realizada conforme a especificação da Equipe 2, detalhada na Seção 4.1 do roteiro. Para a estrutura do gerador de ondas, utilizou-se a base comum a todas as equipes: amplificadores LM741 alimentados simetricamente com $\pm 15\,\text{V}$ (desacoplados por capacitores de $1\,\mu\text{F}$), integrador com capacitor $C = 1\,\mu\text{F}$ e resistores do comparador fixados em $R_1 = 4{,}7\,\text{k}\Omega$ e $R_2 = 10\,\text{k}\Omega$. O estágio amplificador empregou $R_f = 1\,\text{k}\Omega$ e $R_g = 820\,\Omega$. Os componentes do conformador, específicos para a bancada, seguiram o arranjo: $R_1 = 100\,\text{k}\Omega$, $R_2 = 390\,\text{k}\Omega$, $R_3 = 150\,\text{k}\Omega$, $R_4 = 4{,}7\,\text{k}\Omega$, $R_5 = 1{,}2\,\text{k}\Omega$, $R_6 = 1{,}8\,\text{k}\Omega$ e $R_7 = 2{,}7\,\text{k}\Omega$[cite: 6, 7].
+
+Antes de iniciar as montagens, os componentes foram medidos individualmente, conforme solicitado no procedimento experimental, para que a análise dos resultados levasse em consideração os desvios tolerados pelos componentes reais disponíveis no laboratório, assegurando a precisão na verificação das equações de projeto.
+
+Durante todo o experimento, observou-se rigorosamente a manutenção do aterramento comum da fonte de alimentação e das pontas de prova do osciloscópio.
+
+\paragraph{Gerador de ondas quadrada e triangular.}
+
+A primeira montagem consistiu no fechamento da malha entre o comparador com histerese e o integrador. A Figura~\ref{fig:montagem_gerador_33k} apresenta a montagem do gerador utilizando o resistor de integração inicial de $R_3 = 33\,\text{k}\Omega$. Os canais do osciloscópio foram conectados nas saídas dos dois operacionais para registrar simultaneamente os picos de $V_{sat}$ (onda quadrada) e $V_{tri}$ (onda triangular), além da frequência de oscilação do circuito.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]
+    {imgs/bancada/4_2_gerador_ondas_resistor_33kohm.jpeg}
+    \caption{Montagem em bancada do gerador astável com $R_3 = 33\,\text{k}\Omega$.}
+    \label{fig:montagem_gerador_33k}
+\end{figure}
+
+Em seguida, o resistor $R_3$ foi substituído pelo valor secundário atribuído à Equação 2, que é de $R_3 = 22\,\text{k}\Omega$. A Figura~\ref{fig:montagem_gerador_22k} exibe o circuito modificado. Essa troca permitiu a leitura de uma nova frequência de oscilação, viabilizando a comprovação experimental da relação de proporcionalidade inversa entre a frequência e a resistência de integração ditada pela Equação 3 do roteiro.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]
+    {imgs/bancada/4_2_gerador_ondas_resistor_22kohm.jpeg}
+    \caption{Montagem em bancada do gerador astável com o segundo resistor da equipe ($R_3 = 22\,\text{k}\Omega$).}
+    \label{fig:montagem_gerador_22k}
+\end{figure}
+
+\paragraph{Amplificador e conformador.}
+
+Retornando o gerador para a configuração base ($R_3 = 33\,\text{k}\Omega$), acoplou-se o terceiro amplificador operacional (na topologia não inversora) à saída da onda triangular. A Figura~\ref{fig:montagem_amplificador} exibe a montagem deste estágio. A medição neste nó teve como objetivo verificar se o ganho proporcionado por $R_f$ e $R_g$ foi suficiente para equiparar a amplitude da onda triangular ($v_T$) à saturação da onda quadrada original.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]
+    {imgs/bancada/4_3_amplificador_vT.jpeg}
+    \caption{Montagem em bancada do estágio amplificador não inversor para a onda triangular.}
+    \label{fig:montagem_amplificador}
+\end{figure}
+
+Por fim, a saída do amplificador foi conectada à entrada do conformador não linear a diodos, cuja montagem em matriz de contatos é ilustrada na Figura~\ref{fig:montagem_conformador}. Após a inserção dos diodos, as pontas do osciloscópio foram dispostas no sinal de entrada ($v_T$, Canal 1) e no sinal conformado final ($v_{sen}$, Canal 2). 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]
+    {imgs/bancada/4_3_amplificador_e_confomador_vT_vsin.jpeg}
+    \caption{Montagem completa da bancada incluindo o conformador de onda a diodos.}
+    \label{fig:montagem_conformador}
+\end{figure}
+
 \subsection{Simulação da montagem}
 
 % Refaça a simulação usando os valores medidos dos componentes que estavam na bancada. Ela
