@@ -306,28 +306,99 @@ Por fim, a saída do amplificador foi conectada à entrada do conformador não l
 
 \subsection{Simulação da montagem}
 
-% Refaça a simulação usando os valores medidos dos componentes que estavam na bancada. Ela
-% não substitui a simulação de projeto: é a comparação entre as duas que separa o efeito da
-% tolerância dos componentes do restante.
+As simulações desta etapa têm como objetivo reproduzir, no LTspice, as condições efetivamente utilizadas em bancada. Diferentemente da simulação de projeto (Seção 3), na qual os componentes são selecionados a partir dos valores nominais e calculados matematicamente para a matrícula, a simulação da montagem utiliza a topologia geral da turma com os valores exatos medidos fisicamente nos componentes da Equipe 2. 
 
-\begin{nota}{Três comparações, três causas diferentes}
-% Ao longo do relatório vocês vão confrontar três pares de resultados. Cada um responde a uma
-% pergunta distinta, e vale mantê-los separados na hora de discutir.
+A comparação entre os resultados simulados e experimentais permite investigar a influência das tolerâncias reais dos resistores e capacitores na oscilação e na conformação de onda, além de validar o equacionamento teórico frente a assimetrias físicas. Os componentes foram configurados no LTspice com as seguintes resistências e capacitâncias reais, oriundas da tabela de medição de componentes da bancada:
+\begin{itemize}
+    \item \textbf{Gerador:} $R_1 = 4{,}661\,\text{k}\Omega$, $R_2 = 10{,}05\,\text{k}\Omega$, $R_3 = 32{,}50\,\text{k}\Omega$ (e secundário de $21{,}97\,\text{k}\Omega$), $C = 1{,}097\,\mu\text{F}$.
+    \item \textbf{Amplificador:} $R_f = 975\,\Omega$ e $R_g = 825\,\Omega$.
+    \item \textbf{Conformador (Ramos + e - respectivamente):} $R_{in} = 100{,}4\,\text{k}\Omega$, $R_{c2} = \{388{,}8\,\text{k}\Omega;\; 392{,}78\,\text{k}\Omega\}$, $R_{c3} = \{148{,}7\,\text{k}\Omega;\; 146{,}72\,\text{k}\Omega\}$, $R_4 = \{4{,}666\,\text{k}\Omega;\; 4{,}640\,\text{k}\Omega\}$, $R_5 = \{1{,}192\,\text{k}\Omega;\; 1{,}187\,\text{k}\Omega\}$, $R_6 = \{1{,}820\,\text{k}\Omega;\; 1{,}771\,\text{k}\Omega\}$ e $R_7 = \{2{,}678\,\text{k}\Omega;\; 2{,}646\,\text{k}\Omega\}$.
+\end{itemize}
 
-% \smallskip
-% \textbf{Cálculo analítico contra simulação de projeto.} A conta está certa? Se aqui houver
-% diferença, procure na álgebra ou no esquemático.
+As análises transientes foram prolongadas para $500\,\text{ms}$ considerando as frequências mais baixas adotadas no laboratório. Os gráficos apresentados a seguir exibem todo esse intervalo ($0$ a $500\,\text{ms}$) para demonstrar a partida e a dinâmica de estabilização do oscilador, enquanto a extração automatizada dos dados numéricos via diretivas \texttt{.meas} operou exclusivamente na janela estabilizada da simulação.
 
-% \smallskip
-% \textbf{Simulação de projeto contra simulação da montagem.} Quanto custou a tolerância dos
-% componentes? A diferença aqui é a distância entre o valor nominal e o valor real da peça
-% que vocês pegaram.
+\paragraph{Gerador de ondas quadrada e triangular.}
 
-% \smallskip
-% \textbf{Simulação da montagem contra medição.} O modelo descreve o circuito real? Diferença
-% aqui aponta algo que o modelo não representa, como a resistência série do indutor, a
-% impedância da ponta de prova ou a banda do instrumento.
-\end{nota}
+A Figura~\ref{fig:sim_esquematico_gerador_33k} apresenta o esquemático simulado do oscilador astável utilizando o resistor de integração principal medido de $32{,}5\,\text{k}\Omega$. O circuito partiu do repouso sem excitação externa (\texttt{startup}). 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]
+    {imgs/simulacao/sim_bancada_esquematico_gerador_32k.png}
+    \caption{Circuito simulado do gerador de ondas na configuração principal ($R_3 = 32{,}5\,\text{k}\Omega$).}
+    \label{fig:sim_esquematico_gerador_33k}
+\end{figure}
+
+A Figura~\ref{fig:sim_gerador_33k} apresenta os resultados transientes desta topologia. A simulação indicou uma saturação da onda quadrada em aproximadamente $\pm 13{,}95\,\text{V}$. A onda triangular apresentou amplitude de pico de $6{,}42\,\text{V}$, limitando-se exatamente nos limiares de comutação impostos pela malha realimentada positivamente.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]
+    {imgs/simulacao/sim_bancada_gerador_32k.png}
+    \caption{Formas de onda simuladas do gerador na configuração principal.}
+    \label{fig:sim_gerador_33k}
+\end{figure}
+
+A frequência de oscilação extraída pelos cursores simulados foi de $15{,}17\,\text{Hz}$. Esse valor é extremamente coerente com a frequência teórica de bancada prevista pela Equação 3, validando que a constante de tempo do integrador dita rigorosamente a inversão dos estados de saturação.
+
+\paragraph{Gerador com frequência alterada (Equipe 2).}
+
+Para avaliar o efeito da constante de integração, o resistor principal foi substituído pelo valor secundário atribuído à Equação 2, cuja resistência medida foi de $21{,}97\,\text{k}\Omega$. O esquemático modificado está ilustrado na Figura~\ref{fig:sim_esquematico_gerador_22k}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]
+    {imgs/simulacao/sim_bancada_esquematico_gerador_22k.png}
+    \caption{Circuito simulado do gerador com o resistor secundário da equipe ($R_3 = 21{,}97\,\text{k}\Omega$).}
+    \label{fig:sim_esquematico_gerador_22k}
+\end{figure}
+
+As formas de onda resultantes desta modificação estão na Figura~\ref{fig:sim_gerador_22k}. Com a redução do resistor, os patamares de saturação quadrada ($\pm 13{,}94\,\text{V}$) e a amplitude triangular ($6{,}42\,\text{V}$) mantiveram-se inalterados. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]
+    {imgs/simulacao/sim_bancada_gerador_22k.png}
+    \caption{Formas de onda simuladas do gerador após a troca do resistor de integração.}
+    \label{fig:sim_gerador_22k}
+\end{figure}
+
+Contudo, a frequência simulada aumentou proporcionalmente para $22{,}41\,\text{Hz}$. Em bancada, a frequência medida para essa configuração foi de $22{,}73\,\text{Hz}$, atestando que a simulação com componentes reais reproduz com alta fidelidade a física do hardware montado.
+
+\paragraph{Amplificador e conformador não linear.}
+
+A cadeia completa foi simulada reinserindo-se o resistor de $32{,}5\,\text{k}\Omega$ e conectando a saída triangular ao estágio amplificador e, subsequentemente, ao conformador a diodos. As assimetrias típicas de componentes de bancada foram fielmente transcritas para as malhas dos diodos 1N4148, conforme o esquemático da Figura~\ref{fig:sim_esquematico_conformador}. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.96\textwidth]
+    {imgs/simulacao/sim_bancada_esquematico_conformador.png}
+    \caption{Circuito simulado da cadeia completa (gerador, amplificador e conformador não linear) utilizando os valores medidos dos componentes da bancada.}
+    \label{fig:sim_esquematico_conformador}
+\end{figure}
+
+A Figura~\ref{fig:sim_conformador_tempo} exibe a resposta no domínio do tempo e a Figura~\ref{fig:sim_conformador_xy} a curva de transferência estática simulada.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]
+    {imgs/simulacao/sim_bancada_conformador_tempo.png}
+    \caption{Simulação da onda triangular amplificada e da pseudossenoide final conformada.}
+    \label{fig:sim_conformador_tempo}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]
+    {imgs/simulacao/sim_bancada_conformador_xy.png}
+    \caption{Curva de transferência estática simulada (modo XY) detalhando as quebras de inclinação.}
+    \label{fig:sim_conformador_xy}
+\end{figure}
+
+O estágio amplificador elevou a onda triangular para um pico de $V_T = 13{,}72\,\text{V}$, valor muito próximo ao nível de saturação da onda quadrada inicial. A pseudossenoide resultante, exibida no gráfico temporal, sofreu o ceifamento programado pelos diodos e alcançou um pico de $8{,}76\,\text{V}$. A análise de Fourier simulada para este estágio revelou uma Distorção Harmônica Total (THD) excepcional de apenas $1{,}59\%$. 
+
+\paragraph{Síntese das Divergências e Validação do Modelo}
+A análise sequencial dos estágios permitiu isolar as fontes de divergência do projeto, respondendo plenamente aos questionamentos do roteiro. Na etapa de \textbf{projeto}, o confronto entre o modelo analítico e a simulação ideal apresentou erros nulos na frequência e no ganho, validando o equacionamento algébrico. Ao avançar para a \textbf{simulação da montagem}, isolou-se o efeito das tolerâncias das peças: verificou-se que o descasamento ôhmico real entre os ramos positivo e negativo do divisor de tensão não prejudicou o circuito; pelo contrário, introduziu suavizações adicionais nas quebras de reta que reduziram o THD de $6{,}54\%$ para $1{,}59\%$, aproximando a forma de onda final de um sinal senoidal ainda mais puro. Por fim, o confronto direto entre a \textbf{simulação da montagem e a medição física} em bancada (como o desvio de apenas $\approx 0{,}3\text{ Hz}$ na frequência do gerador secundário) confirmou que o modelo SPICE adotado descreve o circuito real com extrema fidelidade, sendo as diferenças residuais atribuídas às tolerâncias de outros parâmetros não diretamente mapeáveis e à dinâmica intrínseca dos CIs empregados.
 
 % \begin{figure}[htb]
 % \centering
@@ -338,19 +409,6 @@ Por fim, a saída do amplificador foi conectada à entrada do conformador não l
 % apenas o nome do circuito.}
 % \label{fig:exemplo}
 % \end{figure}
-
-\section{Resultados}
-
-% Apresente o que vocês obtiveram, em tabela sempre que houver mais de dois números. Use o
-% número de algarismos significativos que a medição sustenta, e não todos os que o programa
-% imprime. Para cada leitura de bancada, informe o instrumento e a incerteza.
-
-% Guarde a interpretação para a seção seguinte: aqui vocês mostram o que encontraram.
-
-\subsection{Projeto de cada integrante}
-
-% Uma tabela por integrante, ou uma tabela única com uma coluna por integrante, confrontando
-% o valor analítico e o simulado para cada grandeza pedida no roteiro.
 
 \section{Resultados}
 
