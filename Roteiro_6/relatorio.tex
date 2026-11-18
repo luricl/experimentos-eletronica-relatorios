@@ -1133,6 +1133,120 @@ A partir desses valores, as especificações individuais exigidas pelo roteiro s
 
 \end{espec}
 
+\phantomsection\label{sec:projeto_lurian}Os componentes da série E12 escolhidos para cada especificação, e as contas que levaram a eles, são apresentados a seguir. Cada resistor é realizado por um único valor E12 ou por dois em série, como permite o roteiro.
+
+\begin{itemize}
+
+    \item \textbf{Comparador com histerese ($R_1$ e $R_2$):}
+
+    O valor $R_2=22\,\text{k}\Omega$ pertence à série E12 e foi usado diretamente. O valor $R_1=5\,\text{k}\Omega$ não pertence, e a associação em série mais próxima encontrada foi
+    \[
+    R_1=4{,}7\,\text{k}\Omega+270\,\Omega=4{,}97\,\text{k}\Omega,
+    \qquad
+    \varepsilon_{R_1}=\frac{4{,}97-5}{5}\times100=-0{,}60\%.
+    \]
+    Pela Equação~\ref{eq:limiares}, os limiares do comparador e, pela Equação~\ref{eq:amplitude_tri}, a amplitude da onda triangular valem
+    \[
+    V_L=\pm V_{tri}=\pm\frac{R_1}{R_2}V_{sat}=\pm\frac{4{,}97}{22}V_{sat}\approx\pm0{,}2259\,V_{sat},
+    \]
+    contra $0{,}2273\,V_{sat}$ com o valor nominal de $5\,\text{k}\Omega$.
+
+    \item \textbf{Gerador de ondas (integrador e amplificador):}
+
+    O integrador usa os valores especificados, $R_3=33\,\text{k}\Omega$ e $C=1\,\mu\text{F}$, ambos da série E12. Pela Equação~\ref{eq:frequencia}, com o $R_1$ nominal,
+    \[
+    f=\frac{R_2}{4R_1R_3C}=\frac{22\times10^3}{4\times5\times10^3\times33\times10^3\times1\times10^{-6}}\approx33{,}33\,\text{Hz},
+    \]
+    e, com o $R_1$ adotado,
+    \[
+    f_{\text{real}}=\frac{22\times10^3}{4\times4{,}97\times10^3\times33\times10^3\times1\times10^{-6}}\approx33{,}53\,\text{Hz}\quad(+0{,}60\%).
+    \]
+
+    O amplificador não inversor deve devolver à onda triangular a amplitude da quadrada. Como a triangular é produzida pelos resistores adotados, o ganho foi calculado com eles:
+    \[
+    G=\frac{R_2}{R_1}=\frac{22}{4{,}97}\approx4{,}427
+    \qquad\Rightarrow\qquad
+    \frac{R_f}{R_g}=G-1\approx3{,}427.
+    \]
+    Fixando $R_g=560\,\Omega$, o valor necessário é $R_f\approx1{,}919\,\text{k}\Omega$, realizado por $R_f=1{,}8\,\text{k}\Omega+120\,\Omega=1{,}92\,\text{k}\Omega$. O ganho obtido é
+    \[
+    G_{\text{real}}=1+\frac{1{,}92}{0{,}56}\approx4{,}429\quad(+0{,}05\%).
+    \]
+
+    \item \textbf{Divisor e conformador a diodos ($R_{c1}$ a $R_{c7}$):}
+
+    Para não confundir com os resistores do gerador, os resistores do conformador são chamados aqui de $R_{c1}$ a $R_{c7}$, na mesma ordem do roteiro. O roteiro manda usar $V_T=V_{sat}$ lido na simulação do gerador, que resultou em $V_T=13{,}96\,\text{V}$ (Seção 5.1). A amplitude da senoide é
+    \[
+    A=0{,}675\times13{,}96\approx9{,}42\,\text{V},
+    \]
+    e os limiares, pela Equação~\ref{eq:limiares_conformador}, são
+    \begin{align*}
+        V_1&=9{,}42\operatorname{sen}(30^\circ)\approx4{,}71\,\text{V}\\
+        V_2&=9{,}42\operatorname{sen}(50^\circ)\approx7{,}22\,\text{V}\\
+        V_3&=9{,}42\operatorname{sen}(75^\circ)\approx9{,}10\,\text{V}
+    \end{align*}
+
+    \textbf{Dimensionamento do divisor:} adotou-se $R_T=20\,\text{k}\Omega$, dentro da faixa de 15 a $30\,\text{k}\Omega$, com $V_{CC}=15\,\text{V}$:
+    \begin{align*}
+        R_{c7}&=R_T\frac{V_1-0{,}7}{V_{CC}}=20\text{k}\,\frac{4{,}71-0{,}7}{15}\approx5{,}349\,\text{k}\Omega\\
+        R_{c6}&=R_T\frac{V_2-0{,}7}{V_{CC}}-R_{c7}=20\text{k}\,\frac{7{,}22-0{,}7}{15}-5{,}349\text{k}\approx3{,}343\,\text{k}\Omega\\
+        R_{c5}&=R_T\frac{V_3-0{,}7}{V_{CC}}-R_{c7}-R_{c6}=20\text{k}\,\frac{9{,}10-0{,}7}{15}-8{,}691\text{k}\approx2{,}511\,\text{k}\Omega\\
+        R_{c4}&=R_T-R_{c5}-R_{c6}-R_{c7}=20\text{k}-11{,}203\text{k}\approx8{,}797\,\text{k}\Omega
+    \end{align*}
+    Na série E12, adotaram-se $R_{c7}=4{,}7\,\text{k}\Omega+680\,\Omega=5{,}38\,\text{k}\Omega$, $R_{c6}=3{,}3\,\text{k}\Omega$, $R_{c5}=1{,}5\,\text{k}\Omega+1\,\text{k}\Omega=2{,}5\,\text{k}\Omega$ e $R_{c4}=8{,}2\,\text{k}\Omega+560\,\Omega=8{,}76\,\text{k}\Omega$, que somam $R_{T,\text{real}}=19{,}94\,\text{k}\Omega$.
+
+    \textbf{Dimensionamento das malhas de inclinação:} o resistor de entrada é $R_{c1}=10R_T=200\,\text{k}\Omega$, realizado por $100\,\text{k}\Omega+100\,\text{k}\Omega$. Os valores do triângulo nos ângulos de quebra são
+    \[
+    V_{\theta_2}=13{,}96\,\frac{50^\circ}{90^\circ}\approx7{,}756\,\text{V}
+    \qquad\text{e}\qquad
+    V_{\theta_3}=13{,}96\,\frac{75^\circ}{90^\circ}\approx11{,}633\,\text{V}.
+    \]
+    Pela Equação~\ref{eq:inclinacao} e pelas expressões que a precedem,
+    \[
+    R_{c2}=R_{c1}\left(\frac{V_{\theta_2}-V_1}{V_{\theta_2}-V_2}-1\right)
+    =200\text{k}\left(\frac{7{,}756-4{,}712}{7{,}756-7{,}218}-1\right)\approx933{,}5\,\text{k}\Omega,
+    \]
+    realizado por $R_{c2}=470\,\text{k}\Omega+470\,\text{k}\Omega=940\,\text{k}\Omega$. Com o valor teórico de $R_{c2}$, o nível intermediário é
+    \[
+    V^*=V_{\theta_3}-\frac{R_{c1}(V_{\theta_3}-V_1)}{R_{c1}+R_{c2}}
+    =11{,}633-\frac{200\text{k}\,(11{,}633-4{,}712)}{200\text{k}+933{,}5\text{k}}\approx10{,}412\,\text{V},
+    \]
+    e a resistência do último segmento é
+    \[
+    R_{c3}=R_{c1}\left(\frac{V^*-V_2}{V^*-V_3}-1\right)
+    =200\text{k}\left(\frac{10{,}412-7{,}218}{10{,}412-9{,}102}-1\right)\approx287{,}5\,\text{k}\Omega,
+    \]
+    realizada por $R_{c3}=220\,\text{k}\Omega+68\,\text{k}\Omega=288\,\text{k}\Omega$.
+
+\end{itemize}
+
+A Tabela~\ref{tab:projeto_lurian} resume os parâmetros teóricos de projeto e os efetivamente adotados.
+
+\begin{table}[H]
+\centering
+\caption{Parâmetros teóricos e adotados no projeto (Matrícula 22/2005395).}
+\label{tab:projeto_lurian}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Grandeza} & \textbf{Teórico} & \textbf{Adotado (E12)} & \textbf{Desvio} \\
+\midrule
+Resistor do comparador ($R_1$) & $5{,}00\,\text{k}\Omega$ & $4{,}97\,\text{k}\Omega$ & $-0{,}60\%$ \\
+Resistor do comparador ($R_2$) & $22{,}00\,\text{k}\Omega$ & $22{,}00\,\text{k}\Omega$ & $0{,}00\%$ \\
+Frequência do astável ($f$) & $33{,}33\,\text{Hz}$ & $33{,}53\,\text{Hz}$ & $+0{,}60\%$ \\
+Ganho do amplificador ($G$) & $4{,}427\,\text{V/V}$ & $4{,}429\,\text{V/V}$ & $+0{,}05\%$ \\
+Resistência de entrada ($R_{c1}$) & $200{,}0\,\text{k}\Omega$ & $200{,}0\,\text{k}\Omega$ & $0{,}00\%$ \\
+Resistência de inclinação ($R_{c2}$) & $933{,}5\,\text{k}\Omega$ & $940{,}0\,\text{k}\Omega$ & $+0{,}70\%$ \\
+Resistência de inclinação ($R_{c3}$) & $287{,}5\,\text{k}\Omega$ & $288{,}0\,\text{k}\Omega$ & $+0{,}16\%$ \\
+Resistor do divisor ($R_{c4}$) & $8{,}797\,\text{k}\Omega$ & $8{,}760\,\text{k}\Omega$ & $-0{,}43\%$ \\
+Resistor do divisor ($R_{c5}$) & $2{,}511\,\text{k}\Omega$ & $2{,}500\,\text{k}\Omega$ & $-0{,}45\%$ \\
+Resistor do divisor ($R_{c6}$) & $3{,}343\,\text{k}\Omega$ & $3{,}300\,\text{k}\Omega$ & $-1{,}27\%$ \\
+Resistor do divisor ($R_{c7}$) & $5{,}349\,\text{k}\Omega$ & $5{,}380\,\text{k}\Omega$ & $+0{,}59\%$ \\
+Resistência total do divisor ($R_T$) & $20{,}00\,\text{k}\Omega$ & $19{,}94\,\text{k}\Omega$ & $-0{,}30\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 
 % Transcreva os parâmetros que a sua matrícula determina, mostrando a conta a partir dos
 % dígitos.
@@ -1212,6 +1326,50 @@ Para comprovar que o projeto atende às especificações apresentadas na Seção
 
 \caption{Esquemáticos projetados no LTspice para a matrícula 23/1038626, detalhando as associações da série E12 e a integração sucessiva dos estágios.}
 \label{fig:circs_guilherme}
+\end{figure}
+
+\subsubsection{Lurian Correia Lima (22/2005395)}
+
+Os circuitos simulados usam os componentes dimensionados na Seção~\ref{sec:projeto_lurian}, resumidos na Tabela~\ref{tab:projeto_lurian}: $R_1=4{,}7\,\text{k}\Omega+270\,\Omega$, $R_2=22\,\text{k}\Omega$, $R_3=33\,\text{k}\Omega$, $C=1\,\mu\text{F}$, $R_g=560\,\Omega$, $R_f=1{,}8\,\text{k}\Omega+120\,\Omega$ e o conformador projetado para $V_T=13{,}96\,\text{V}$ e $A\approx9{,}42\,\text{V}$.
+
+\textbf{Configuração e simulação dos circuitos}
+
+Os três circuitos foram desenhados no LTspice com o LM741 do símbolo do Roteiro 2 e o modelo da \texttt{ene0046.lib}, alimentados com $\pm15\,\text{V}$, conforme a Figura~\ref{fig:circs_lurian}. Todos usam a análise transiente \texttt{.tran 0 300m 0 20u}. O passo máximo de $20\,\mu\text{s}$ foi imposto para que as comutações do comparador, que ocorrem em poucos microssegundos, fossem resolvidas com precisão suficiente para ler os limiares.
+
+\begin{itemize}
+    \item \textbf{Comparador com histerese (item 1, Fig.~\ref{fig:circs_lurian}a):} entrada não inversora recebendo a senoide de $10\,\text{V}$ de pico em $10\,\text{Hz}$ (\texttt{SINE(0 10 10)}) por $R_1=4{,}7\,\text{k}\Omega+270\,\Omega$, realimentação positiva por $R_2=22\,\text{k}\Omega$ e entrada inversora aterrada.
+
+    \item \textbf{Gerador de ondas (item 2, Fig.~\ref{fig:circs_lurian}b):} o comparador anterior, com a entrada substituída pela saída do integrador ($R_3=33\,\text{k}\Omega$ e $C=1\,\mu\text{F}$). Nenhuma fonte de sinal foi usada, e o circuito parte do ponto de operação calculado pelo LTspice.
+
+    \item \textbf{Cadeia completa (item 3, Fig.~\ref{fig:circs_lurian}c):} o gerador, o amplificador não inversor ($R_g=560\,\Omega$, $R_f=1{,}92\,\text{k}\Omega$) e o conformador com os seis diodos 1N4148 e os resistores da Tabela~\ref{tab:projeto_lurian}. A diretiva \texttt{.four 33.5 V(vsen)} acompanha a \texttt{.tran} e fornece a distorção harmônica total no arquivo de registro.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/item1-comparador_com_histerese.png}
+    \vspace{2pt}
+    {\small (a) Comparador com histerese excitado pela senoide de 10 V e 10 Hz.}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/item2-gerador_de_ondas_quadrada_triangular.png}
+    \vspace{2pt}
+    {\small (b) Gerador de ondas quadrada e triangular.}
+\end{minipage}
+
+\vspace{12pt}
+
+\begin{minipage}{0.96\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{imgs/luri/item_3-gerador_+_amplificador.png}
+    \vspace{2pt}
+    {\small (c) Gerador, amplificador não inversor e conformador a diodos.}
+\end{minipage}
+
+\caption{Esquemáticos simulados no LTspice para a matrícula 22/2005395, com as associações E12 de cada estágio.}
+\label{fig:circs_lurian}
 \end{figure}
 
 % Cada integrante recebeu uma especificação diferente da própria matrícula, e portanto chegou
@@ -1462,6 +1620,91 @@ Após atravessar as três malhas do conformador não linear simétrico, o sinal 
     \end{minipage}
     \caption{Resultados gráficos das simulações dos estágios do Roteiro 6.}
     \label{fig:graficos_cardoso}
+\end{figure}
+
+\subsubsection{Lurian Correia Lima (22/2005395)}
+
+A Tabela~\ref{tab:resultados_lurian} confronta os valores analíticos com os lidos nas formas de onda das simulações do LTspice, e a Figura~\ref{fig:graficos_lurian} reúne os gráficos. As leituras foram feitas depois de $50\,\text{ms}$, quando o oscilador já completou o primeiro período. Os valores analíticos de $V_{tri}$, $V_T$, $A$ e dos limiares usam o $V_{sat}$ lido na simulação do item correspondente.
+
+\begin{table}[H]
+    \centering
+    \caption{Resultados analíticos e simulados dos estágios do oscilador e do conformador (Matrícula 22/2005395).}
+    \label{tab:resultados_lurian}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Analítico} & \textbf{Simulado} & \textbf{Desvio} \\
+    \midrule
+    Tensão de saturação (item 1, $V_{sat}$) & -- & $\pm14{,}00\,\text{V}$ & -- \\
+    Limiar inferior ($-V_L$, Eq.~\ref{eq:limiares}) & $-3{,}163\,\text{V}$ & $-3{,}164\,\text{V}$ & $+0{,}02\%$ \\
+    Limiar superior ($+V_L$, Eq.~\ref{eq:limiares}) & $3{,}163\,\text{V}$ & $3{,}162\,\text{V}$ & $-0{,}03\%$ \\
+    \midrule
+    Tensão de saturação (item 2, $v_{\text{qua}}$) & -- & $\pm13{,}96\,\text{V}$ & -- \\
+    Frequência ($f$, Eq.~\ref{eq:frequencia}) & $33{,}53\,\text{Hz}$ & $33{,}53\,\text{Hz}$ & $0{,}00\%$ \\
+    Amplitude da triangular ($V_{tri}$, Eq.~\ref{eq:amplitude_tri}) & $3{,}154\,\text{V}$ & $3{,}14\,\text{V}$ & $-0{,}4\%$ \\
+    \midrule
+    Pico de $v_T$ & $13{,}96\,\text{V}$ & $13{,}76\,\text{V}$ & $-1{,}4\%$ \\
+    Nó do divisor $V_1-0{,}7$ & $4{,}01\,\text{V}$ & $4{,}06\,\text{V}$ & $+1{,}2\%$ \\
+    Nó do divisor $V_2-0{,}7$ & $6{,}52\,\text{V}$ & $6{,}54\,\text{V}$ & $+0{,}4\%$ \\
+    Nó do divisor $V_3-0{,}7$ & $8{,}40\,\text{V}$ & $8{,}42\,\text{V}$ & $+0{,}3\%$ \\
+    Quebra $V_1$ & $4{,}71\,\text{V}$ & $4{,}27\,\text{V}$ & $-9{,}3\%$ \\
+    Quebra $V_2$ & $7{,}22\,\text{V}$ & $6{,}80\,\text{V}$ & $-5{,}8\%$ \\
+    Quebra $V_3$ & $9{,}10\,\text{V}$ & $8{,}76\,\text{V}$ & $-3{,}8\%$ \\
+    Pico de $v_{\text{sen}}$ ($A$) & $9{,}42\,\text{V}$ & $8{,}90\,\text{V}$ & $-5{,}6\%$ \\
+    Fundamental de $v_{\text{sen}}$ (\texttt{.four}) & $9{,}42\,\text{V}$ & $9{,}08\,\text{V}$ & $-3{,}7\%$ \\
+    Distorção harmônica total (THD) & -- & $1{,}16\%$ & -- \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\paragraph{Comparador com histerese (item 1):}
+A saída comutou entre $\pm14{,}00\,\text{V}$. A transição para $-V_{sat}$ ocorreu quando a entrada desceu a $-3{,}164\,\text{V}$, e o retorno para $+V_{sat}$ quando ela subiu a $+3{,}162\,\text{V}$. Com $V_{sat}=14{,}00\,\text{V}$ e $R_1/R_2=4{,}97/22$, a Equação~\ref{eq:limiares} prevê $\pm3{,}163\,\text{V}$, de modo que os dois limiares coincidem com o previsto dentro de $0{,}03\%$. Os instantes de comutação (Fig.~\ref{fig:graficos_lurian}a) se repetem a cada $100\,\text{ms}$, o período da senoide de entrada.
+
+\paragraph{Gerador de ondas (item 2):}
+Em regime, a onda quadrada ficou entre $+13{,}96\,\text{V}$ e $-13{,}96\,\text{V}$ e a triangular entre $+3{,}140\,\text{V}$ e $-3{,}142\,\text{V}$. O período medido entre subidas consecutivas de $v_{\text{qua}}$ foi de $29{,}82\,\text{ms}$, ou seja, $f=33{,}53\,\text{Hz}$, igual ao previsto pela Equação~\ref{eq:frequencia}. Com o $V_{sat}=13{,}96\,\text{V}$ deste circuito, a Equação~\ref{eq:amplitude_tri} prevê $V_{tri}=3{,}154\,\text{V}$, $0{,}4\%$ acima do simulado.
+
+No início da simulação, ambas as saídas estão em praticamente $0\,\text{V}$ ($v_{\text{qua}}=4{,}4\,\text{mV}$ e $v_{\text{tri}}=-1{,}9\,\text{mV}$). A saída do comparador vai a $-V_{sat}$ em $t\approx1{,}5\,\text{ms}$, e a primeira subida regular de $v_{\text{qua}}$ acontece em $t=8{,}99\,\text{ms}$; a partir daí o período se mantém constante (Fig.~\ref{fig:graficos_lurian}b). O ponto de equilíbrio com todas as tensões nulas existe, mas é instável por causa da realimentação positiva, e qualquer desvio nas entradas basta para levar a saída à saturação. O modelo do LM741 da \texttt{ene0046.lib} inclui uma fonte de tensão de desvio de $1\,\text{mV}$ em série com a entrada (\texttt{BOS}), que é a perturbação mais provável para essa partida. Essa causa não foi isolada simulando o circuito sem a fonte.
+
+\paragraph{Amplificador e conformador (item 3):}
+O amplificador elevou o pico de $v_T$ a $13{,}76\,\text{V}$, $1{,}4\%$ abaixo de $V_{sat}=13{,}96\,\text{V}$. O ganho de $4{,}429$ aplicado a $V_{tri}=3{,}14\,\text{V}$ levaria a $13{,}9\,\text{V}$, e a diferença restante se deve à excursão de saída do LM741, que agora fornece corrente também ao conformador. A frequência permaneceu em $33{,}53\,\text{Hz}$.
+
+Os nós do divisor ficaram em $\pm4{,}06$, $\pm6{,}54$ e $\pm8{,}42\,\text{V}$, até $1{,}2\%$ acima do projeto. As quebras foram localizadas na curva de transferência $v_{\text{sen}}\times v_T$ (Fig.~\ref{fig:graficos_lurian}d) pela interseção das retas ajustadas a cada trecho. As inclinações dos quatro trechos são $1{,}000$, $0{,}831$, $0{,}540$ e $0{,}051$, e as quebras ocorrem em $v_{\text{sen}}=4{,}27$, $6{,}80$ e $8{,}76\,\text{V}$, simétricas no semiciclo negativo. Todas estão abaixo dos limiares $V_k$ da Equação~\ref{eq:limiares_conformador}, com desvio que diminui de $-9{,}3\%$ na primeira para $-3{,}8\%$ na terceira, enquanto os nós do divisor ficaram acima do projeto. Isso indica que os diodos passam a conduzir com uma queda menor que os $0{,}7\,\text{V}$ adotados.
+
+O pico de $v_{\text{sen}}$ foi de $8{,}90\,\text{V}$, $5{,}6\%$ abaixo de $A=9{,}42\,\text{V}$, e a componente fundamental fornecida pela \texttt{.four} foi de $9{,}08\,\text{V}$. A distorção harmônica total foi de $1{,}16\%$. Só os harmônicos ímpares são relevantes, como esperado de uma forma de onda simétrica, e o $5^\circ$ domina ($64{,}5\,\text{mV}$, $0{,}71\%$ da fundamental), seguido pelo $9^\circ$ ($0{,}49\%$), pelo $3^\circ$ ($0{,}49\%$) e pelo $7^\circ$ ($0{,}25\%$).
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/item1-comparador_com_histerese_graph.png}
+        \vspace{2pt}
+        {\small (a) Item 1: entrada senoidal $v_i$ (verde) e saída $v_o$ (azul).}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/item2-gerador_de_ondas_quadrada_triangular_graph.png}
+        \vspace{2pt}
+        {\small (b) Item 2: $v_{\text{qua}}$ (verde) e $v_{\text{tri}}$ (azul).}
+    \end{minipage}
+
+    \vspace{12pt}
+
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/item_3-gerador_+_amplificador_graph.png}
+        \vspace{2pt}
+        {\small (c) Item 3: $v_T$ (verde) e $v_{\text{sen}}$ (azul) no tempo.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/luri/item_3-gerador_+_amplificador_four_graph.png}
+        \vspace{2pt}
+        {\small (d) Item 3: $v_{\text{sen}}$ (azul) e $v_T$ (verde) em função de $v_T$.}
+    \end{minipage}
+    \caption{Resultados das simulações de projeto da matrícula 22/2005395.}
+    \label{fig:graficos_lurian}
 \end{figure}
 
 \subsection{Circuito montado}
