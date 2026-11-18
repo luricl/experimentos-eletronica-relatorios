@@ -21,7 +21,7 @@
 \input{estilo-relatorio}
 
 % --------------------------- IDENTIFICACAO ---------------------------------
-\roteiro{1}{Simulação de Circuitos: Introdução ao LTspice}
+\roteiro{6}{Simulação de Circuitos: Introdução ao LTspice}
 \aturma{03}
 
 \autorum{Lurian Correia Lima}{22/2005395} 
@@ -33,43 +33,511 @@
 \capa
 
 \begin{resumo}
-% Escreva este parágrafo por último, com 100 a 150 palavras. Diga o que você projetou, sob
-% qual especificação, o que simulou ou mediu, o principal resultado numérico e a que
-% conclusão chegou. Quem ler só este parágrafo deve saber o que você fez e o que encontrou.
+Este trabalho apresenta o projeto e a análise experimental de um circuito oscilador astável com conformação de onda, desenvolvido conforme as especificações do Roteiro 6 da disciplina de Laboratório de Eletrônica. O sistema é composto por um comparador com histerese, um integrador, um amplificador não inversor e um conformador a diodos, utilizando amplificadores operacionais LM741. Para a Equipe 2, foram especificados resistores de 4,7 k$\Omega$ e 10 k$\Omega$ no comparador, capacitor de 1 $\mu$F e resistores de integração de 33 k$\Omega$ e 22 k$\Omega$. Foram determinadas teoricamente as frequências de oscilação de aproximadamente 16,12 Hz e 24,15 Hz, respectivamente, além das amplitudes das formas de onda. Por fim, investigou-se a aproximação de uma senoide por segmentos lineares e o comportamento do circuito.
 \end{resumo}
 
 \section{Introdução}
 
-% Comece pelo problema, e não pelo circuito. Que necessidade de engenharia deu origem a esta
-% topologia, onde você a encontraria em um equipamento real e o que aconteceria sem ela. Duas
-% ou três referências ajudam aqui.
+A geração e o condicionamento de sinais elétricos constituem operações fundamentais em sistemas eletrônicos, sendo empregados em aplicações como geradores de funções, sistemas de instrumentação, circuitos de temporização e processamento analógico de sinais. Em diversas dessas aplicações, é necessário produzir sinais periódicos com características específicas de frequência, amplitude e forma de onda. A ausência de circuitos adequados para essa finalidade pode comprometer a temporização, a interpretação e o processamento dos sinais em sistemas eletrônicos.
 
-% Depois estreite o foco: que aspecto você vai investigar, sob quais condições, e por que
-% vale a pena verificá-lo. Se o roteiro impõe alguma restrição de projeto que parece
-% arbitrária, aproveite para explicar a razão dela.
+Uma das soluções utilizadas para a geração autônoma de sinais periódicos é a associação de amplificadores operacionais em configurações de comparador com histerese e integrador. A realimentação positiva presente no comparador permite estabelecer dois limiares distintos de comutação, enquanto o integrador converte a onda quadrada produzida pelo comparador em uma onda triangular. A interligação desses estágios forma um oscilador astável, capaz de produzir simultaneamente sinais quadrados e triangulares sem a necessidade de uma entrada periódica externa. Essa topologia pode ser encontrada em geradores de sinais e circuitos de temporização, nos quais a frequência de oscilação depende dos componentes empregados e pode ser ajustada por meio de alterações na resistência ou na capacitância do integrador.
 
-% No último parágrafo, diga qual é o objetivo deste relatório e como o texto está
-% organizado, seção a seção.
+Além da geração de sinais, determinadas aplicações exigem formas de onda aproximadamente senoidais. Como a onda triangular apresenta conteúdo harmônico significativo, sua utilização direta pode não atender aos requisitos de sistemas que demandam sinais com menor distorção harmônica. Uma alternativa consiste na utilização de um conformador de onda baseado em diodos, que modifica progressivamente a inclinação do sinal por meio de diferentes níveis de condução, aproximando sua forma de uma senoide. Um amplificador não inversor é empregado antes desse estágio para ajustar a amplitude do sinal triangular às condições necessárias ao conformador.
+
+Nesse contexto, o presente trabalho tem como objetivo projetar, simular e analisar experimentalmente um oscilador astável com conformação de onda, utilizando amplificadores operacionais LM741 alimentados com tensões de $+15$ V e $-15$ V. Para a Equipe 2, são investigadas as frequências de oscilação obtidas com resistências de integração de 33 k$\Omega$ e 22 k$\Omega$, mantendo os demais componentes do gerador constantes. Também são analisados o comportamento do amplificador não inversor e a atuação do conformador a diodos na aproximação de uma senoide. O relatório apresenta inicialmente os fundamentos teóricos dos circuitos envolvidos, seguido da especificação e do dimensionamento dos componentes. Posteriormente, são apresentados os procedimentos de montagem, simulação e medição, permitindo comparar os resultados teóricos, simulados e experimentais.
 
 \section{Fundamentação teórica}
 
-% Deduza as expressões que você vai usar mais adiante, partindo das leis de circuito.
-% Numere as equações que forem retomadas no restante do texto.
+\subsection{Amplificador operacional e realimentação positiva}
 
-% \begin{equation}
-% H(j\omega) = \frac{1}{1+j\omega RC}
-% \label{eq:exemplo}
-% \end{equation}
+O amplificador operacional é um dispositivo eletrônico que amplifica a diferença de tensão entre suas entradas inversora e não inversora. Seu comportamento pode ser descrito, em primeira aproximação, por:
 
-% Toda grandeza que aparecer nos resultados precisa ter sido apresentada aqui. Explique o que
-% cada termo significa fisicamente, não apenas o que a letra representa. Registre as hipóteses
-% que você está assumindo, como linearidade ou idealidade dos componentes: se alguma delas
-% não se sustentar no experimento, você vai retomá-la na discussão.
+\begin{equation}
+v_o=A_{OL}(v_+-v_-)
+\end{equation}
 
-% Se o circuito tiver regimes de funcionamento distintos, apresente cada um e diga o que os
-% separa.
+em que $v_o$ representa a tensão de saída, $A_{OL}$ é o ganho de malha aberta e $v_+$ e $v_-$ correspondem às tensões nas entradas não inversora e inversora, respectivamente.
+
+Quando há realimentação negativa, uma parcela da saída é aplicada à entrada inversora, fazendo com que o circuito tenda a reduzir a diferença entre as entradas. Em condições apropriadas, essa configuração permite utilizar a aproximação de curto virtual.
+
+Por outro lado, na realimentação positiva, parte da saída é aplicada à entrada não inversora. Nesse caso, qualquer pequena diferença entre as entradas tende a ser amplificada, levando a saída rapidamente à saturação positiva ou negativa.
+
+Esse comportamento é utilizado no comparador com histerese, no qual existem dois limiares de comutação distintos. A saída permanece em um dos estados de saturação até que a tensão de entrada ultrapasse o limiar correspondente ao sentido da transição. Dessa forma, o estado da saída depende não apenas da entrada instantânea, mas também do estado anterior do circuito.
+
+\subsection{Comparador com histerese}
+
+O comparador com histerese utilizado no oscilador apresenta a entrada inversora conectada ao terra, enquanto a entrada não inversora recebe uma combinação das tensões de entrada e de saída por meio dos resistores $R_1$ e $R_2$.
+
+Considerando inicialmente a saída saturada em $+V_{sat}$, a tensão na entrada não inversora é determinada pelo divisor resistivo formado pelos dois resistores. A comutação ocorre quando essa tensão alcança zero, estabelecendo o limiar inferior. Quando a saída está em $-V_{sat}$, o processo se inverte e determina-se o limiar superior.
+
+Aplicando a análise nodal ao terminal não inversor, obtêm-se os limiares:
+
+\begin{equation}
+V_L=\pm\frac{R_1}{R_2}V_{sat}
+\label{eq:limiares}
+\end{equation}
+
+Portanto, a largura da histerese depende da razão entre as resistências e da tensão de saturação do amplificador operacional.
+
+A saída do comparador apresenta uma onda quadrada que alterna entre $+V_{sat}$ e $-V_{sat}$. A utilização de dois limiares distintos evita comutações sucessivas provocadas por pequenas variações de tensão próximas ao ponto de transição.
+
+\subsection{Oscilador astável: associação entre comparador e integrador}
+
+A associação de um comparador com histerese e um integrador inversor permite construir um oscilador astável, capaz de produzir simultaneamente ondas quadradas e triangulares.
+
+O integrador é constituído por um amplificador operacional, um resistor de entrada $R_3$ e um capacitor $C$ na realimentação. Considerando um amplificador operacional ideal, a relação entre a tensão de entrada e a tensão de saída pode ser expressa por:
+
+\begin{equation}
+v_{tri}(t)=-\frac{1}{R_3C}
+\int v_{qua}(t)\,dt
+\end{equation}
+
+Derivando essa expressão em relação ao tempo:
+
+\begin{equation}
+\frac{dv_{tri}}{dt}
+=-\frac{v_{qua}}{R_3C}
+\end{equation}
+
+Como a saída do comparador permanece alternando entre $+V_{sat}$ e $-V_{sat}$, a tensão na saída do integrador apresenta uma variação linear, formando uma onda triangular.
+
+Quando a saída do comparador está em $+V_{sat}$, a tensão triangular diminui com inclinação constante. Ao atingir o limiar inferior do comparador, ocorre a inversão da saída para $-V_{sat}$, fazendo com que a tensão triangular passe a aumentar. Quando o limiar superior é atingido, o processo se repete.
+
+A amplitude de pico da onda triangular corresponde ao valor dos limiares do comparador:
+
+\begin{equation}
+V_{tri}=\frac{R_1}{R_2}V_{sat}
+\label{eq:amplitude_tri}
+\end{equation}
+
+O período de oscilação pode ser determinado considerando que, durante cada semiperíodo, a tensão triangular percorre uma variação de $2V_{tri}$. Assim:
+
+\begin{equation}
+\frac{T}{2}=
+\frac{2V_{tri}R_3C}{V_{sat}}
+\end{equation}
+
+Substituindo a Equação \ref{eq:amplitude_tri} e considerando que $f=1/T$, obtém-se:
+
+\begin{equation}
+f=\frac{R_2}{4R_1R_3C}
+\label{eq:frequencia}
+\end{equation}
+
+Essa expressão demonstra que a frequência de oscilação é inversamente proporcional à resistência e à capacitância do integrador. Portanto, aumentando $R_3$ ou $C$, a frequência diminui, enquanto a redução desses componentes provoca o aumento da frequência.
+
+É importante observar que a oscilação exige $R_1<R_2$, pois os limiares precisam permanecer abaixo da tensão de saturação que o integrador consegue atingir.
+
+\subsection{Amplificador não inversor}
+
+A amplitude da onda triangular produzida pelo oscilador é inferior à amplitude da onda quadrada, devido à razão entre os resistores do comparador.
+
+Para adequar o sinal às condições de funcionamento do conformador, utiliza-se um amplificador operacional na configuração não inversora. Essa topologia permite amplificar o sinal sem inverter sua fase.
+
+O ganho de tensão é determinado pela relação entre os resistores de realimentação:
+
+\begin{equation}
+G=1+\frac{R_f}{R_g}
+\end{equation}
+
+Para recuperar a amplitude da onda quadrada, o ganho ideal necessário é:
+
+\begin{equation}
+G=\frac{R_2}{R_1}
+\label{eq:ganho}
+\end{equation}
+
+Dessa forma, o sinal amplificado, denominado $v_T$, apresenta amplitude de pico aproximadamente igual à tensão de saturação do oscilador:
+
+\begin{equation}
+V_T\approx V_{sat}
+\end{equation}
+
+Essa condição é importante para que o conformador receba um sinal com amplitude adequada à implementação dos diferentes segmentos de inclinação.
+
+\subsection{Conformador de onda a diodos}
+
+O conformador a diodos tem como finalidade aproximar a onda triangular amplificada de uma onda senoidal. Seu funcionamento baseia-se na alteração progressiva da inclinação do sinal de saída, utilizando diodos que entram em condução quando determinadas tensões são atingidas.
+
+O circuito possui um divisor resistivo simétrico, conectado entre as alimentações $+V_{CC}$ e $-V_{CC}$, responsável por estabelecer os níveis de referência. Quando a tensão de entrada ultrapassa determinado nível, considerando a queda de aproximadamente $0,7$ V no diodo de silício 1N4148, ocorre sua condução, modificando a resistência equivalente do circuito e, consequentemente, a inclinação da tensão de saída.
+
+A senoide que se deseja aproximar possui amplitude definida pela especificação do roteiro:
+
+\begin{equation}
+A=\left(0,45+\frac{H}{40}\right)V_T
+\end{equation}
+
+Para o projeto de bancada da Equipe 2, o roteiro estabelece:
+
+\begin{equation}
+A=\frac{2}{3}V_T
+\end{equation}
+
+Os três níveis de quebra são calculados a partir dos ângulos especificados:
+
+\begin{equation}
+V_k=A\sin(\theta_k), \qquad k=1,2,3
+\label{eq:limiares_conformador}
+\end{equation}
+
+Os ângulos correspondentes são $30^\circ$, $50^\circ$ e $75^\circ$. Cada um deles determina um ponto no qual a inclinação do sinal de saída deve ser modificada.
+
+O divisor resistivo é dimensionado a partir da resistência total:
+
+\begin{equation}
+R_T=R_4+R_5+R_6+R_7
+\end{equation}
+
+A partir dos níveis de referência, os resistores são calculados por:
+
+\begin{equation}
+R_7=R_T\frac{V_1-0,7}{V_{CC}}
+\end{equation}
+
+\begin{equation}
+R_6=R_T\frac{V_2-0,7}{V_{CC}}-R_7
+\end{equation}
+
+\begin{equation}
+R_5=R_T\frac{V_3-0,7}{V_{CC}}-R_7-R_6
+\end{equation}
+
+\begin{equation}
+R_4=R_T-R_5-R_6-R_7
+\label{eq:divisor}
+\end{equation}
+
+O resistor de entrada é definido como dez vezes a resistência total do divisor:
+
+\begin{equation}
+R_{\text{in}}=10R_T
+\end{equation}
+
+Essa relação reduz a influência da corrente dos diodos sobre os níveis de referência estabelecidos pelo divisor.
+
+Por fim, os resistores associados aos diodos determinam as inclinações dos segmentos de saída. Considerando os valores da onda triangular nos ângulos de quebra:
+
+\begin{equation}
+V_{\theta}=V_T\frac{\theta}{90^\circ}
+\end{equation}
+
+obtêm-se as expressões para o dimensionamento das resistências de inclinação:
+
+\begin{equation}
+R_{c2}=R_{\text{in}}
+\left(
+\frac{V_{\theta_2}-V_1}
+{V_{\theta_2}-V_2}-1
+\right)
+\end{equation}
+
+\begin{equation}
+V^*=V_{\theta_3}-
+\frac{R_{\text{in}}(V_{\theta_3}-V_1)}
+{R_{\text{in}}+R_{c2}}
+\end{equation}
+
+\begin{equation}
+R_{c3}=R_{\text{in}}
+\left(
+\frac{V^*-V_2}{V^*-V_3}-1
+\right)
+\label{eq:inclinacao}
+\end{equation}
+
+A utilização desses diferentes segmentos permite obter uma forma de onda que se aproxima de uma senoide. Entretanto, como o conformador utiliza segmentos lineares, a saída não corresponde a uma senoide ideal, apresentando componentes harmônicas residuais.
+
+\subsection{Distorção harmônica total}
+
+A qualidade da aproximação senoidal produzida pelo conformador pode ser avaliada por meio da distorção harmônica total (THD, do inglês \textit{Total Harmonic Distortion}).
+
+Essa grandeza representa a relação entre o conteúdo harmônico do sinal e sua componente fundamental, sendo expressa por:
+
+\begin{equation}
+THD=
+\frac{\sqrt{V_2^2+V_3^2+\cdots+V_n^2}}
+{V_1}\times100\%
+\end{equation}
+
+em que $V_1$ representa a amplitude eficaz da componente fundamental e $V_2,V_3,\ldots,V_n$ representam as amplitudes eficazes dos harmônicos de ordem superior.
+
+Quanto menor o valor da THD, mais próxima a forma de onda se encontra de uma senoide ideal. No LTspice, essa análise pode ser realizada por meio da diretiva \texttt{.four}, aplicada à tensão de saída do conformador na frequência fundamental do oscilador.
 
 \section{Especificação e projeto}
+
+
+\subsection{Especificação do circuito}
+
+De acordo com a Seção 4.1 do Roteiro 6, o projeto experimental é definido pelo número da equipe. Para a Equipe 2, o circuito gerador de ondas quadrada e triangular utiliza os mesmos componentes básicos para todas as equipes, enquanto o segundo valor de resistência do integrador é utilizado para investigar a influência desse componente na frequência de oscilação.
+
+As especificações estabelecidas são apresentadas a seguir:
+
+\begin{itemize}
+
+    \item \textbf{Gerador de ondas quadrada e triangular:}
+    \begin{itemize}
+        \item $R_1=4,7\,\text{k}\Omega$;
+        \item $R_2=10\,\text{k}\Omega$;
+        \item $R_3=33\,\text{k}\Omega$, inicialmente;
+        \item $R_3=22\,\text{k}\Omega$, na segunda configuração;
+        \item $C=1\,\mu\text{F}$.
+    \end{itemize}
+
+    \item \textbf{Amplificador não inversor:}
+    \begin{itemize}
+        \item $R_f=1\,\text{k}\Omega$;
+        \item $R_g=820\,\Omega$.
+    \end{itemize}
+
+    \item \textbf{Conformador de onda:}
+    \begin{itemize}
+        \item $R_{\text{in}}=100\,\text{k}\Omega$;
+        \item $R_2=390\,\text{k}\Omega$;
+        \item $R_3=150\,\text{k}\Omega$;
+        \item $R_4=4,7\,\text{k}\Omega$;
+        \item $R_5=1,2\,\text{k}\Omega$;
+        \item $R_6=1,8\,\text{k}\Omega$;
+        \item $R_7=2,7\,\text{k}\Omega$.
+    \end{itemize}
+
+\end{itemize}
+
+Os diodos utilizados são do modelo 1N4148, e a alimentação dos amplificadores operacionais LM741 é realizada com tensões simétricas de $+15$ V e $-15$ V.
+
+\subsection{Dimensionamento do gerador de ondas}
+
+O dimensionamento do gerador é realizado utilizando as Equações \ref{eq:amplitude_tri} e \ref{eq:frequencia}, apresentadas na fundamentação teórica.
+
+Inicialmente, considerando os valores especificados para o comparador e para o integrador, a amplitude de pico da onda triangular é determinada por:
+
+\begin{equation}
+V_{tri}=\frac{R_1}{R_2}V_{sat}
+\end{equation}
+
+Substituindo os valores:
+
+\begin{equation}
+V_{tri}=\frac{4,7}{10}V_{sat}
+\end{equation}
+
+\begin{equation}
+\boxed{V_{tri}=0,47V_{sat}}
+\end{equation}
+
+Considerando uma tensão de saturação aproximada de $14$ V, obtém-se:
+
+\begin{equation}
+V_{tri}=0,47\times14
+\end{equation}
+
+\begin{equation}
+\boxed{V_{tri}=6,58\,\text{V}}
+\end{equation}
+
+A frequência de oscilação é calculada pela Equação \ref{eq:frequencia}:
+
+\begin{equation}
+f=\frac{R_2}{4R_1R_3C}
+\end{equation}
+
+Para a primeira configuração, com $R_3=33\,\text{k}\Omega$:
+
+\begin{equation}
+f_1=
+\frac{10\times10^3}
+{4(4,7\times10^3)(33\times10^3)(1\times10^{-6})}
+\end{equation}
+
+\begin{equation}
+\boxed{f_1\approx16,12\,\text{Hz}}
+\end{equation}
+
+Na segunda configuração, substituindo o resistor de integração por $22\,\text{k}\Omega$:
+
+\begin{equation}
+f_2=
+\frac{10\times10^3}
+{4(4,7\times10^3)(22\times10^3)(1\times10^{-6})}
+\end{equation}
+
+\begin{equation}
+\boxed{f_2\approx24,15\,\text{Hz}}
+\end{equation}
+
+Portanto, a substituição do resistor de $33\,\text{k}\Omega$ pelo de $22\,\text{k}\Omega$ resulta em um aumento da frequência de oscilação, mantendo aproximadamente constante a amplitude da onda triangular.
+
+\subsection{Dimensionamento do amplificador não inversor}
+
+O amplificador não inversor é responsável por recuperar a amplitude da onda triangular, de modo que seu valor de pico se aproxime da tensão de saturação do comparador.
+
+O ganho teórico necessário é:
+
+\begin{equation}
+G_{\text{teórico}}=\frac{R_2}{R_1}
+\end{equation}
+
+\begin{equation}
+G_{\text{teórico}}=\frac{10}{4,7}
+\end{equation}
+
+\begin{equation}
+\boxed{G_{\text{teórico}}\approx2,128}
+\end{equation}
+
+Entretanto, os resistores especificados para a Equipe 2 são $R_f=1\,\text{k}\Omega$ e $R_g=820\,\Omega$. Assim, o ganho efetivamente estabelecido pelos componentes é:
+
+\begin{equation}
+G_{\text{real}}=1+\frac{R_f}{R_g}
+\end{equation}
+
+\begin{equation}
+G_{\text{real}}=1+\frac{1000}{820}
+\end{equation}
+
+\begin{equation}
+\boxed{G_{\text{real}}\approx2,220}
+\end{equation}
+
+A diferença entre os ganhos é de aproximadamente $4,31\%$. Portanto, o ganho adotado é ligeiramente superior ao valor teórico necessário, mas permanece dentro da tolerância de $15\%$ estabelecida pelo roteiro.
+
+Considerando $V_{tri}=6,58$ V, a amplitude de pico estimada na saída do amplificador será:
+
+\begin{equation}
+V_T=G_{\text{real}}V_{tri}
+\end{equation}
+
+\begin{equation}
+V_T=2,220\times6,58
+\end{equation}
+
+\begin{equation}
+\boxed{V_T\approx14,61\,\text{V}}
+\end{equation}
+
+Esse resultado representa uma estimativa idealizada. Na prática, a excursão de saída do LM741 é limitada pelas tensões de alimentação e pelas características não ideais do amplificador, de modo que o valor efetivamente obtido deve ser determinado por simulação e medição.
+
+\subsection{Dimensionamento do conformador de onda}
+
+Para o conformador de onda, o roteiro estabelece uma amplitude de senoide desejada correspondente a dois terços da amplitude da onda triangular amplificada:
+
+\begin{equation}
+A=\frac{2}{3}V_T
+\end{equation}
+
+Adotando o valor de projeto $V_T=14$ V, conforme indicado na especificação de bancada:
+
+\begin{equation}
+A=\frac{2}{3}\times14
+\end{equation}
+
+\begin{equation}
+\boxed{A\approx9,33\,\text{V}}
+\end{equation}
+
+Os níveis de quebra são determinados pela Equação \ref{eq:limiares_conformador}:
+
+\begin{equation}
+V_k=A\sin(\theta_k)
+\end{equation}
+
+Para o primeiro ângulo, $\theta_1=30^\circ$:
+
+\begin{equation}
+V_1=9,33\sin(30^\circ)
+\end{equation}
+
+\begin{equation}
+\boxed{V_1\approx4,67\,\text{V}}
+\end{equation}
+
+Para o segundo ângulo, $\theta_2=50^\circ$:
+
+\begin{equation}
+V_2=9,33\sin(50^\circ)
+\end{equation}
+
+\begin{equation}
+\boxed{V_2\approx7,15\,\text{V}}
+\end{equation}
+
+Para o terceiro ângulo, $\theta_3=75^\circ$:
+
+\begin{equation}
+V_3=9,33\sin(75^\circ)
+\end{equation}
+
+\begin{equation}
+\boxed{V_3\approx9,01\,\text{V}}
+\end{equation}
+
+O roteiro fornece como valores de referência para a montagem os limiares de aproximadamente $4,6$ V, $7,2$ V e $8,9$ V. Esses valores são utilizados no projeto do divisor resistivo e na determinação dos pontos de condução dos diodos.
+
+Para o divisor, estabelece-se uma resistência total:
+
+\begin{equation}
+R_T=R_4+R_5+R_6+R_7
+\end{equation}
+
+O roteiro utiliza $R_T=10\,\text{k}\Omega$ como referência para o projeto experimental. Dessa forma, o resistor de entrada deve corresponder a:
+
+\begin{equation}
+R_{\text{in}}=10R_T
+\end{equation}
+
+\begin{equation}
+\boxed{R_{\text{in}}=100\,\text{k}\Omega}
+\end{equation}
+
+Os demais resistores do conformador são definidos conforme os valores comerciais especificados para a bancada, apresentados na Tabela \ref{tab:conformador}.
+
+\begin{table}[htbp]
+\centering
+\caption{Componentes utilizados no conformador da Equipe 2.}
+\label{tab:conformador}
+\begin{tabular}{cc}
+\hline
+\textbf{Componente} & \textbf{Valor especificado} \\
+\hline
+$R_{\text{in}}$ & $100\,\text{k}\Omega$ \\
+$R_2$ & $390\,\text{k}\Omega$ \\
+$R_3$ & $150\,\text{k}\Omega$ \\
+$R_4$ & $4,7\,\text{k}\Omega$ \\
+$R_5$ & $1,2\,\text{k}\Omega$ \\
+$R_6$ & $1,8\,\text{k}\Omega$ \\
+$R_7$ & $2,7\,\text{k}\Omega$ \\
+\hline
+\end{tabular}
+\end{table}
+
+Os resistores de inclinação e o divisor estabelecem as diferentes regiões de operação do conformador. À medida que a tensão de entrada aumenta, os diodos entram em condução sucessivamente, modificando a inclinação da saída e permitindo a aproximação da forma de onda senoidal.
+
+\subsection{Síntese dos parâmetros de projeto}
+
+A Tabela \ref{tab:parametros} apresenta os principais resultados teóricos obtidos para a Equipe 2.
+
+\begin{table}[htbp]
+\centering
+\caption{Parâmetros teóricos de projeto da Equipe 2.}
+\label{tab:parametros}
+\begin{tabular}{lc}
+\hline
+\textbf{Grandeza} & \textbf{Resultado teórico} \\
+\hline
+Amplitude de pico da onda triangular & $6,58$ V \\
+Frequência com $R_3=33\,\text{k}\Omega$ & $16,12$ Hz \\
+Frequência com $R_3=22\,\text{k}\Omega$ & $24,15$ Hz \\
+Ganho teórico do amplificador & $2,128$ \\
+Ganho com os resistores especificados & $2,220$ \\
+Amplitude desejada para o conformador & $9,33$ V \\
+Primeiro limiar & $4,67$ V \\
+Segundo limiar & $7,15$ V \\
+Terceiro limiar & $9,01$ V \\
+\hline
+\end{tabular}
+\end{table}
+
+Os valores apresentados constituem as referências teóricas para a análise do circuito. A comparação definitiva com os resultados obtidos deverá considerar a tensão de saturação efetivamente observada, os valores reais dos componentes, as formas de onda simuladas e as medições realizadas em bancada.
+
 
 \begin{espec}
 
@@ -161,6 +629,476 @@ Resistência de Inclinação ($R_{c3}$ Conformador) & $1{,}120\text{ M}\Omega$ &
 \bottomrule
 \end{tabular}
 \end{center}
+
+
+\begin{espec}
+
+\textbf{Matrícula \mat{231036775}.} Considerando os nove dígitos na forma ABCDEFGHI:
+
+\begin{equation}
+A=2,\quad B=3,\quad C=1,\quad D=0,\quad E=3,\quad
+F=6,\quad G=7,\quad H=7,\quad I=5
+\end{equation}
+
+A partir desses valores, as especificações individuais exigidas pelo roteiro são:
+
+\begin{itemize}
+
+    \item \textbf{Comparador:}
+
+    \[
+    R_1=I\,\text{k}\Omega=5\,\text{k}\Omega
+    \]
+    \[
+    R_2=AB\,\text{k}\Omega=23\,\text{k}\Omega
+    \]
+
+    \item \textbf{Integrador:}
+
+    \[
+    R_3=33\,\text{k}\Omega
+    \qquad
+    C_1=1\,\mu\text{F}
+    \]
+
+    \item \textbf{Conformador:}
+
+    Entrada com a amplitude da onda quadrada, senoide de amplitude:
+
+    \[
+    A=\left(0{,}45+\frac{H}{40}\right)V_T
+    \]
+
+    Para $H=7$:
+
+    \[
+    A=\left(0{,}45+\frac{7}{40}\right)V_T
+    =0{,}625V_T
+    \]
+
+    As quebras são especificadas em:
+
+    \[
+    \theta_1=30^\circ,\quad
+    \theta_2=50^\circ,\quad
+    \theta_3=75^\circ
+    \]
+
+\end{itemize}
+
+\end{espec}
+
+Os componentes da série comercial E12 selecionados para atender às especificações, bem como o desenvolvimento analítico para seu dimensionamento, são detalhados a seguir.
+
+\begin{itemize}
+
+    \item \textbf{Comparador com Histerese ($R_1$ e $R_2$):}
+
+    A especificação determina $R_1=5\,\text{k}\Omega$ e
+    $R_2=23\,\text{k}\Omega$. Como os valores exatos não estão
+    simultaneamente disponíveis na série E12, adotaram-se associações
+    em série para aproximar os valores especificados.
+
+    Para $R_1$, adotou-se:
+
+    \[
+    R_1=4{,}7\,\text{k}\Omega+330\,\Omega
+    =5{,}03\,\text{k}\Omega
+    \]
+
+    O desvio em relação ao valor especificado é:
+
+    \[
+    \varepsilon_{R_1}
+    =\frac{5{,}03-5}{5}\times100
+    =0{,}60\%
+    \]
+
+    Para $R_2$, adotou-se:
+
+    \[
+    R_2=22\,\text{k}\Omega+1\,\text{k}\Omega
+    =23\,\text{k}\Omega
+    \]
+
+    Nesse caso, o valor obtido corresponde exatamente à especificação.
+
+    Considerando inicialmente os valores teóricos especificados, a
+    amplitude de pico da onda triangular é:
+
+    \[
+    V_{tri}=\frac{R_1}{R_2}V_{sat}
+    =\frac{5}{23}V_{sat}
+    \approx0{,}2174V_{sat}
+    \]
+
+    Para uma tensão de saturação aproximada de $14\,\text{V}$:
+
+    \[
+    V_{tri}=\frac{5}{23}\times14
+    \]
+
+    \[
+    \boxed{V_{tri}\approx3{,}043\,\text{V}}
+    \]
+
+    Considerando os resistores efetivamente adotados, a amplitude
+    estimada passa a ser:
+
+    \[
+    V_{tri,\text{real}}
+    =\frac{5{,}03}{23}\times14
+    \]
+
+    \[
+    \boxed{V_{tri,\text{real}}\approx3{,}062\,\text{V}}
+    \]
+
+    \item \textbf{Gerador de Ondas (Integrador e Amplificador):}
+
+    O integrador utiliza os componentes especificados:
+    $R_3=33\,\text{k}\Omega$ e $C_1=1\,\mu\text{F}$.
+
+    Utilizando os valores teóricos do comparador na equação da
+    frequência de oscilação:
+
+    \[
+    f=\frac{R_2}{4R_1R_3C_1}
+    \]
+
+    Substituindo os valores:
+
+    \[
+    f=
+    \frac{23\times10^3}
+    {4\times5\times10^3\times33\times10^3
+    \times1\times10^{-6}}
+    \]
+
+    \[
+    \boxed{f\approx34{,}85\,\text{Hz}}
+    \]
+
+    Considerando o valor efetivamente adotado para $R_1$,
+    de $5{,}03\,\text{k}\Omega$, a frequência estimada passa a ser:
+
+    \[
+    f_{\text{real}}=
+    \frac{23\times10^3}
+    {4\times5{,}03\times10^3\times33\times10^3
+    \times1\times10^{-6}}
+    \]
+
+    \[
+    \boxed{f_{\text{real}}\approx34{,}64\,\text{Hz}}
+    \]
+
+    Para o estágio do amplificador não inversor do conformador,
+    a fim de recuperar a amplitude da onda quadrada, o ganho teórico
+    necessário é:
+
+    \[
+    G=\frac{R_2}{R_1}=\frac{23}{5}=4{,}6
+    \]
+
+    Sendo a topologia não inversora dada por:
+
+    \[
+    G=1+\frac{R_f}{R_g}
+    \]
+
+    a razão necessária entre os resistores é:
+
+    \[
+    \frac{R_f}{R_g}=3{,}6
+    \]
+
+    Utilizando resistores da série E12, definiu-se:
+
+    \[
+    R_g=10\,\text{k}\Omega
+    \]
+
+    \[
+    R_f=33\,\text{k}\Omega+3{,}3\,\text{k}\Omega
+    =36\,\text{k}\Omega
+    \]
+
+    Dessa forma, o ganho real é:
+
+    \[
+    G_{\text{real}}=1+\frac{36}{10}=4{,}6
+    \]
+
+    Portanto, o ganho obtido corresponde exatamente ao ganho teórico
+    calculado a partir dos valores nominais especificados.
+
+    \item \textbf{Divisor e Conformador a Diodos
+    ($R_4$ a $R_7$ e Malhas de Inclinação):}
+
+    Projetando o circuito para uma tensão de saturação típica
+    $V_T=V_{sat}\approx14\,\text{V}$, correspondente à alimentação
+    simétrica de $\pm15\,\text{V}$, a amplitude da senoide a ser
+    aproximada é:
+
+    \[
+    A=\left(0{,}45+\frac{7}{40}\right)14
+    \]
+
+    \[
+    A=0{,}625\times14
+    \]
+
+    \[
+    \boxed{A=8{,}75\,\text{V}}
+    \]
+
+    Os limiares teóricos de condução, correspondentes aos ângulos
+    de quebra, são calculados por:
+
+    \[
+    V_k=A\operatorname{sen}(\theta_k)
+    \]
+
+    Assim:
+
+    \begin{align*}
+        V_1&=8{,}75\operatorname{sen}(30^\circ)
+        =4{,}375\,\text{V}\\
+        V_2&=8{,}75\operatorname{sen}(50^\circ)
+        \approx6{,}703\,\text{V}\\
+        V_3&=8{,}75\operatorname{sen}(75^\circ)
+        \approx8{,}452\,\text{V}
+    \end{align*}
+
+    \textbf{Dimensionamento do divisor:}
+
+    Arbitrando $R_T=22\,\text{k}\Omega$, valor dentro da faixa
+    de 15 a 30 $\text{k}\Omega$, calculam-se os resistores para
+    $V_{CC}=15\,\text{V}$:
+
+    \begin{align*}
+        R_7&=R_T\frac{V_1-0{,}7}{V_{CC}}\\
+        &=22\text{k}\frac{4{,}375-0{,}7}{15}\\
+        &\approx5{,}390\,\text{k}\Omega
+    \end{align*}
+
+    \begin{align*}
+        R_6&=R_T\frac{V_2-0{,}7}{V_{CC}}-R_7\\
+        &=22\text{k}\frac{6{,}703-0{,}7}{15}-5{,}390\text{k}\\
+        &\approx3{,}414\,\text{k}\Omega
+    \end{align*}
+
+    \begin{align*}
+        R_5&=R_T\frac{V_3-0{,}7}{V_{CC}}-R_7-R_6\\
+        &=22\text{k}\frac{8{,}452-0{,}7}{15}
+        -5{,}390\text{k}-3{,}414\text{k}\\
+        &\approx2{,}565\,\text{k}\Omega
+    \end{align*}
+
+    \begin{align*}
+        R_4&=R_T-R_5-R_6-R_7\\
+        &=22\text{k}-2{,}565\text{k}
+        -3{,}414\text{k}-5{,}390\text{k}\\
+        &\approx10{,}631\,\text{k}\Omega
+    \end{align*}
+
+    Mapeando para a série E12, adotaram-se as seguintes associações:
+
+    \begin{align*}
+        R_7&=5{,}1\,\text{k}\Omega+270\,\Omega
+        =5{,}37\,\text{k}\Omega\\
+        R_6&=3{,}3\,\text{k}\Omega+120\,\Omega
+        =3{,}42\,\text{k}\Omega\\
+        R_5&=2{,}2\,\text{k}\Omega+390\,\Omega
+        =2{,}59\,\text{k}\Omega\\
+        R_4&=10\,\text{k}\Omega+680\,\Omega
+        =10{,}68\,\text{k}\Omega
+    \end{align*}
+
+    O somatório dos valores adotados resulta em:
+
+    \[
+    R_{T,\text{real}}=
+    5{,}37+3{,}42+2{,}59+10{,}68
+    \]
+
+    \[
+    \boxed{R_{T,\text{real}}=22{,}06\,\text{k}\Omega}
+    \]
+
+    \textbf{Dimensionamento das malhas de inclinação:}
+
+    O resistor de entrada isola o divisor, sendo definido como
+    dez vezes o valor de $R_T$. Portanto:
+
+    \[
+    R_{\text{in}}=10R_T=220\,\text{k}\Omega
+    \]
+
+    Os valores da onda triangular nos ângulos de quebra são dados por:
+
+    \[
+    V_\theta=V_T\frac{\theta}{90^\circ}
+    \]
+
+    Assim:
+
+    \[
+    V_{\theta_2}=14\frac{50^\circ}{90^\circ}
+    \approx7{,}778\,\text{V}
+    \]
+
+    \[
+    V_{\theta_3}=14\frac{75^\circ}{90^\circ}
+    \approx11{,}667\,\text{V}
+    \]
+
+    Aplicando a equação para o primeiro diodo de inclinação,
+    referenciado como $R_2$ no roteiro e denominado $R_{c2}$
+    neste dimensionamento:
+
+    \[
+    R_{c2}=R_{\text{in}}
+    \left(
+    \frac{V_{\theta_2}-V_1}
+    {V_{\theta_2}-V_2}-1
+    \right)
+    \]
+
+    Substituindo os valores:
+
+    \[
+    R_{c2}=220\text{k}
+    \left(
+    \frac{7{,}778-4{,}375}
+    {7{,}778-6{,}703}-1
+    \right)
+    \]
+
+    \[
+    \boxed{R_{c2}\approx476{,}45\,\text{k}\Omega}
+    \]
+
+    Adotou-se a associação:
+
+    \[
+    R_{c2}=470\,\text{k}\Omega+6{,}8\,\text{k}\Omega
+    =476{,}8\,\text{k}\Omega
+    \]
+
+    Para o segundo diodo ($R_{c3}$), calcula-se inicialmente
+    o nível intermediário ideal $V^*$:
+
+    \[
+    V^*=V_{\theta_3}-
+    \frac{R_{\text{in}}(V_{\theta_3}-V_1)}
+    {R_{\text{in}}+R_{c2}}
+    \]
+
+    Substituindo os valores:
+
+    \[
+    V^*=11{,}667-
+    \frac{220\text{k}(11{,}667-4{,}375)}
+    {220\text{k}+476{,}45\text{k}}
+    \]
+
+    \[
+    \boxed{V^*\approx9{,}363\,\text{V}}
+    \]
+
+    Por fim, a resistência teórica do último segmento é:
+
+    \[
+    R_{c3}=R_{\text{in}}
+    \left(
+    \frac{V^*-V_2}{V^*-V_3}-1
+    \right)
+    \]
+
+    Substituindo os valores:
+
+    \[
+    R_{c3}=220\text{k}
+    \left(
+    \frac{9{,}363-6{,}703}
+    {9{,}363-8{,}452}-1
+    \right)
+    \]
+
+    \[
+    \boxed{R_{c3}\approx422{,}14\,\text{k}\Omega}
+    \]
+
+    Na série E12, adotou-se a associação:
+
+    \[
+    R_{c3}=390\,\text{k}\Omega+33\,\text{k}\Omega
+    \]
+
+    \[
+    \boxed{R_{c3}=423\,\text{k}\Omega}
+    \]
+
+\end{itemize}
+
+A tabela abaixo resume os parâmetros teóricos de projeto e os
+efetivamente adotados:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Grandeza} &
+\textbf{Teórico} &
+\textbf{Adotado (E12)} &
+\textbf{Desvio}\\
+\midrule
+Resistor do comparador ($R_1$) &
+$5{,}00\,\text{k}\Omega$ &
+$5{,}03\,\text{k}\Omega$ &
+$+0{,}60\%$\\
+
+Resistor do comparador ($R_2$) &
+$23{,}00\,\text{k}\Omega$ &
+$23{,}00\,\text{k}\Omega$ &
+$0{,}00\%$\\
+
+Frequência astável ($f$) &
+$34{,}85\,\text{Hz}$ &
+$34{,}64\,\text{Hz}$ &
+$-0{,}60\%$\\
+
+Ganho do amplificador ($G$) &
+$4{,}600\,\text{V/V}$ &
+$4{,}600\,\text{V/V}$ &
+$0{,}00\%$\\
+
+Resistência de entrada ($R_{\text{in}}$) &
+$220{,}00\,\text{k}\Omega$ &
+$220{,}00\,\text{k}\Omega$ &
+$0{,}00\%$\\
+
+Resistência do divisor ($R_T$) &
+$22{,}00\,\text{k}\Omega$ &
+$22{,}06\,\text{k}\Omega$ &
+$+0{,}27\%$\\
+
+Resistência de inclinação ($R_{c2}$) &
+$476{,}45\,\text{k}\Omega$ &
+$476{,}80\,\text{k}\Omega$ &
+$+0{,}07\%$\\
+
+Resistência de inclinação ($R_{c3}$) &
+$422{,}14\,\text{k}\Omega$ &
+$423{,}00\,\text{k}\Omega$ &
+$+0{,}20\%$\\
+\bottomrule
+\end{tabular}
+\end{center}
+```
+
 
 % Transcreva os parâmetros que a sua matrícula determina, mostrando a conta a partir dos
 % dígitos.
