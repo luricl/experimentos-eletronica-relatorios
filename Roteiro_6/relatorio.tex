@@ -488,7 +488,7 @@ R_{\text{in}}=10R_T
 \boxed{R_{\text{in}}=100\,\text{k}\Omega}
 \end{equation}
 
-Os demais resistores do conformador são definidos conforme os valores comerciais especificados para a bancada, apresentados na Tabela \ref{tab:conformador}.
+Os demais resistores do conformador são definidos conforme os valores comerciais especificados para a bancada, apresentados na Tabela~\ref{tab:conformador}.
 
 \begin{table}[htbp]
 \centering
@@ -513,7 +513,7 @@ Os resistores de inclinação e o divisor estabelecem as diferentes regiões de 
 
 \subsection{Síntese dos parâmetros de projeto}
 
-A Tabela \ref{tab:parametros} apresenta os principais resultados teóricos obtidos para a Equipe 2.
+A Tabela~\ref{tab:parametros} apresenta os principais resultados teóricos obtidos para a Equipe 2.
 
 \begin{table}[htbp]
 \centering
@@ -611,9 +611,12 @@ Os componentes da série comercial E12 selecionados para atender a cada especifi
 
 \end{itemize}
 
-A tabela abaixo resume os parâmetros teóricos de projeto e os efetivamente adotados:
+A Tabela~\ref{tab:projeto_cardoso} resume os parâmetros teóricos de projeto e os efetivamente adotados.
 
-\begin{center}
+\begin{table}[H]
+\centering
+\caption{Parâmetros teóricos e adotados no projeto (Matrícula 23/1038626).}
+\label{tab:projeto_cardoso}
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{@{}lrrr@{}}
 \toprule
@@ -628,7 +631,7 @@ Resistência de Inclinação ($R_{c2}$ Conformador) & $169{,}61\text{ k}\Omega$ 
 Resistência de Inclinação ($R_{c3}$ Conformador) & $1{,}120\text{ M}\Omega$ & $1{,}047\text{ M}\Omega$ & $-6{,}51\%$ \\
 \bottomrule
 \end{tabular}
-\end{center}
+\end{table}
 
 
 \begin{espec}
@@ -1043,10 +1046,13 @@ Os componentes da série comercial E12 selecionados para atender às especifica�
 
 \end{itemize}
 
-A tabela abaixo resume os parâmetros teóricos de projeto e os
-efetivamente adotados:
+A Tabela~\ref{tab:projeto_daniel} resume os parâmetros teóricos de projeto e os
+efetivamente adotados.
 
-\begin{center}
+\begin{table}[H]
+\centering
+\caption{Parâmetros teóricos e adotados no projeto (Matrícula 23/1036775).}
+\label{tab:projeto_daniel}
 \renewcommand{\arraystretch}{1.3}
 \begin{tabular}{@{}lrrr@{}}
 \toprule
@@ -1096,8 +1102,36 @@ $423{,}00\,\text{k}\Omega$ &
 $+0{,}20\%$\\
 \bottomrule
 \end{tabular}
-\end{center}
+\end{table}
 ```
+
+
+\begin{espec}
+
+\textbf{Matrícula \mat{22/2005395}.} Considerando os nove dígitos na forma ABCDEFGHI:
+
+\begin{equation}
+    A=2,\; B=2,\; C=2,\; D=0,\; E=0,\; F=5,\; G=3,\; H=9,\; I=5
+\end{equation}
+
+A partir desses valores, as especificações individuais exigidas pelo roteiro são:
+
+\begin{itemize}
+    \item \textbf{Comparador:} \hfill\break
+    $R_1 = I\text{ k}\Omega = 5\text{ k}\Omega$ e $R_2 = AB\text{ k}\Omega = 22\text{ k}\Omega$.
+
+\vspace{0.3cm}
+
+    \item \textbf{Integrador:} \hfill\break
+    $R_3 = 33\text{ k}\Omega$ e $C_1 = 1\text{ }\mu\text{F}$.
+
+    \vspace{0.3cm}
+
+    \item \textbf{Conformador:} \hfill\break
+    Entrada com a amplitude da onda quadrada, senoide de amplitude $A = (0{,}45 + H/40) V_{\text{T}}$ e quebras em $\theta_{1} = 30^\circ$, $\theta_2 = 50^\circ$ e $\theta_3 = 75^\circ$. (Para $H=9$, a amplitude projetada é $A = (0{,}45 + 9/40) V_{\text{T}} = 0{,}675 V_{\text{T}}$).
+\end{itemize}
+
+\end{espec}
 
 
 % Transcreva os parâmetros que a sua matrícula determina, mostrando a conta a partir dos
