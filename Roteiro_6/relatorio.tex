@@ -1180,6 +1180,51 @@ Para comprovar que o projeto atende às especificações apresentadas na Seção
 \label{fig:circs_guilherme}
 \end{figure}
 
+\subsubsection{Daniel Campos Silva (231036775)}
+
+\textbf{Configuração e Simulação dos Circuitos}
+
+Para verificar o atendimento às especificações individuais de projeto, os circuitos do comparador com histerese, gerador de ondas e conformador a diodos foram implementados e simulados no LTspice, utilizando os valores calculados especificamente para a matrícula 231036775. As simulações foram realizadas em regime transitório, com duração de 300 ms, por meio da diretiva \texttt{.tran 0 300m}. Os esquemáticos utilizados são apresentados na Figura~\ref{fig:circs_daniel}.
+
+\begin{itemize}
+    \item \textbf{Comparador com histerese (Fig.~\ref{fig:circs_daniel}a):} O circuito foi dimensionado com os resistores da malha de realimentação positiva $R_1$ e $R_2$, cujos valores teóricos são, respectivamente, $5\,\text{k}\Omega$ e $23\,\text{k}\Omega$. Para a implementação, foram utilizadas associações de resistores comerciais, resultando em $R_1=5{,}03\,\text{k}\Omega$ e $R_2=23\,\text{k}\Omega$. Considerando a tensão de saturação de aproximadamente $\pm14\,\text{V}$, o circuito apresentou limiares de comutação próximos de $\pm3{,}06\,\text{V}$.
+
+    \item \textbf{Gerador de ondas quadrada e triangular (Fig.~\ref{fig:circs_daniel}b):} A partir do comparador, foi implementado o estágio integrador em malha fechada, responsável por produzir a onda triangular a partir da onda quadrada. Foram utilizados os componentes definidos para o projeto coletivo: $R_3=33\,\text{k}\Omega$ e $C_1=1\,\mu\text{F}$. A frequência teórica de oscilação, considerando os valores ideais de $R_1$ e $R_2$, é de aproximadamente $34{,}85\,\text{Hz}$. Com os valores comerciais efetivamente empregados, a frequência estimada é de aproximadamente $34{,}64\,\text{Hz}$.
+
+    \item \textbf{Amplificador e conformador a diodos (Fig.~\ref{fig:circs_daniel}c):} Na etapa final, foi implementado um amplificador não inversor para elevar a amplitude da onda triangular antes de sua aplicação ao conformador. O ganho projetado foi de $4{,}6$, obtido com $R_g=10\,\text{k}\Omega$ e $R_f=36\,\text{k}\Omega$, este último implementado por associação de resistores comerciais. Em seguida, foi conectado o circuito conformador não linear, composto por uma rede resistiva e seis diodos 1N4148, responsável por modificar a inclinação da característica de transferência e produzir uma forma de onda aproximadamente senoidal. Os resistores da rede foram dimensionados individualmente a partir dos limiares calculados para a matrícula, utilizando os valores comerciais mais próximos: $R_4=10{,}68\,\text{k}\Omega$, $R_5=2{,}59\,\text{k}\Omega$, $R_6=3{,}42\,\text{k}\Omega$ e $R_7=5{,}37\,\text{k}\Omega$. Para as malhas de correção, foram adotados $R_{c2}=476{,}8\,\text{k}\Omega$ e $R_{c3}=423\,\text{k}\Omega$.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/esquematicos/comparador_com_histerese.png}
+        \vspace{2pt}
+        {\small (a) Comparador com histerese.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/esquematicos/gerador_de_ondas_quadrada_e_triangular.png}
+        \vspace{2pt}
+        {\small (b) Gerador de ondas quadrada e triangular.}
+    \end{minipage}
+
+    \vspace{12pt}
+
+    \begin{minipage}{0.96\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/esquematicos/amplificador_e_conformador.png}
+        \vspace{2pt}
+        {\small (c) Amplificador não inversor e conformador a diodos.}
+    \end{minipage}
+
+    \caption{Esquemáticos individuais implementados no LTspice para a matrícula 231036775, contemplando o comparador, o gerador de ondas e o estágio amplificador associado ao conformador.}
+    \label{fig:circs_daniel}
+\end{figure}
+
+
+
 % Cada integrante recebeu uma especificação diferente da própria matrícula, e portanto chegou
 % a um dimensionamento diferente. Traga aqui \textbf{uma simulação por integrante}, cada uma
 % com os componentes que aquela pessoa projetou. São elas que mostram se cada projeto cumpre
@@ -1429,6 +1474,85 @@ Após atravessar as três malhas do conformador não linear simétrico, o sinal 
     \caption{Resultados gráficos das simulações dos estágios do Roteiro 6.}
     \label{fig:graficos_cardoso}
 \end{figure}
+
+ 
+ 
+ 
+\subsubsection{Daniel Campos Silva (23/1036775)}
+
+A Tabela~\ref{tab:resultados_daniel} apresenta os parâmetros projetados analiticamente a partir dos componentes utilizados na implementação, confrontando-os com os resultados obtidos nas simulações de regime transitório (\texttt{.tran}) no LTspice e na análise de Fourier, realizada por meio da diretiva \texttt{.four}.
+
+\begin{table}[H]
+    \centering
+    \caption{Resultados dos estágios do oscilador astável e conformador (Matrícula 23/1036775).}
+    \label{tab:resultados_daniel}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Grandeza} & \textbf{Analítico} & \textbf{Simulado} & \textbf{Erro (\%)} \\
+    \midrule
+    Tensão de Saturação ($V_{sat}$) & $14{,}00\text{ V}$ & $13{,}96\text{ V}$ & $-0{,}29\%$ \\
+    Limiar de Comutação ($+V_L$) & $3{,}05\text{ V}$ & $3{,}04\text{ V}$ & $-0{,}33\%$ \\
+    Frequência do Astável ($f$) & $34{,}16\text{ Hz}$ & $34{,}16\text{ Hz}$ & $0{,}00\%$ \\
+    Amplitude da Onda Triangular ($V_{tri}$) & $3{,}05\text{ V}$ & $3{,}03\text{ V}$ & $-0{,}66\%$ \\
+    Pico da Entrada do Conformador ($V_T$) & $14{,}00\text{ V}$ & $13{,}96\text{ V}$ & $-0{,}29\%$ \\
+    Amplitude da Componente Fundamental ($V_1$) & -- & $8{,}466\text{ V}$ & -- \\
+    Distorção Harmônica Total (THD) & $\leq 10\%$ & $2{,}237708\%$ & -- \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+\paragraph{Análise do Comparador com Histerese (Item 1):}
+Alimentado por tensões simétricas de $\pm15\text{ V}$, o amplificador operacional LM741 operou próximo aos limites de saturação, apresentando tensão de saída de aproximadamente $\pm13{,}96\text{ V}$. A simulação apresentou comportamento compatível com os cálculos analíticos dos limiares de comutação, estabelecidos em aproximadamente $\pm3{,}05\text{ V}$. A configuração utiliza uma malha de realimentação positiva composta pelos resistores $R_1=5\,k\Omega$ e $R_2=23\,k\Omega$, responsável por estabelecer a histerese e proporcionar estabilidade na comutação.
+
+\paragraph{Análise do Gerador de Ondas (Item 2):}
+A associação do comparador com o estágio integrador permitiu a geração simultânea de ondas quadrada e triangular. O circuito apresentou oscilação periódica, com frequência considerada de $34{,}16\text{ Hz}$. A amplitude de pico da onda triangular ficou em torno de $3{,}03\text{ V}$, acompanhando os limiares de comutação definidos pelo comparador. A saída quadrada apresentou níveis próximos de $\pm14\text{ V}$, enquanto o integrador produziu a forma de onda triangular a partir da integração dos níveis de tensão da saída do comparador. Dessa maneira, a realimentação entre os dois estágios estabeleceu um ciclo contínuo de oscilação, conforme o funcionamento esperado para um oscilador astável.
+
+\paragraph{Análise do Conformador e THD (Item 3):}
+O estágio conformador foi utilizado para transformar a onda triangular em uma forma de onda com características mais próximas de uma senoide. Para isso, o circuito emprega redes de resistores e diodos que modificam progressivamente a inclinação da função de transferência, conforme a amplitude do sinal de entrada.
+
+Na curva XY apresentada na Figura~\ref{fig:curva_xy_daniel}, o eixo horizontal representa a tensão de entrada $V(vt)$, enquanto o eixo vertical representa a tensão de saída $V(vsen)$. A linha de referência linear, representada em magenta, permite comparar a relação ideal entre entrada e saída com a resposta efetiva do conformador, representada em azul. Observa-se que, na região central, a saída acompanha aproximadamente a variação da entrada. Entretanto, à medida que a tensão de entrada aumenta em módulo, ocorre uma redução progressiva da inclinação da curva de saída. Esse comportamento está relacionado à condução dos diodos nas diferentes redes de conformação, que alteram o ganho efetivo do circuito em diferentes faixas de tensão. Nas extremidades, a saída tende a se estabilizar em valores próximos de $\pm8{,}2\text{ V}$, mesmo com a entrada alcançando aproximadamente $\pm14\text{ V}$.
+
+Além da análise gráfica, foi realizada a análise de Fourier por meio da diretiva \texttt{.four 34.16 V(vsen)} no LTspice. O resultado apresentou uma Distorção Harmônica Total (THD) de $2{,}237708\%$, indicando uma baixa contribuição das componentes harmônicas em relação à componente fundamental, cuja amplitude foi de aproximadamente $8{,}466\text{ V}$. Entre as componentes analisadas, a terceira harmônica apresentou a maior amplitude individual, correspondendo a aproximadamente $1{,}924\%$ da componente fundamental. O resultado demonstra que o conformador conseguiu atenuar significativamente as componentes harmônicas do sinal triangular, produzindo uma forma de onda com características próximas às de uma senoide e atendendo ao limite de distorção estabelecido no projeto, de até $10\%$.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/resultados/comparador_com_histerese.png}
+        \vspace{2pt}
+        {\small (a) Comparador com histerese.}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/resultados/gerador_de_ondas_quadrada_e_triangular.png}
+        \vspace{2pt}
+        {\small (b) Gerador de ondas quadrada e triangular.}
+    \end{minipage}
+
+    \vspace{12pt}
+
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/resultados/amplificador_e_conformador.png}
+        \vspace{2pt}
+        {\small (c) Amplificador e conformador.}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{imgs/daniel/resultados/curvaXY_conformador.png}
+        \vspace{2pt}
+        {\small (d) Curva XY: função de transferência do conformador.}
+    \end{minipage}
+
+    \caption{Resultados gráficos das simulações dos estágios do Roteiro 6 (Daniel Campos Silva).}
+    \label{fig:graficos_daniel}
+\end{figure}
+
+
+
 
 \subsection{Circuito montado}
 
